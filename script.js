@@ -26,4 +26,4 @@ function saveInvoice() {
 
 function printInvoice() {
     window.print();
-}
+} 
