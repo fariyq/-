@@ -45,4 +45,18 @@ function generateQRCode() {
     document.body.innerHTML = "<h2>Invoice</h2>" + printContent;
     window.print();
     document.body.innerHTML = originalContent;
+}function printInvoice() {
+    var invoiceContainer = document.getElementById("invoiceOutput");
+
+    if (!invoiceContainer || invoiceContainer.innerHTML.trim() === "") {
+        alert("No invoice available to print!");
+        return;
+    }
+
+    var printWindow = window.open("", "", "width=800,height=600");
+    printWindow.document.write("<html><head><title>Invoice</title></head><body>");
+    printWindow.document.write(invoiceContainer.innerHTML);
+    printWindow.document.write("</body></html>");
+    printWindow.document.close();
+    printWindow.print();
 }
