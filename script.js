@@ -1,84 +1,42 @@
-document.getElementById("date").innerText = new Date().toLocaleDateString();
-document.getElementById("time").innerText = new Date().toLocaleTimeString();
-
-// ✅ নতুন কাস্টমার ফর্ম দেখানো
-document.getElementById("newCustomerBtn").addEventListener("click", function() {
-    let form = document.getElementById("newCustomerForm");
-    if (form.style.display === "none") {
-        form.style.display = "block";
-    } else {
-        form.style.display = "none";
-    }
-});
+document.getElementById("date-time").innerText = new Date().toLocaleString();
 
 function addItem() {
-    let table = document.getElementById("invoiceTable").getElementsByTagName('tbody')[0];
-    let row = table.insertRow();
-    
-    row.innerHTML = `
-        <td><input type="text" placeholder="প্রোডাক্টের নাম"></td>
-        <td><input type="number" class="price" oninput="updateTotal()"></td>
-        <td><input type="number" class="quantity" value="1" oninput="updateTotal()"></td>
-        <td class="total">0</td>
-        <td><button onclick="removeItem(this)">❌</button></td>
-    `;
+    let table = document.getElementById("invoice-table");
+    let row = table.insertRow(-1);
+    row.innerHTML = `<td><input type="text" placeholder="প্রোডাক্টের নাম"></td>
+                     <td><input type="number" value="0"></td>
+                     <td><input type="number" value="1"></td>
+                     <td>0</td>
+                     <td><button onclick="deleteRow(this)">❌</button></td>`;
 }
 
-function removeItem(button) {
-    let row = button.parentNode.parentNode;
-    row.parentNode.removeChild(row);
-    updateTotal();
+function deleteRow(button) {
+    button.parentElement.parentElement.remove();
 }
 
-function updateTotal() {
-    let prices = document.querySelectorAll(".price");
-    let quantities = document.querySelectorAll(".quantity");
-    let totals = document.querySelectorAll(".total");
-    
-    let grandTotal = 0;
-
-    prices.forEach((price, index) => {
-        let itemPrice = parseFloat(price.value) || 0;
-        let itemQuantity = parseInt(quantities[index].value) || 1;
-        let itemTotal = itemPrice * itemQuantity;
-
-        totals[index].innerText = itemTotal;
-        grandTotal += itemTotal;
-    });
-
-    document.getElementById("total").innerText = grandTotal + " টাকা";
-}
-
-// ✅ QR Code জেনারেট করা
 function generateQR() {
-    let total = document.getElementById("total").innerText;
-    let phone = "01952325903"; // বিকাশ নম্বর
-
-    let qrData = `https://bkash.com/pay?amount=${total}&phone=${phone}`;
-    let qrCodeContainer = document.getElementById("qrCode");
-    
-    qrCodeContainer.innerHTML = "";
-    
-    let img = document.createElement("img");
-    img.src = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(qrData)}&size=150x150`;
-    qrCodeContainer.appendChild(img);
+    let customerName = document.getElementById("customer-name").value;
+    let customerPhone = document.getElementById("customer-phone").value;
+    let qrData = `কাস্টমার: ${customerName}, মোবাইল: ${customerPhone}`;
+    document.getElementById("qr-code").innerText = qrData; // (এখানে QR কোড লাইব্রেরি লাগবে)
 }
 
-// ✅ Invoice সংরক্ষণ করা
-function saveInvoice() {
-    let invoiceData = {
-        date: new Date().toLocaleDateString(),
-        time: new Date().toLocaleTimeString(),
-        customerName: document.getElementById("customerName").value,
-        customerPhone: document.getElementById("customerPhone").value,
-        total: document.getElementById("total").innerText
-    };
-
-    localStorage.setItem("invoice", JSON.stringify(invoiceData));
-    alert("Invoice সংরক্ষণ করা হলো!");
-}
-
-// ✅ Invoice প্রিন্ট করা
 function printInvoice() {
-    window.print();
+    let name = document.getElementById("customer-name").value;
+    let phone = document.getElementById("customer-phone").value;
+
+    let invoiceHTML = document.getElementById("invoice").innerHTML;
+    let printWindow = window.open('', '', 'width=800,height=600');
+    
+    printWindow.document.write(`<html><head><title>Invoice</title></head><body>`);
+    printWindow.document.write(`<h2>ইমরান ইলেকট্রনিক্স মোবাইল সার্ভিসিং সেন্টার</h2>`);
+    printWindow.document.write(`<p>Phone: 01952325903 | Email: mdemranst0@gmail.com</p>`);
+    printWindow.document.write(`<p>Date: ${new Date().toLocaleString()}</p>`);
+    printWindow.document.write(`<h3>কাস্টমার: ${name}</h3>`);
+    printWindow.document.write(`<h3>মোবাইল: ${phone}</h3>`);
+    printWindow.document.write(invoiceHTML);
+    printWindow.document.write(`</body></html>`);
+
+    printWindow.document.close();
+    printWindow.print();
 }
