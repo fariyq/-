@@ -34,4 +34,14 @@ button {
     button {
         display: none;
     }
+}@media print {
+    button, input {
+        display: none;
+    }
+
+    #invoice {
+        width: 100%;
+        border: none;
+        padding: 0;
+    }
 }
