@@ -2,9 +2,14 @@ document.getElementById("date").innerText = new Date().toLocaleDateString();
 document.getElementById("time").innerText = new Date().toLocaleTimeString();
 
 // ✅ নতুন কাস্টমার ফর্ম দেখানো
-function showNewCustomerForm() {
-    document.getElementById("newCustomerForm").style.display = "block";
-}
+document.getElementById("newCustomerBtn").addEventListener("click", function() {
+    let form = document.getElementById("newCustomerForm");
+    if (form.style.display === "none") {
+        form.style.display = "block";
+    } else {
+        form.style.display = "none";
+    }
+});
 
 function addItem() {
     let table = document.getElementById("invoiceTable").getElementsByTagName('tbody')[0];
