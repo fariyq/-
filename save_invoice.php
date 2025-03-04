@@ -10,4 +10,4 @@ if ($conn->query($sql) === TRUE) {
 } else {
     echo "ত্রুটি: " . $conn->error;
 }
-?>
+?> 
