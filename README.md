@@ -1,25 +1,15 @@
-body {
-    background-color: #f8f9fa;
-    font-family: Arial, sans-serif;
-}
+function generateInvoice() {
+    let customer = document.getElementById("customerName").value;
+    let product = document.getElementById("productName").value;
+    let quantity = document.getElementById("quantity").value;
+    let price = document.getElementById("price").value;
 
-.container {
-    max-width: 500px;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-}
+    let total = quantity * price;
 
-h2 {
-    color: #007bff;
-}
+    document.getElementById("invoiceCustomer").innerText = customer;
+    document.getElementById("invoiceProduct").innerText = product;
+    document.getElementById("invoiceQuantity").innerText = quantity;
+    document.getElementById("invoiceTotal").innerText = total;
 
-.btn-primary {
-    background-color: #007bff;
-    border: none;
-}
-
-.btn-primary:hover {
-    background-color: #0056b3;
+    document.getElementById("invoiceResult").classList.remove("d-none");
 }
