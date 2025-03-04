@@ -25,7 +25,7 @@ function generateInvoice() {
 }
 
 function generateQRCode() {
-    let paymentNumber = "018XXXXXXXX"; // এখানে আপনার বিকাশ/নগদ নম্বর দিন
+    let paymentNumber = "01952325903"; // এখানে আপনার বিকাশ/নগদ নম্বর দিন
     let amount = document.getElementById("price").value * document.getElementById("quantity").value;
 
     if (!amount || amount <= 0) {
