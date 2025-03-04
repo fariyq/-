@@ -19,18 +19,32 @@
         <input type="text" id="searchPhone" placeholder="019XXXXXXXX">
         <button onclick="fetchCustomer()">সার্চ</button>
 
+        <label>ক্রেতার নাম:</label>
+        <input type="text" id="customerName" placeholder="ক্রেতার নাম লিখুন">
+
         <h3>Invoice Details</h3>
-        <label>প্রোডাক্টের দাম:</label>
-        <input type="number" id="price">
-        <label>পরিমাণ:</label>
-        <input type="number" id="quantity" value="1">
-        
+
+        <table id="invoiceTable">
+            <thead>
+                <tr>
+                    <th>প্রোডাক্টের নাম</th>
+                    <th>দাম</th>
+                    <th>পরিমাণ</th>
+                    <th>মোট</th>
+                    <th>❌</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <button onclick="addItem()">➕ নতুন আইটেম যোগ করুন</button>
+
         <h3>মোট মূল্য: <span id="total">0</span> টাকা</h3>
-        
+
         <button onclick="generateQR()">QR কোড তৈরি করুন</button>
         <button onclick="saveInvoice()">সংরক্ষণ করুন</button>
         <button onclick="printInvoice()">প্রিন্ট করুন</button>
-        
+
         <div id="qrCode"></div>
     </main>
 </body>
