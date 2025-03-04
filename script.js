@@ -1,6 +1,11 @@
 document.getElementById("date").innerText = new Date().toLocaleDateString();
 document.getElementById("time").innerText = new Date().toLocaleTimeString();
 
+// ✅ নতুন কাস্টমার ফর্ম দেখানো
+function showNewCustomerForm() {
+    document.getElementById("newCustomerForm").style.display = "block";
+}
+
 function addItem() {
     let table = document.getElementById("invoiceTable").getElementsByTagName('tbody')[0];
     let row = table.insertRow();
@@ -54,12 +59,13 @@ function generateQR() {
     qrCodeContainer.appendChild(img);
 }
 
-// ✅ Invoice সংরক্ষণ করা (LocalStorage ব্যবহার)
+// ✅ Invoice সংরক্ষণ করা
 function saveInvoice() {
     let invoiceData = {
         date: new Date().toLocaleDateString(),
         time: new Date().toLocaleTimeString(),
         customerName: document.getElementById("customerName").value,
+        customerPhone: document.getElementById("customerPhone").value,
         total: document.getElementById("total").innerText
     };
 
