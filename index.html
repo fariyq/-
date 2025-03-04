@@ -3,57 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice Apps 2025</title>
+    <title>Invoice Generator</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Invoice Generator</h1>
-    <label for="customerName">Customer Name:</label>
-    <input type="text" id="customerName">
+    <div id="invoice-container">
+        <h2>Invoice Generator</h2>
+        <label>Customer Name:</label>
+        <input type="text" id="customerName"><br>
+
+        <label>Product Name:</label>
+        <input type="text" id="productName"><br>
+
+        <label>Quantity:</label>
+        <input type="number" id="quantity"><br>
+
+        <label>Price (Per Item):</label>
+        <input type="number" id="price"><br>
+
+        <button onclick="generateInvoice()">Generate Invoice</button>
+        <div id="invoiceOutput"></div>
+        <div id="totalPrice"></div>
+    </div>
     
-    <label for="productName">Product Name:</label>
-    <input type="text" id="productName">
-    
-    <label for="quantity">Quantity:</label>
-    <input type="number" id="quantity">
-
-    <button onclick="generateInvoice()">Generate Invoice</button>
-    
-    <h2>Invoice:</h2>
-    <div id="invoiceOutput"></div>
-
-    <script src="script.js"></script>
-</body>
-</html><!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice Apps 2025</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <h1>Invoice Generator</h1>
-
-    <label for="customerName">Customer Name:</label>
-    <input type="text" id="customerName">
-
-    <label for="productName">Product Name:</label>
-    <input type="text" id="productName">
-
-    <label for="quantity">Quantity:</label>
-    <input type="number" id="quantity">
-
-    <label for="price">Price (Per Item):</label>
-    <input type="number" id="price">
-
-    <button onclick="generateInvoice()">Generate Invoice</button>
-
-    <h2>Invoice:</h2>
-    <div id="invoiceOutput"></div>
-
-    <h3>Total Price: <span id="totalPrice">0</span> BDT</h3>
-
     <script src="script.js"></script>
 </body>
 </html>
