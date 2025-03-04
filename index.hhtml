@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ইমরান ইলেকট্রনিক্স - Invoice</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header>
+        <img src="logo.png" alt="Shop Logo">
+        <h1>ইমরান ইলেকট্রনিক্স মোবাইল সার্ভিসিং সেন্টার</h1>
+        <p>Phone: 01952325903 | Email: mdemranst0@gmail.com</p>
+        <p>Date: <span id="date"></span> | Time: <span id="time"></span></p>
+    </header>
+    
+    <main>
+        <label>ফোন নাম্বার দিয়ে সার্চ করুন:</label>
+        <input type="text" id="searchPhone" placeholder="019XXXXXXXX">
+        <button onclick="fetchCustomer()">সার্চ</button>
+
+        <label>QR কোড স্ক্যান করুন:</label>
+        <input type="file" id="qrScanner" accept="image/*">
+        
+        <h3>Invoice Details</h3>
+        <label>প্রোডাক্টের দাম:</label>
+        <input type="number" id="price">
+        <label>পরিমাণ:</label>
+        <input type="number" id="quantity" value="1">
+        
+        <h3>মোট মূল্য: <span id="total">0</span> টাকা</h3>
+        
+        <button onclick="generateQR()">QR কোড তৈরি করুন</button>
+        <button onclick="saveInvoice()">সংরক্ষণ করুন</button>
+        <button onclick="printInvoice()">প্রিন্ট করুন</button>
+        
+        <div id="qrCode"></div>
+    </main>
+</body>
+</html>
