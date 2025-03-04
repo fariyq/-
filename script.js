@@ -38,4 +38,11 @@ function generateQRCode() {
     let qrCodeContainer = document.getElementById("qrcode");
     qrCodeContainer.innerHTML = ""; // পূর্বের QR কোড মুছে ফেলুন
     new QRCode(qrCodeContainer, qrData);
+}function printInvoice() {
+    var printContent = document.getElementById("invoiceOutput").innerHTML;
+    var originalContent = document.body.innerHTML;
+
+    document.body.innerHTML = "<h2>Invoice</h2>" + printContent;
+    window.print();
+    document.body.innerHTML = originalContent;
 }
