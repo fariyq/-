@@ -1,13 +1,42 @@
 document.getElementById("date").innerText = new Date().toLocaleDateString();
 document.getElementById("time").innerText = new Date().toLocaleTimeString();
 
-document.getElementById("price").addEventListener("input", updateTotal);
-document.getElementById("quantity").addEventListener("input", updateTotal);
+function addItem() {
+    let table = document.getElementById("invoiceTable").getElementsByTagName('tbody')[0];
+    let row = table.insertRow();
+    
+    row.innerHTML = `
+        <td><input type="text" placeholder="প্রোডাক্টের নাম"></td>
+        <td><input type="number" class="price" oninput="updateTotal()"></td>
+        <td><input type="number" class="quantity" value="1" oninput="updateTotal()"></td>
+        <td class="total">0</td>
+        <td><button onclick="removeItem(this)">❌</button></td>
+    `;
+}
+
+function removeItem(button) {
+    let row = button.parentNode.parentNode;
+    row.parentNode.removeChild(row);
+    updateTotal();
+}
 
 function updateTotal() {
-    let price = parseFloat(document.getElementById("price").value) || 0;
-    let quantity = parseInt(document.getElementById("quantity").value) || 1;
-    document.getElementById("total").innerText = (price * quantity) + " টাকা";
+    let prices = document.querySelectorAll(".price");
+    let quantities = document.querySelectorAll(".quantity");
+    let totals = document.querySelectorAll(".total");
+    
+    let grandTotal = 0;
+
+    prices.forEach((price, index) => {
+        let itemPrice = parseFloat(price.value) || 0;
+        let itemQuantity = parseInt(quantities[index].value) || 1;
+        let itemTotal = itemPrice * itemQuantity;
+
+        totals[index].innerText = itemTotal;
+        grandTotal += itemTotal;
+    });
+
+    document.getElementById("total").innerText = grandTotal + " টাকা";
 }
 
 // ✅ QR Code জেনারেট করা
@@ -30,8 +59,7 @@ function saveInvoice() {
     let invoiceData = {
         date: new Date().toLocaleDateString(),
         time: new Date().toLocaleTimeString(),
-        price: document.getElementById("price").value,
-        quantity: document.getElementById("quantity").value,
+        customerName: document.getElementById("customerName").value,
         total: document.getElementById("total").innerText
     };
 
