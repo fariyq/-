@@ -5,10 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invoice Generator</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
+
     <div id="invoice-container">
         <h2>Invoice Generator</h2>
+
         <label>Customer Name:</label>
         <input type="text" id="customerName"><br>
 
@@ -22,10 +25,17 @@
         <input type="number" id="price"><br>
 
         <button onclick="generateInvoice()">Generate Invoice</button>
+
         <div id="invoiceOutput"></div>
         <div id="totalPrice"></div>
+
+        <!-- QR Code Section -->
+        <div id="qrcode"></div>
+        <button onclick="generateQRCode()">Generate QR Code</button>
+
     </div>
-    
+
     <script src="script.js"></script>
+
 </body>
-</html><script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</html>
