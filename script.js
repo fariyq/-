@@ -24,7 +24,7 @@ function generateInvoice() {
         <h3>Total Price: ${total} BDT</h3>
     `;
 }function generateQRCode() {
-    let paymentNumber = "018XXXXXXXX"; // এখানে আপনার বিকাশ/নগদ/রকেট নম্বর দিন
+    let paymentNumber = "01952325903"; // এখানে আপনার বিকাশ/নগদ/রকেট নম্বর দিন
     let amount = document.getElementById("price").value * document.getElementById("quantity").value;
     let qrData = `https://www.bkash.com/sendmoney?mobile=${paymentNumber}&amount=${amount}`;
 
