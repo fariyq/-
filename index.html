@@ -19,8 +19,15 @@
         <input type="text" id="searchPhone" placeholder="019XXXXXXXX">
         <button onclick="fetchCustomer()">সার্চ</button>
 
-        <label>ক্রেতার নাম:</label>
-        <input type="text" id="customerName" placeholder="ক্রেতার নাম লিখুন">
+        <button onclick="showNewCustomerForm()">➕ নতুন কাস্টমার</button>
+
+        <div id="newCustomerForm" style="display: none;">
+            <label>নতুন কাস্টমারের নাম:</label>
+            <input type="text" id="customerName" placeholder="ক্রেতার নাম লিখুন">
+            
+            <label>নতুন কাস্টমারের মোবাইল:</label>
+            <input type="text" id="customerPhone" placeholder="019XXXXXXXX">
+        </div>
 
         <h3>Invoice Details</h3>
 
