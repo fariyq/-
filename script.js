@@ -59,4 +59,11 @@ function generateQRCode() {
     printWindow.document.write("</body></html>");
     printWindow.document.close();
     printWindow.print();
+}function printInvoice() {
+    var printContent = document.getElementById("invoiceOutput").innerHTML;
+    var originalContent = document.body.innerHTML;
+    
+    document.body.innerHTML = printContent;
+    window.print();
+    document.body.innerHTML = originalContent;
 }
