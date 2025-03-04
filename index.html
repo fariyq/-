@@ -3,58 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ইনভয়েস - ইমরান ইলেকট্রনিক্স</title>
+    <title>ইনভয়েস সিস্টেম</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="invoice">
+    <div class="invoice-container">
         <h2>ইমরান ইলেকট্রনিক্স মোবাইল সার্ভিসিং সেন্টার</h2>
         <p>Phone: 01952325903 | Email: mdemranst0@gmail.com</p>
-        <p>Date: <span id="date-time"></span></p>
+        <p>Date: <span id="date"></span> | Time: <span id="time"></span></p>
 
-        <div>
-            <label>নতুন কাস্টমারের নাম:</label>
-            <input type="text" id="customer-name" placeholder="কাস্টমারের নাম">
-            <label>নতুন কাস্টমারের মোবাইল:</label>
-            <input type="text" id="customer-phone" placeholder="মোবাইল নম্বর">
-        </div>
+        <label>কাস্টমার মোবাইল:</label>
+        <input type="text" id="customer_phone" placeholder="মোবাইল নম্বর">
+        <button onclick="searchCustomer()">সার্চ</button>
 
         <h3>Invoice Details</h3>
         <table id="invoice-table">
             <tr>
-                <th>প্রোডাক্টের নাম</th>
-                <th>দাম</th>
+                <th>পণ্যের নাম</th>
                 <th>পরিমাণ</th>
+                <th>দাম</th>
                 <th>মোট</th>
-                <th>❌</th>
+                <th>মুছুন</th>
             </tr>
         </table>
         <button onclick="addItem()">+ নতুন আইটেম যোগ করুন</button>
 
         <h3>মোট মূল্য: <span id="total-price">0</span> টাকা</h3>
-
         <button onclick="generateQR()">QR কোড তৈরি করুন</button>
+        <button onclick="saveInvoice()">সংরক্ষণ করুন</button>
         <button onclick="printInvoice()">প্রিন্ট করুন</button>
-
-        <div id="qr-code"></div>
     </div>
 
     <script src="script.js"></script>
 </body>
-</html><h3>কাস্টমার তথ্য</h3>
-<input type="text" id="search-phone" placeholder="মোবাইল নম্বর দিন">
-<button onclick="searchCustomer()">সার্চ</button>
-
-<br><br>
-
-<input type="text" id="customer-name" placeholder="নাম">
-<input type="text" id="customer-phone" placeholder="মোবাইল নম্বর">
-<button onclick="saveCustomer()">সংরক্ষণ</button>
-
-<div id="invoice">
-    <h3>Invoice Details</h3>
-    <!-- এখানে ইনভয়েসের প্রোডাক্ট ডাটা থাকবে -->
-</div>
-
-<button onclick="printInvoice()">প্রিন্ট করুন</button>
+</html>
