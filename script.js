@@ -10,20 +10,36 @@ function updateTotal() {
     document.getElementById("total").innerText = (price * quantity) + " টাকা";
 }
 
+// ✅ QR Code জেনারেট করা
 function generateQR() {
-    let invoiceData = `Shop: ইমরান ইলেকট্রনিক্স\nPhone: 01952325903\nTotal: ${document.getElementById("total").innerText}`;
-    alert("QR Code Generated: " + invoiceData);
+    let total = document.getElementById("total").innerText;
+    let phone = "01952325903"; // বিকাশ নম্বর
+
+    let qrData = `https://bkash.com/pay?amount=${total}&phone=${phone}`;
+    let qrCodeContainer = document.getElementById("qrCode");
+    
+    qrCodeContainer.innerHTML = "";
+    
+    let img = document.createElement("img");
+    img.src = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(qrData)}&size=150x150`;
+    qrCodeContainer.appendChild(img);
 }
 
-function fetchCustomer() {
-    let phone = document.getElementById("searchPhone").value;
-    alert("সার্চ করা হচ্ছে: " + phone);
-}
-
+// ✅ Invoice সংরক্ষণ করা (LocalStorage ব্যবহার)
 function saveInvoice() {
+    let invoiceData = {
+        date: new Date().toLocaleDateString(),
+        time: new Date().toLocaleTimeString(),
+        price: document.getElementById("price").value,
+        quantity: document.getElementById("quantity").value,
+        total: document.getElementById("total").innerText
+    };
+
+    localStorage.setItem("invoice", JSON.stringify(invoiceData));
     alert("Invoice সংরক্ষণ করা হলো!");
 }
 
+// ✅ Invoice প্রিন্ট করা
 function printInvoice() {
     window.print();
-} 
+}
