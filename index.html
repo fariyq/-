@@ -63,7 +63,35 @@
         } else {
             alert("Please enter valid product details.");
         }
-    }
+    }<button class="btn" onclick="generatePDF()">Download PDF</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.text("ইমরান ইলেকট্রনিক্স এন্ড মোবাইল সার্ভিসিং সেন্টার", 20, 20);
+            doc.text("Invoice", 20, 30);
+
+            let y = 50;
+            doc.text("Product Name   Price   Quantity   Total", 20, y);
+            y += 10;
+
+            document.querySelectorAll("#invoiceTable tr").forEach(row => {
+                let cols = row.querySelectorAll("td");
+                if (cols.length > 0) {
+                    let rowData = `${cols[0].innerText}  ${cols[1].innerText}  ${cols[2].innerText}  ${cols[3].innerText}`;
+                    doc.text(rowData, 20, y);
+                    y += 10;
+                }
+            });
+
+            doc.text(`Total Amount: ${total} BDT`, 20, y + 10);
+
+            doc.save("invoice.pdf");
+        }
+    </script>
 </script>
 
 </body>
