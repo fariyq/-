@@ -1,34 +1,21 @@
-function addItem() {
-    let table = document.getElementById("invoice-table");
-    let row = table.insertRow(-1);
-    row.innerHTML = `
-        <td><input type="text" placeholder="পণ্যের নাম"></td>
-        <td><input type="number" value="1" oninput="updateRowTotal(this)"></td>
-        <td><input type="number" value="0" oninput="updateRowTotal(this)"></td>
-        <td class="total">0</td>
-        <td><button onclick="deleteRow(this)">X</button></td>
-    `;
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
 }
-
-function updateRowTotal(element) {
-    let row = element.parentElement.parentElement;
-    let quantity = row.cells[1].querySelector("input").value;
-    let price = row.cells[2].querySelector("input").value;
-    let totalCell = row.cells[3];
-
-    let total = quantity * price;
-    totalCell.innerText = total;
-
-    updateTotal(); // সব প্রোডাক্টের মোট দাম আপডেট করা
+form {
+    width: 50%;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
 }
-
-function updateTotal() {
-    let totalElements = document.querySelectorAll(".total");
-    let grandTotal = 0;
-
-    totalElements.forEach(cell => {
-        grandTotal += parseFloat(cell.innerText) || 0;
-    });
-
-    document.getElementById("grand-total").innerText = `মোট মূল্য: ${grandTotal} টাকা`;
+input, button {
+    width: 90%;
+    padding: 8px;
+    margin: 5px;
+}
+button {
+    background-color: green;
+    color: white;
+    border: none;
 }
