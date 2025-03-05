@@ -1,43 +1,63 @@
-let invoiceNumber = 1001;
-let totalAmount = 0;
-
-function showCustomerForm() {
-    document.getElementById("customer-form").style.display = "block";
-}
-
-function saveCustomer() {
-    let name = document.getElementById("customer-name").value;
-    let phone = document.getElementById("customer-phone").value;
-    let address = document.getElementById("customer-address").value;
+document.addEventListener("DOMContentLoaded", function() {
     
-    if (!name || !phone || !address) {
-        alert("সব তথ্য দিন!");
-        return;
+    function updateDateTime() {
+        let now = new Date();
+        let formattedDate = now.toLocaleDateString("bn-BD");
+        let formattedTime = now.toLocaleTimeString("bn-BD");
+        document.getElementById("datetime").innerText = "তারিখ: " + formattedDate + " | সময়: " + formattedTime;
+    }
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+
+    let invoiceItems = [];
+    let totalPrice = 0;
+
+    document.getElementById("newCustomerBtn").addEventListener("click", function() {
+        document.getElementById("customerForm").style.display = "block";
+    });
+
+    document.getElementById("saveCustomer").addEventListener("click", function() {
+        let name = document.getElementById("customerName").value;
+        let phone = document.getElementById("customerPhone").value;
+        let address = document.getElementById("customerAddress").value;
+
+        if (name && phone && address) {
+            alert("✅ কাস্টমার সংরক্ষিত!");
+            document.getElementById("customerForm").style.display = "none";
+        } else {
+            alert("❌ সব তথ্য দিন!");
+        }
+    });
+
+    document.getElementById("addItem").addEventListener("click", function() {
+        let itemName = document.getElementById("itemName").value;
+        let itemQty = parseInt(document.getElementById("itemQty").value);
+        let itemPrice = parseFloat(document.getElementById("itemPrice").value);
+
+        if (itemName && itemQty > 0 && itemPrice > 0) {
+            let itemTotal = itemQty * itemPrice;
+            invoiceItems.push({ name: itemName, qty: itemQty, price: itemPrice, total: itemTotal });
+            updateInvoiceTable();
+        } else {
+            alert("❌ সঠিক তথ্য দিন!");
+        }
+    });
+
+    function updateInvoiceTable() {
+        let tableBody = document.getElementById("invoiceTable");
+        tableBody.innerHTML = "";
+        totalPrice = 0;
+
+        invoiceItems.forEach(item => {
+            let row = tableBody.insertRow();
+            row.insertCell(0).innerText = item.name;
+            row.insertCell(1).innerText = item.qty;
+            row.insertCell(2).innerText = item.price;
+            row.insertCell(3).innerText = item.total;
+            totalPrice += item.total;
+        });
+
+        document.getElementById("totalPrice").innerText = totalPrice;
     }
 
-    alert(`কাস্টমার সংরক্ষণ করা হয়েছে:\nনাম: ${name}\nফোন: ${phone}\nঠিকানা: ${address}`);
-}
-
-function addItem() {
-    let name = document.getElementById("item-name").value;
-    let quantity = document.getElementById("item-quantity").value;
-    let price = document.getElementById("item-price").value;
-    
-    if (!name || !quantity || !price) {
-        alert("সব তথ্য দিন!");
-        return;
-    }
-    
-    let total = quantity * price;
-    totalAmount += total;
-
-    let row = `<tr>
-        <td>${name}</td>
-        <td>${quantity}</td>
-        <td>${price}</td>
-        <td>${total}</td>
-    </tr>`;
-
-    document.getElementById("invoice-body").innerHTML += row;
-    document.getElementById("total-amount").innerText = totalAmount;
-}
+});
