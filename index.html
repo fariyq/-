@@ -1,142 +1,54 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ইনভয়েস - ইমরান ইলেকট্রনিক্স এন্ড মোবাইল সার্ভিসিং সেন্টার</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali&display=swap');
-
-        body { 
-            font-family: 'Noto Sans Bengali', sans-serif; 
-            margin: 20px; 
-            background-color: #f8f9fa;
-        }
-        .container { 
-            width: 80%; 
-            margin: auto; 
-            padding: 20px; 
-            border: 1px solid #ddd; 
-            background: white; 
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        h2 { text-align: center; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
-        .btn { 
-            margin-top: 10px; 
-            padding: 10px; 
-            background: #28a745; 
-            color: white; 
-            border: none; 
-            cursor: pointer; 
-            display: block;
-            width: 100%;
-        }
-        .btn:hover { background: #218838; }
-    </style>
+    <title>Invoice - EMRAN ELECTRONICS</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="invoice-container">
+        <div class="invoice-header">
+            <h1>EMRAN ELECTRONICS</h1>
+            <p>Invoice No: <span id="invoiceNumber"></span></p>
+            <p>Date: <span id="invoiceDate"></span></p>
+        </div>
 
-<div class="container">
-    <h2>ইমরান ইলেকট্রনিক্স এন্ড মোবাইল সার্ভিসিং সেন্টার</h2>
-    <label>পণ্যের নাম:</label>
-    <input type="text" id="productName" placeholder="পণ্যের নাম লিখুন">
-    <label>দাম:</label>
-    <input type="number" id="price" placeholder="দাম লিখুন">
-    <label>পরিমাণ:</label>
-    <input type="number" id="quantity" placeholder="পরিমাণ লিখুন">
-    <button class="btn" onclick="addItem()">ইনভয়েসে যোগ করুন</button>
+        <div class="customer-info">
+            <label>Customer Name:</label>
+            <input type="text" id="customerName">
+            <label>Phone:</label>
+            <input type="text" id="customerPhone">
+        </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>পণ্য</th>
-                <th>দাম</th>
-                <th>পরিমাণ</th>
-                <th>মোট</th>
-            </tr>
-        </thead>
-        <tbody id="invoiceTable"></tbody>
-    </table>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody id="productList"></tbody>
+        </table>
 
-    <h3>মোট পরিমাণ: <span id="totalAmount">0</span> BDT</h3>
+        <button onclick="addProduct()">Add Product</button>
 
-    <h3>ইনভয়েসের কিউআর কোড:</h3>
-    <div id="qrcode"></div>
-    <button class="btn" onclick="generateQR()">কিউআর কোড তৈরি করুন</button>
+        <h3>Total: <span id="totalAmount">0</span> ৳</h3>
 
-    <button class="btn" onclick="generatePDF()">পিডিএফ ডাউনলোড করুন</button>
-</div>
+        <div class="payment-methods">
+            <h4>Payment Methods</h4>
+            <p>bKash: 01952325903</p>
+            <p>Nagad: 01952325903</p>
+            <p>Rocket: 01952325903</p>
+        </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <div id="qrCode"></div>
 
-<script>
-    let total = 0;
+        <button onclick="generatePDF()">Download Invoice</button>
+    </div>
 
-    function addItem() {
-        let name = document.getElementById("productName").value;
-        let price = parseFloat(document.getElementById("price").value);
-        let qty = parseInt(document.getElementById("quantity").value);
-        let totalPrice = price * qty;
-
-        if (name && price && qty) {
-            let table = document.getElementById("invoiceTable");
-            let row = table.insertRow();
-            row.innerHTML = `<td>${name}</td><td>${price}</td><td>${qty}</td><td>${totalPrice}</td>`;
-            
-            total += totalPrice;
-            document.getElementById("totalAmount").innerText = total;
-
-            document.getElementById("productName").value = "";
-            document.getElementById("price").value = "";
-            document.getElementById("quantity").value = "";
-        } else {
-            alert("সঠিক পণ্য বিবরণী লিখুন!");
-        }
-    }
-
-    function generateQR() {
-        document.getElementById("qrcode").innerHTML = "";
-        let totalAmount = document.getElementById("totalAmount").innerText;
-        let qrText = `মোট পরিমাণ: ${totalAmount} BDT`;
-        
-        new QRCode(document.getElementById("qrcode"), {
-            text: qrText,
-            width: 100,
-            height: 100
-        });
-    }
-
-    function generatePDF() {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-
-        doc.addFont("NotoSansBengali-Regular.ttf", "NotoSansBengali", "normal");
-        doc.setFont("NotoSansBengali");
-
-        doc.text("ইমরান ইলেকট্রনিক্স এন্ড মোবাইল সার্ভিসিং সেন্টার", 20, 20);
-        doc.text("ইনভয়েস", 20, 30);
-
-        let y = 50;
-        doc.text("পণ্য       দাম       পরিমাণ       মোট", 20, y);
-        y += 10;
-
-        document.querySelectorAll("#invoiceTable tr").forEach(row => {
-            let cols = row.querySelectorAll("td");
-            if (cols.length > 0) {
-                let rowData = `${cols[0].innerText}  ${cols[1].innerText}  ${cols[2].innerText}  ${cols[3].innerText}`;
-                doc.text(rowData, 20, y);
-                y += 10;
-            }
-        });
-
-        doc.text(`মোট পরিমাণ: ${total} BDT`, 20, y + 10);
-
-        doc.save("invoice.pdf");
-    }
-</script>
-
+    <script src="script.js"></script>
 </body>
 </html>
