@@ -28,3 +28,8 @@ th, td {
 .payment-methods {
     margin-top: 20px;
 }
+
+.signature-section {
+    margin-top: 20px;
+    text-align: left;
+}
