@@ -3,46 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ইনভয়েস সিস্টেম</title>
-    <link rel="stylesheet" href="style.css">
+    <title>ইমরান ইলেকট্রনিক্স - ইনভয়েস সিস্টেম</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
+    <div class="container mt-4">
+        <!-- Header -->
+        <div class="text-center">
+            <img src="logo.png" alt="Logo" width="100">
+            <h2>ইমরান ইলেকট্রনিক্স মোবাইল সার্ভিসিং সেন্টার</h2>
+            <p>📞 01952325903 | ✉️ mdemranst0@gmail.com</p>
+            <h5>📅 তারিখ: <span id="invoiceDate"></span> ⏰ সময়: <span id="invoiceTime"></span></h5>
+        </div>
 
-    <div class="invoice-container">
-        <h2>ইমরান ইলেকট্রনিক্স মোবাইল সার্ভিসিং সেন্টার</h2>
-        <p>Phone: 01952325903 | Email: mdemranst0@gmail.com</p>
-        <p>Date: <span id="date"></span> | Time: <span id="time"></span></p>
-
-        <label>কাস্টমার মোবাইল:</label>
-        <input type="text" id="customer_phone" placeholder="মোবাইল নম্বর">
-        <button onclick="searchCustomer()">সার্চ</button>
-
-        <h3>Invoice Details</h3>
-        <table id="invoice-table">
-            <tr>
-                <th>পণ্যের নাম</th>
-                <th>পরিমাণ</th>
-                <th>দাম</th>
-                <th>মোট</th>
-                <th>মুছুন</th>
-            </tr>
-        </table>
-        <button onclick="addItem()">+ নতুন আইটেম যোগ করুন</button>
-
-        <h3>মোট মূল্য: <span id="total-price">0</span> টাকা</h3>
-        <button onclick="generateQR()">QR কোড তৈরি করুন</button>
-        <button onclick="saveInvoice()">সংরক্ষণ করুন</button>
-        <button onclick="printInvoice()">প্রিন্ট করুন</button>
+        <!-- Invoice Form -->
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4>নতুন ইনভয়েস</h4>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>পণ্যের নাম</th>
+                            <th>পরিমাণ</th>
+                            <th>দাম (৳)</th>
+                            <th>মোট (৳)</th>
+                            <th>অপশন</th>
+                        </tr>
+                    </thead>
+                    <tbody id="invoiceTable">
+                        <tr>
+                            <td><input type="text" class="form-control product-name" placeholder="পণ্যের নাম"></td>
+                            <td><input type="number" class="form-control quantity" value="1"></td>
+                            <td><input type="number" class="form-control price" value="0"></td>
+                            <td class="total-price">0</td>
+                            <td><button class="btn btn-danger remove-item">❌</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="btn btn-success" id="addItem">➕ নতুন পণ্য</button>
+                <hr>
+                <h5 class="text-end">মোট টাকা: <span id="grandTotal">0</span>৳</h5>
+                <button class="btn btn-primary">✅ ইনভয়েস তৈরি করুন</button>
+            </div>
+        </div>
     </div>
 
-    <script src="script.js"></script>
-</body>
-</html><h3 id="grand-total">মোট মূল্য: 0 টাকা</h3>
+    <script>
+        $(document).ready(function () {
+            // নতুন পণ্য যোগ করা
+            $("#addItem").click(function () {
+                $("#invoiceTable").append(`
+                    <tr>
+                        <td><input type="text" class="form-control product-name" placeholder="পণ্যের নাম"></td>
+                        <td><input type="number" class="form-control quantity" value="1"></td>
+                        <td><input type="number" class="form-control price" value="0"></td>
+                        <td class="total-price">0</td>
+                        <td><button class="btn btn-danger remove-item">❌</button></td>
+                    </tr>
+                `);
+            });
 
-    <button onclick="generateQR()">QR কোড তৈরি করুন</button>
-    <button onclick="saveInvoice()">সংরক্ষণ করুন</button>
-    <button onclick="printInvoice()">প্রিন্ট</button>
+            // দাম পরিবর্তন হলে মোট টাকার হিসাব
+            $(document).on("input", ".quantity, .price", function () {
+                let row = $(this).closest("tr");
+                let qty = row.find(".quantity").val();
+                let price = row.find(".price").val();
+                let total = qty * price;
+                row.find(".total-price").text(total);
+                calculateGrandTotal();
+            });
 
-    <script src="script.js"></script>
+            // মোট টাকা গণনা
+            function calculateGrandTotal() {
+                let total = 0;
+                $(".total-price").each(function () {
+                    total += parseFloat($(this).text());
+                });
+                $("#grandTotal").text(total);
+            }
+
+            // পণ্য লাইন রিমুভ করা
+            $(document).on("click", ".remove-item", function () {
+                $(this).closest("tr").remove();
+                calculateGrandTotal();
+            });
+
+            // অটোমেটিক তারিখ ও সময় সেট করা
+            function updateDateTime() {
+                let now = new Date();
+                let date = now.toLocaleDateString('bn-BD');
+                let time = now.toLocaleTimeString('bn-BD');
+                $("#invoiceDate").text(date);
+                $("#invoiceTime").text(time);
+            }
+            updateDateTime(); // প্রথমবার সেট করা
+            setInterval(updateDateTime, 1000); // প্রতি সেকেন্ডে আপডেট হবে
+        });
+    </script>
 </body>
 </html>
