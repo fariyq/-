@@ -105,4 +105,13 @@
         });
     </script>
 </body>
-</html>
+</html><button onclick="window.print()" class="btn btn-primary">🖨️ প্রিন্ট</button><div id="qrcode"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+    var invoiceData = "আপনার ইনভয়েস নম্বর বা প্রয়োজনীয় তথ্য";
+    var qrcode = new QRCode(document.getElementById("qrcode"), {
+        text: invoiceData,
+        width: 128,
+        height: 128
+    });
+</script>
