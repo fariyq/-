@@ -118,4 +118,33 @@
 <input type="text" id="customerName" placeholder="নাম লিখুন">
 
 <label>ফোন নম্বর:</label>
+<input type="text" id="customerPhone" placeholder="ফোন নম্বর লিখুন"><h3>নতুন কাস্টমার যুক্ত করুন</h3>
+<label>কাস্টমারের নাম:</label>
+<input type="text" id="customerName" placeholder="নাম লিখুন">
+
+<label>ঠিকানা:</label>
+<input type="text" id="customerAddress" placeholder="ঠিকানা লিখুন">
+
+<label>ফোন নম্বর:</label>
 <input type="text" id="customerPhone" placeholder="ফোন নম্বর লিখুন">
+
+<button onclick="saveCustomer()">কাস্টমার সংরক্ষণ করুন</button>
+
+<h3>নতুন ইনভয়েস</h3>
+<table>
+    <tr>
+        <th>পণ্যের নাম</th>
+        <th>পরিমাণ</th>
+        <th>দাম (৳)</th>
+        <th>মোট (৳)</th>
+        <th>অপশন</th>
+    </tr>
+    <tbody id="productList">
+        <!-- নতুন পণ্য এখানে যোগ হবে -->
+    </tbody>
+</table>
+
+<button onclick="addProduct()">নতুন পণ্য</button>
+<button onclick="generateInvoice()">ইনভয়েস তৈরি করুন</button>
+
+<div id="qrcode"></div>
