@@ -27,4 +27,20 @@ function saveInvoice() {
 
 function printInvoice() {
     window.print();
-}
+}document.getElementById("generateInvoice").addEventListener("click", function() {
+    var name = document.getElementById("customerName").value;
+    var phone = document.getElementById("customerPhone").value;
+    var totalPrice = document.getElementById("totalAmount").innerText;
+
+    var invoiceData = `
+    কাস্টমারের নাম: ${name}
+    ফোন: ${phone}
+    মোট টাকা: ${totalPrice}৳
+    `;
+
+    var qrcode = new QRCode(document.getElementById("qrcode"), {
+        text: invoiceData,
+        width: 128,
+        height: 128
+    });
+});
