@@ -38,4 +38,3 @@ function generatePDF() {
         jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
     };
     html2pdf().from(invoiceElement).set(opt).save();
-}
