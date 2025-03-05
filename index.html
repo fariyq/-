@@ -3,148 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ইমরান ইলেকট্রনিক্স - ইনভয়েস সিস্টেম</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>ইমরান ইলেকট্রনিক্স - ইনভয়েস</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="container mt-4">
-        <!-- Header -->
-        <div class="text-center">
-            <img src="logo.png" alt="Logo" width="100">
-            <h2>ইমরান ইলেকট্রনিক্স মোবাইল সার্ভিসিং সেন্টার</h2>
-            <p>📞 01952325903 | ✉️ mdemranst0@gmail.com</p>
-            <h5>📅 তারিখ: <span id="invoiceDate"></span> ⏰ সময়: <span id="invoiceTime"></span></h5>
+    <h2>ইমরান ইলেকট্রনিক্স মোবাইল সার্ভিসিং সেন্টার</h2>
+    <p>📞 01952325903 | ✉ mdemranst0@gmail.com</p>
+    <p>📅 <span id="date-time"></span></p>
+
+    <form id="invoiceForm">
+        <label>কাস্টমারের নাম:</label>
+        <input type="text" id="customerName" required>
+        <label>ফোন নাম্বার:</label>
+        <input type="text" id="customerPhone" required>
+        <label>ঠিকানা:</label>
+        <input type="text" id="customerAddress">
+
+        <h3>পণ্য যোগ করুন</h3>
+        <div id="productList">
+            <input type="text" placeholder="পণ্যের নাম" required>
+            <input type="number" placeholder="পরিমাণ" required>
+            <input type="number" placeholder="দাম (৳)" required>
         </div>
+        <button type="button" onclick="addProduct()">+ নতুন পণ্য</button>
+        <button type="submit">✅ ইনভয়েস তৈরি করুন</button>
+    </form>
 
-        <!-- Invoice Form -->
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h4>নতুন ইনভয়েস</h4>
-            </div>
-            <div class="card-body">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>পণ্যের নাম</th>
-                            <th>পরিমাণ</th>
-                            <th>দাম (৳)</th>
-                            <th>মোট (৳)</th>
-                            <th>অপশন</th>
-                        </tr>
-                    </thead>
-                    <tbody id="invoiceTable">
-                        <tr>
-                            <td><input type="text" class="form-control product-name" placeholder="পণ্যের নাম"></td>
-                            <td><input type="number" class="form-control quantity" value="1"></td>
-                            <td><input type="number" class="form-control price" value="0"></td>
-                            <td class="total-price">0</td>
-                            <td><button class="btn btn-danger remove-item">❌</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <button class="btn btn-success" id="addItem">➕ নতুন পণ্য</button>
-                <hr>
-                <h5 class="text-end">মোট টাকা: <span id="grandTotal">0</span>৳</h5>
-                <button class="btn btn-primary">✅ ইনভয়েস তৈরি করুন</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        $(document).ready(function () {
-            // নতুন পণ্য যোগ করা
-            $("#addItem").click(function () {
-                $("#invoiceTable").append(`
-                    <tr>
-                        <td><input type="text" class="form-control product-name" placeholder="পণ্যের নাম"></td>
-                        <td><input type="number" class="form-control quantity" value="1"></td>
-                        <td><input type="number" class="form-control price" value="0"></td>
-                        <td class="total-price">0</td>
-                        <td><button class="btn btn-danger remove-item">❌</button></td>
-                    </tr>
-                `);
-            });
-
-            // দাম পরিবর্তন হলে মোট টাকার হিসাব
-            $(document).on("input", ".quantity, .price", function () {
-                let row = $(this).closest("tr");
-                let qty = row.find(".quantity").val();
-                let price = row.find(".price").val();
-                let total = qty * price;
-                row.find(".total-price").text(total);
-                calculateGrandTotal();
-            });
-
-            // মোট টাকা গণনা
-            function calculateGrandTotal() {
-                let total = 0;
-                $(".total-price").each(function () {
-                    total += parseFloat($(this).text());
-                });
-                $("#grandTotal").text(total);
-            }
-
-            // পণ্য লাইন রিমুভ করা
-            $(document).on("click", ".remove-item", function () {
-                $(this).closest("tr").remove();
-                calculateGrandTotal();
-            });
-
-            // অটোমেটিক তারিখ ও সময় সেট করা
-            function updateDateTime() {
-                let now = new Date();
-                let date = now.toLocaleDateString('bn-BD');
-                let time = now.toLocaleTimeString('bn-BD');
-                $("#invoiceDate").text(date);
-                $("#invoiceTime").text(time);
-            }
-            updateDateTime(); // প্রথমবার সেট করা
-            setInterval(updateDateTime, 1000); // প্রতি সেকেন্ডে আপডেট হবে
-        });
-    </script>
+    <script src="js/script.js"></script>
 </body>
-</html><button onclick="window.print()" class="btn btn-primary">🖨️ প্রিন্ট</button><div id="qrcode"></div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script>
-    var invoiceData = "আপনার ইনভয়েস নম্বর বা প্রয়োজনীয় তথ্য";
-    var qrcode = new QRCode(document.getElementById("qrcode"), {
-        text: invoiceData,
-        width: 128,
-        height: 128
-    });
-</script><label>কাস্টমারের নাম:</label>
-<input type="text" id="customerName" placeholder="নাম লিখুন">
-
-<label>ফোন নম্বর:</label>
-<input type="text" id="customerPhone" placeholder="ফোন নম্বর লিখুন"><h3>নতুন কাস্টমার যুক্ত করুন</h3>
-<label>কাস্টমারের নাম:</label>
-<input type="text" id="customerName" placeholder="নাম লিখুন">
-
-<label>ঠিকানা:</label>
-<input type="text" id="customerAddress" placeholder="ঠিকানা লিখুন">
-
-<label>ফোন নম্বর:</label>
-<input type="text" id="customerPhone" placeholder="ফোন নম্বর লিখুন">
-
-<button onclick="saveCustomer()">কাস্টমার সংরক্ষণ করুন</button>
-
-<h3>নতুন ইনভয়েস</h3>
-<table>
-    <tr>
-        <th>পণ্যের নাম</th>
-        <th>পরিমাণ</th>
-        <th>দাম (৳)</th>
-        <th>মোট (৳)</th>
-        <th>অপশন</th>
-    </tr>
-    <tbody id="productList">
-        <!-- নতুন পণ্য এখানে যোগ হবে -->
-    </tbody>
-</table>
-
-<button onclick="addProduct()">নতুন পণ্য</button>
-<button onclick="generateInvoice()">ইনভয়েস তৈরি করুন</button>
-
-<div id="qrcode"></div>
+</html>
