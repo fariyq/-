@@ -3,32 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ইমরান ইলেকট্রনিক্স - ইনভয়েস</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>ইনভয়েস সিস্টেম</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
     <h2>ইমরান ইলেকট্রনিক্স মোবাইল সার্ভিসিং সেন্টার</h2>
-    <p>📞 01952325903 | ✉ mdemranst0@gmail.com</p>
-    <p>📅 <span id="date-time"></span></p>
 
-    <form id="invoiceForm">
-        <label>কাস্টমারের নাম:</label>
-        <input type="text" id="customerName" required>
-        <label>ফোন নাম্বার:</label>
-        <input type="text" id="customerPhone" required>
-        <label>ঠিকানা:</label>
-        <input type="text" id="customerAddress">
+    <button onclick="showCustomerForm()">নতুন কাস্টমার</button>
+    
+    <div id="customer-form" style="display: none;">
+        <h3>কাস্টমারের তথ্য</h3>
+        <label>নাম: <input type="text" id="customer-name"></label><br>
+        <label>ফোন: <input type="text" id="customer-phone"></label><br>
+        <label>ঠিকানা: <input type="text" id="customer-address"></label><br>
+        <button onclick="saveCustomer()">সংরক্ষণ করুন</button>
+    </div>
 
-        <h3>পণ্য যোগ করুন</h3>
-        <div id="productList">
-            <input type="text" placeholder="পণ্যের নাম" required>
-            <input type="number" placeholder="পরিমাণ" required>
-            <input type="number" placeholder="দাম (৳)" required>
-        </div>
-        <button type="button" onclick="addProduct()">+ নতুন পণ্য</button>
-        <button type="submit">✅ ইনভয়েস তৈরি করুন</button>
-    </form>
+    <h3>আইটেম যোগ করুন</h3>
+    <div>
+        <input type="text" id="item-name" placeholder="আইটেম নাম">
+        <input type="number" id="item-quantity" placeholder="পরিমাণ">
+        <input type="number" id="item-price" placeholder="দাম">
+        <button onclick="addItem()">যোগ করুন</button>
+    </div>
 
-    <script src="js/script.js"></script>
+    <h3>ইনভয়েস</h3>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>আইটেম</th>
+                <th>পরিমাণ</th>
+                <th>দাম</th>
+                <th>মোট</th>
+            </tr>
+        </thead>
+        <tbody id="invoice-body"></tbody>
+    </table>
+
+    <h3>মোট মূল্য: <span id="total-amount">0</span> টাকা</h3>
+
+    <script src="script.js"></script>
 </body>
-</html><link rel="stylesheet" href="style.css"><script src="script.js"></script>
+</html>
