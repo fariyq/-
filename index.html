@@ -3,33 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ইনভয়েস সিস্টেম</title>
-    <link rel="stylesheet" href="style.css">
+    <title>ইমরান ইলেকট্রনিক্স - ইনভয়েস</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
     <h2>ইমরান ইলেকট্রনিক্স মোবাইল সার্ভিসিং সেন্টার</h2>
+    <p id="datetime"></p>
 
-    <button onclick="showCustomerForm()">নতুন কাস্টমার</button>
+    <button id="newCustomerBtn">🔰 নতুন কাস্টমার</button>
     
-    <div id="customer-form" style="display: none;">
-        <h3>কাস্টমারের তথ্য</h3>
-        <label>নাম: <input type="text" id="customer-name"></label><br>
-        <label>ফোন: <input type="text" id="customer-phone"></label><br>
-        <label>ঠিকানা: <input type="text" id="customer-address"></label><br>
-        <button onclick="saveCustomer()">সংরক্ষণ করুন</button>
+    <div id="customerForm" style="display: none;">
+        <h3>কাস্টমার ইনফরমেশন</h3>
+        <label>নাম:</label> <input type="text" id="customerName">
+        <label>ফোন:</label> <input type="text" id="customerPhone">
+        <label>ঠিকানা:</label> <input type="text" id="customerAddress">
+        <button id="saveCustomer">✅ সংরক্ষণ করুন</button>
     </div>
 
     <h3>আইটেম যোগ করুন</h3>
-    <div>
-        <input type="text" id="item-name" placeholder="আইটেম নাম">
-        <input type="number" id="item-quantity" placeholder="পরিমাণ">
-        <input type="number" id="item-price" placeholder="দাম">
-        <button onclick="addItem()">যোগ করুন</button>
-    </div>
+    <input type="text" id="itemName" placeholder="আইটেম নাম">
+    <input type="number" id="itemQty" placeholder="পরিমাণ">
+    <input type="number" id="itemPrice" placeholder="দাম">
+    <button id="addItem">➕ যোগ করুন</button>
 
     <h3>ইনভয়েস</h3>
-    <table border="1">
+    <table>
         <thead>
             <tr>
                 <th>আইটেম</th>
@@ -38,11 +37,12 @@
                 <th>মোট</th>
             </tr>
         </thead>
-        <tbody id="invoice-body"></tbody>
+        <tbody id="invoiceTable"></tbody>
     </table>
-
-    <h3>মোট মূল্য: <span id="total-amount">0</span> টাকা</h3>
+    
+    <h3>মোট মূল্য: <span id="totalPrice">0</span> টাকা</h3>
 
     <script src="script.js"></script>
+
 </body>
 </html>
