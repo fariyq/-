@@ -65,4 +65,25 @@ function generateInvoice() {
     doc.addImage(qrDataURL, "PNG", 10, y + 20, 40, 40);
 
     doc.save("invoice.pdf");
+}document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".quantity, .unit-price").forEach(function (input) {
+        input.addEventListener("input", calculateTotal);
+    });
+});
+
+function calculateTotal() {
+    let rows = document.querySelectorAll(".invoice-row");
+    let grandTotal = 0;
+
+    rows.forEach(function (row) {
+        let quantity = parseFloat(row.querySelector(".quantity").value) || 0;
+        let unitPrice = parseFloat(row.querySelector(".unit-price").value) || 0;
+        let totalPrice = quantity * unitPrice;
+        
+        row.querySelector(".total-price").textContent = totalPrice.toFixed(2); // দুই ঘরDecimal
+        
+        grandTotal += totalPrice;
+    });
+
+    document.getElementById("grand-total").textContent = grandTotal.toFixed(2);
 }
