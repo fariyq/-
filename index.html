@@ -3,57 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ইনভয়েস - ইমরান ইলেকট্রনিক্স</title>
+    <title>ইনভয়েস সিস্টেম - ইমরান ইলেকট্রনিক্স</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        .invoice-box { border: 1px solid #000; padding: 15px; max-width: 600px; margin: auto; background: #f9f9f9; }
-        .header { text-align: center; font-size: 20px; font-weight: bold; }
-        .info { margin-top: 10px; font-size: 14px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        table, th, td { border: 1px solid black; padding: 8px; text-align: center; }
-        .signature { display: flex; justify-content: space-between; margin-top: 20px; }
-        .signature div { text-align: center; }
-        .btn { background: green; color: white; padding: 10px; border: none; cursor: pointer; margin-top: 10px; }
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+        }
+        input, button {
+            margin: 10px;
+            padding: 8px;
+            font-size: 16px;
+        }
+        .btn {
+            background-color: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <div class="invoice-box">
-        <div class="header">ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার</div>
-        <div class="info">
-            <p>তারিখ: <span id="invoice-date"></span> | সময়: <span id="invoice-time"></span></p>
-            <p>ক্রেতার নাম: <input type="text" id="customer-name"></p>
-        </div>
-        <table>
-            <tr>
-                <th>পণ্য</th>
-                <th>পরিমাণ</th>
-                <th>দাম (টাকা)</th>
-                <th>মোট</th>
-            </tr>
-            <tr>
-                <td><input type="text" id="product-name"></td>
-                <td><input type="number" id="quantity" value="1"></td>
-                <td><input type="number" id="price" value="0"></td>
-                <td><span id="total">0</span></td>
-            </tr>
-        </table>
+
+    <div class="container">
+        <h2>ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার</h2>
+        <p>তারিখ: <span id="date"></span> | সময়: <span id="time"></span></p>
+
+        <label>ক্রেতার নাম:</label>
+        <input type="text" id="customer-name"><br>
+
+        <label>পণ্যের নাম:</label>
+        <input type="text" id="product-name"><br>
+
+        <label>পরিমাণ:</label>
+        <input type="number" id="quantity" value="1"><br>
+
+        <label>দাম (টাকা):</label>
+        <input type="number" id="price" value="0"><br>
+
         <button class="btn" onclick="generateInvoice()">ইনভয়েস তৈরি করুন</button>
-        <div class="signature">
-            <div>বিক্রেতার স্বাক্ষর</div>
-            <div>ক্রেতার স্বাক্ষর</div>
-        </div>
+        <button class="btn" onclick="downloadPDF()">PDF ডাউনলোড করুন</button>
+
+        <h3>মোট: <span id="total">0</span> টাকা</h3>
+
+        <div id="qrcode"></div>
+
+        <p>বিক্রেতার স্বাক্ষর: ______________</p>
+        <p>ক্রেতার স্বাক্ষর: ______________</p>
     </div>
 
     <script>
+        document.getElementById("date").innerText = new Date().toLocaleDateString();
+        document.getElementById("time").innerText = new Date().toLocaleTimeString();
+
         function generateInvoice() {
             let quantity = document.getElementById("quantity").value;
             let price = document.getElementById("price").value;
             let total = quantity * price;
             document.getElementById("total").innerText = total;
+
+            let qrData = `ক্রেতার নাম: ${document.getElementById("customer-name").value}, মোট: ${total} টাকা`;
+            document.getElementById("qrcode").innerHTML = "";
+            new QRCode(document.getElementById("qrcode"), qrData);
         }
 
-        document.getElementById("invoice-date").innerText = new Date().toLocaleDateString();
-        document.getElementById("invoice-time").innerText = new Date().toLocaleTimeString();
+        async function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            let doc = new jsPDF();
+
+            let customerName = document.getElementById("customer-name").value || "অজানা";
+            let productName = document.getElementById("product-name").value || "পণ্য নেই";
+            let quantity = document.getElementById("quantity").value || "0";
+            let price = document.getElementById("price").value || "0";
+            let total = document.getElementById("total").innerText || "0";
+            let date = new Date().toLocaleDateString();
+            let time = new Date().toLocaleTimeString();
+
+            doc.setFont("helvetica", "bold");
+            doc.text("ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার", 20, 20);
+            doc.setFont("helvetica", "normal");
+            doc.text(`তারিখ: ${date}    সময়: ${time}`, 20, 30);
+            doc.text(`ক্রেতার নাম: ${customerName}`, 20, 40);
+            
+            doc.text("পণ্যের বিবরণ:", 20, 50);
+            doc.text(`পণ্য: ${productName}`, 20, 60);
+            doc.text(`পরিমাণ: ${quantity}`, 20, 70);
+            doc.text(`দাম: ${price} টাকা`, 20, 80);
+            doc.text(`মোট: ${total} টাকা`, 20, 90);
+
+            doc.text("বিক্রেতার স্বাক্ষর: ______________", 20, 110);
+            doc.text("ক্রেতার স্বাক্ষর: ______________", 120, 110);
+
+            doc.save(`invoice_${date}.pdf`);
+        }
     </script>
+
 </body>
 </html>
