@@ -1,40 +1,68 @@
 window.onload = function() {
-    document.getElementById('invoiceNumber').innerText = "INV-" + new Date().toISOString().slice(0, 10).replace(/-/g, '') + "-" + Math.floor(Math.random() * 1000);
-    document.getElementById('invoiceDate').innerText = new Date().toLocaleString();
+    document.getElementById("invoice-date").innerText = new Date().toLocaleString('bn-BD', { hour: 'numeric', minute: 'numeric', hour12: true });
 };
 
-function addProduct() {
-    let productList = document.getElementById("productList");
-    let row = productList.insertRow();
+function addItem() {
+    let table = document.getElementById("invoice-table").getElementsByTagName('tbody')[0];
+    let row = table.insertRow();
     row.innerHTML = `
-        <td><input type="text" placeholder="Product Name"></td>
-        <td><input type="number" placeholder="Price" oninput="calculateTotal()"></td>
-        <td><input type="number" placeholder="Qty" oninput="calculateTotal()"></td>
-        <td class="totalCell">0</td>
+        <td><input type="text" placeholder="পণ্যের নাম"></td>
+        <td><input type="number" value="1"></td>
+        <td><input type="number" value="0"></td>
+        <td class="total">0</td>
+        <td><button onclick="deleteRow(this)">❌</button></td>
     `;
+    updateTotal();
 }
 
-function calculateTotal() {
-    let rows = document.querySelectorAll("#productList tr");
+function deleteRow(btn) {
+    let row = btn.parentNode.parentNode;
+    row.parentNode.removeChild(row);
+    updateTotal();
+}
+
+function updateTotal() {
     let total = 0;
-    rows.forEach(row => {
-        let price = row.cells[1].querySelector("input").value;
-        let qty = row.cells[2].querySelector("input").value;
-        let totalCell = row.cells[3];
-        let rowTotal = price * qty;
-        totalCell.innerText = rowTotal;
-        total += rowTotal;
+    document.querySelectorAll("#invoice-table tbody tr").forEach(row => {
+        let qty = row.cells[1].querySelector("input").value;
+        let price = row.cells[2].querySelector("input").value;
+        let subtotal = qty * price;
+        row.cells[3].innerText = subtotal;
+        total += subtotal;
     });
-    document.getElementById("totalAmount").innerText = total + " ৳";
+    document.getElementById("total-price").innerText = total;
 }
 
-function generatePDF() {
-    let invoiceElement = document.querySelector(".invoice-container");
-    let opt = {
-        margin: 10,
-        filename: "invoice.pdf",
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
-    };
-    html2pdf().from(invoiceElement).set(opt).save();
+function generateInvoice() {
+    let { jsPDF } = window.jspdf;
+    let doc = new jsPDF();
+    doc.text("ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার", 10, 10);
+    doc.text("📧 mdemranst0@gmail.com | 📞 01952325903", 10, 20);
+    doc.text("তারিখ: " + new Date().toLocaleString('bn-BD', { hour12: true }), 10, 30);
+
+    let y = 40;
+    document.querySelectorAll("#invoice-table tbody tr").forEach(row => {
+        let name = row.cells[0].querySelector("input").value;
+        let qty = row.cells[1].querySelector("input").value;
+        let price = row.cells[2].querySelector("input").value;
+        let subtotal = row.cells[3].innerText;
+        doc.text(`${name} - ${qty} x ${price} = ${subtotal} টাকা`, 10, y);
+        y += 10;
+    });
+
+    doc.text("মোট: " + document.getElementById("total-price").innerText + " টাকা", 10, y + 10);
+    
+    let qrCodeDiv = document.getElementById("qrcode");
+    qrCodeDiv.innerHTML = "";
+    new QRCode(qrCodeDiv, {
+        text: "bKash: 01952325903, Nagad: 01952325903, Rocket: 01952325903",
+        width: 100,
+        height: 100
+    });
+
+    let qrCanvas = qrCodeDiv.querySelector("canvas");
+    let qrDataURL = qrCanvas.toDataURL("image/png");
+    doc.addImage(qrDataURL, "PNG", 10, y + 20, 40, 40);
+
+    doc.save("invoice.pdf");
+}
