@@ -3,49 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ইনভয়েস সিস্টেম - ইমরান ইলেকট্রনিক্স</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <title>ডায়নামিক ইনভয়েস</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার</h1>
-        <p>📧 mdemranst0@gmail.com | 📞 01952325903</p>
-        <p id="invoice-date"></p>
-    </header>
+    <div class="container">
+        <h2>ইনভয়েস তৈরি করুন</h2>
+        <table id="invoiceTable">
+            <thead>
+                <tr>
+                    <th>পণ্য নাম</th>
+                    <th>পরিমাণ</th>
+                    <th>একক মূল্য</th>
+                    <th>মোট</th>
+                    <th>অপশন</th>
+                </tr>
+            </thead>
+            <tbody id="invoiceBody"></tbody>
+        </table>
+        <button onclick="addItem()">+ আইটেম যোগ করুন</button>
 
-    <section id="invoice-form">
-        <input type="text" id="customer-name" placeholder="ক্রেতার নাম">
-        <input type="text" id="customer-phone" placeholder="ক্রেতার মোবাইল">
-        <button onclick="addItem()">+ পণ্য যোগ করুন</button>
-    </section>
-
-    <table id="invoice-table">
-        <thead>
-            <tr>
-                <th>পণ্যের নাম</th>
-                <th>পরিমাণ</th>
-                <th>একক মূল্য</th>
-                <th>মোট</th>
-                <th>ডিলিট</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-
-    <p>মোট: <span id="total-price">0</span> টাকা</p>
-    <button onclick="generateInvoice()">📄 PDF ডাউনলোড</button>
-    
-    <div id="qrcode"></div>
+        <h3>মোট মূল্য: <span id="grandTotal">0</span> টাকা</h3>
+        <button onclick="downloadPDF()">PDF ডাউনলোড</button>
+    </div>
 
     <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 </body>
-</html><meta charset="UTF-8">
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap');
-    body {
-        font-family: 'Noto Sans Bengali', sans-serif;
-    }
-</style>
+</html>
