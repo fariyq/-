@@ -3,13 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ডায়নামিক ইনভয়েস</title>
+    <title>ইনভয়েস সিস্টেম</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="header">
+        <h2>ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার</h2>
+        <p>📧 mdemranst0@gmail.com | 📞 01952325903</p>
+    </div>
+
     <div class="container">
         <h2>ইনভয়েস তৈরি করুন</h2>
-        <table id="invoiceTable">
+        <table>
             <thead>
                 <tr>
                     <th>পণ্য নাম</th>
@@ -21,13 +26,14 @@
             </thead>
             <tbody id="invoiceBody"></tbody>
         </table>
+
         <button onclick="addItem()">+ আইটেম যোগ করুন</button>
 
         <h3>মোট মূল্য: <span id="grandTotal">0</span> টাকা</h3>
-        <button onclick="downloadPDF()">PDF ডাউনলোড</button>
+
+        <button onclick="downloadPDF()">📄 PDF ডাউনলোড</button>
     </div>
 
     <script src="script.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 </body>
 </html>
