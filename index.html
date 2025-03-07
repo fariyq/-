@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ইনভয়েস সিস্টেম</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
     <div class="header">
@@ -15,20 +14,23 @@
 
     <div class="container">
         <h2>ইনভয়েস তৈরি করুন</h2>
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>পণ্য নাম</th>
-                        <th>পরিমাণ</th>
-                        <th>একক মূল্য</th>
-                        <th>মোট</th>
-                        <th>অপশন</th>
-                    </tr>
-                </thead>
-                <tbody id="invoiceBody"></tbody>
-            </table>
-        </div>
+        
+        <!-- কাস্টমারের নাম ইনপুট -->
+        <label for="customerName">কাস্টমারের নাম:</label>
+        <input type="text" id="customerName" placeholder="কাস্টমারের নাম লিখুন">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>পণ্য নাম</th>
+                    <th>পরিমাণ</th>
+                    <th>একক মূল্য</th>
+                    <th>মোট</th>
+                    <th>অপশন</th>
+                </tr>
+            </thead>
+            <tbody id="invoiceBody"></tbody>
+        </table>
 
         <button onclick="addItem()">+ আইটেম যোগ করুন</button>
 
@@ -39,9 +41,4 @@
 
     <script src="script.js"></script>
 </body>
-</html><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script><div class="customer-info">
-    <h3>কাস্টমারের তথ্য</h3>
-    <label>নাম: <input type="text" id="customerName"></label>
-    <label>ফোন: <input type="text" id="customerPhone"></label>
-    <label>ঠিকানা: <input type="text" id="customerAddress"></label>
-</div>
+</html>
