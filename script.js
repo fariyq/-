@@ -6,10 +6,15 @@ document.addEventListener("DOMContentLoaded", function () {
     // স্বয়ংক্রিয় ইনভয়েস নাম্বার সেটআপ
     function generateInvoiceNumber() {
         let today = new Date();
-        let datePart = today.getFullYear().toString() + (today.getMonth() + 1).toString().padStart(2, '0') + today.getDate().toString().padStart(2, '0');
-        let randomPart = Math.floor(1000 + Math.random() * 9000); // 4 ডিজিট র‍্যান্ডম সংখ্যা
-        return "INV-" + datePart + "-" + randomPart;
+        let datePart = today.getFullYear().toString() + 
+                       (today.getMonth() + 1).toString().padStart(2, '0') + 
+                       today.getDate().toString().padStart(2, '0') + 
+                       today.getHours().toString().padStart(2, '0') + 
+                       today.getMinutes().toString().padStart(2, '0') + 
+                       today.getSeconds().toString().padStart(2, '0');
+        return "INV-" + datePart;
     }
+
     invoiceNumberElement.value = generateInvoiceNumber();
 
     // মোট দাম হিসাব
@@ -54,11 +59,10 @@ document.addEventListener("DOMContentLoaded", function () {
         const { jsPDF } = window.jspdf;
         let doc = new jsPDF();
 
-        // ইনভয়েসের তারিখ
         let today = new Date();
         let invoiceDate = today.toLocaleDateString("bn-BD");
 
-        doc.setFont("helvetica"); // বাংলা ফন্ট যুক্ত করলে এখানে সেট করতে হবে
+        doc.setFont("helvetica");
 
         doc.text("ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার", 10, 10);
         doc.text("📧 mdemranst0@gmail.com | 📞 01952325903", 10, 20);
@@ -85,11 +89,6 @@ document.addEventListener("DOMContentLoaded", function () {
         doc.save("invoice.pdf");
     }
 
-    // বাটন ইভেন্ট লিসেনার যোগ করা
-    document.querySelector("button[onclick='downloadPDF()']").addEventListener("click", downloadPDF);
-    document.querySelector("button[onclick='addItem()']").addEventListener("click", addItem);
-
-    // গ্লোবাল এক্সপোজার
-    window.addItem = addItem;
-    window.calculateTotal = calculateTotal;
+    document.getElementById("downloadBtn").addEventListener("click", downloadPDF);
+    document.getElementById("addItemBtn").addEventListener("click", addItem);
 });
