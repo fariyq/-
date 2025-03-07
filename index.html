@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ইনভয়েস সিস্টেম</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
     <div class="header">
@@ -14,18 +15,20 @@
 
     <div class="container">
         <h2>ইনভয়েস তৈরি করুন</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>পণ্য নাম</th>
-                    <th>পরিমাণ</th>
-                    <th>একক মূল্য</th>
-                    <th>মোট</th>
-                    <th>অপশন</th>
-                </tr>
-            </thead>
-            <tbody id="invoiceBody"></tbody>
-        </table>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>পণ্য নাম</th>
+                        <th>পরিমাণ</th>
+                        <th>একক মূল্য</th>
+                        <th>মোট</th>
+                        <th>অপশন</th>
+                    </tr>
+                </thead>
+                <tbody id="invoiceBody"></tbody>
+            </table>
+        </div>
 
         <button onclick="addItem()">+ আইটেম যোগ করুন</button>
 
