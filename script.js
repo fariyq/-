@@ -63,4 +63,20 @@ function downloadPDF() {
 }
 
 // পেজ লোড হলে টেবিল রেন্ডার হবে
-document.addEventListener("DOMContentLoaded", renderTable);
+document.addEventListener("DOMContentLoaded", renderTable);function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    let doc = new jsPDF();
+
+    doc.setFont("helvetica"); // বাংলা ফন্ট সাপোর্ট করতে হলে কাস্টম ফন্ট লোড করতে হবে
+    doc.text("ইনভয়েস", 20, 20);
+    let y = 30;
+
+    invoiceItems.forEach((item, index) => {
+        let total = item.quantity * item.price;
+        doc.text(`${index + 1}. ${item.name} - ${item.quantity} x ${item.price} = ${total} টাকা`, 20, y);
+        y += 10;
+    });
+
+    doc.text("মোট: " + document.getElementById("grandTotal").innerText + " টাকা", 20, y + 10);
+    doc.save("invoice.pdf");
+}
