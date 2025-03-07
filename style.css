@@ -2,8 +2,6 @@ body {
     font-family: Arial, sans-serif;
     text-align: center;
     background-color: #f5f5f5;
-    margin: 0;
-    padding: 0;
 }
 
 .header {
@@ -18,14 +16,25 @@ body {
     background: white;
     padding: 20px;
     width: 90%;
-    max-width: 700px;
+    max-width: 600px;
     margin: auto;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.table-container {
-    overflow-x: auto;
+label {
+    font-size: 16px;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }
 
 table {
@@ -37,12 +46,6 @@ table {
 th, td {
     border: 1px solid #ddd;
     padding: 8px;
-}
-
-input {
-    width: 90%;
-    padding: 5px;
-    text-align: center;
 }
 
 button {
