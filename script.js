@@ -7,36 +7,42 @@ document.addEventListener("DOMContentLoaded", function () {
         let grandTotal = 0;
 
         rows.forEach(row => {
-            let quantity = row.querySelector(".quantity").value || 0;
-            let unitPrice = row.querySelector(".unitPrice").value || 0;
-            let totalPrice = parseFloat(quantity) * parseFloat(unitPrice);
-            row.querySelector(".totalPrice").innerText = totalPrice + " টাকা";
+            let quantity = parseFloat(row.querySelector(".quantity").value) || 0;
+            let unitPrice = parseFloat(row.querySelector(".unitPrice").value) || 0;
+            let totalPrice = quantity * unitPrice;
+            row.querySelector(".totalPrice").innerText = totalPrice.toFixed(2) + " টাকা";
             grandTotal += totalPrice;
         });
 
-        grandTotalElement.innerText = grandTotal + " টাকা";
+        grandTotalElement.innerText = grandTotal.toFixed(2) + " টাকা";
     }
 
     function addItem() {
         let row = document.createElement("tr");
         row.innerHTML = `
             <td><input type="text" class="productName"></td>
-            <td><input type="number" class="quantity" oninput="calculateTotal()"></td>
-            <td><input type="number" class="unitPrice" oninput="calculateTotal()"></td>
+            <td><input type="number" class="quantity"></td>
+            <td><input type="number" class="unitPrice"></td>
             <td class="totalPrice">0 টাকা</td>
-            <td><button onclick="removeItem(this)">❌ মুছুন</button></td>
+            <td><button class="removeBtn">❌ মুছুন</button></td>
         `;
-        invoiceBody.appendChild(row);
-    }
 
-    function removeItem(button) {
-        button.parentElement.parentElement.remove();
-        calculateTotal();
+        row.querySelector(".quantity").addEventListener("input", calculateTotal);
+        row.querySelector(".unitPrice").addEventListener("input", calculateTotal);
+        row.querySelector(".removeBtn").addEventListener("click", function () {
+            row.remove();
+            calculateTotal();
+        });
+
+        invoiceBody.appendChild(row);
     }
 
     function downloadPDF() {
         const { jsPDF } = window.jspdf;
         let doc = new jsPDF();
+        
+        // বাংলা ফন্ট সেটআপ (কাস্টম ফন্ট যুক্ত করতে হবে)
+        doc.setFont("helvetica"); // এখানে বাংলা ফন্ট লোড করা লাগবে
 
         doc.text("ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার", 10, 10);
         doc.text("📧 mdemranst0@gmail.com | 📞 01952325903", 10, 20);
@@ -61,8 +67,10 @@ document.addEventListener("DOMContentLoaded", function () {
         doc.save("invoice.pdf");
     }
 
+    document.querySelector("button[onclick='downloadPDF()']").addEventListener("click", downloadPDF);
+    document.querySelector("button[onclick='addItem()']").addEventListener("click", addItem);
+
+    // গ্লোবাল এক্সপোজার
     window.addItem = addItem;
-    window.removeItem = removeItem;
     window.calculateTotal = calculateTotal;
-    window.downloadPDF = downloadPDF;
 });
