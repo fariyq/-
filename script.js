@@ -1,65 +1,68 @@
-let invoiceItems = [];
+document.addEventListener("DOMContentLoaded", function () {
+    let invoiceBody = document.getElementById("invoiceBody");
+    let grandTotalElement = document.getElementById("grandTotal");
 
-function addItem() {
-    invoiceItems.push({ name: "", quantity: 1, price: 0 });
-    renderTable();
-}
+    function calculateTotal() {
+        let rows = document.querySelectorAll("#invoiceBody tr");
+        let grandTotal = 0;
 
-function removeItem(index) {
-    invoiceItems.splice(index, 1);
-    renderTable();
-}
+        rows.forEach(row => {
+            let quantity = row.querySelector(".quantity").value || 0;
+            let unitPrice = row.querySelector(".unitPrice").value || 0;
+            let totalPrice = parseFloat(quantity) * parseFloat(unitPrice);
+            row.querySelector(".totalPrice").innerText = totalPrice + " টাকা";
+            grandTotal += totalPrice;
+        });
 
-function updateItem(index, field, value) {
-    if (field === "name") {
-        invoiceItems[index][field] = value;
-    } else {
-        invoiceItems[index][field] = parseFloat(value) || 0;
+        grandTotalElement.innerText = grandTotal + " টাকা";
     }
-    calculateTotal();
-}
 
-function renderTable() {
-    let tableBody = document.getElementById("invoiceBody");
-    tableBody.innerHTML = "";
-    invoiceItems.forEach((item, index) => {
-        let total = item.quantity * item.price;
-        tableBody.innerHTML += `
-            <tr>
-                <td><input type="text" value="${item.name}" oninput="updateItem(${index}, 'name', this.value)" autofocus></td>
-                <td><input type="number" value="${item.quantity}" min="1" oninput="updateItem(${index}, 'quantity', this.value)"></td>
-                <td><input type="number" value="${item.price}" min="0" oninput="updateItem(${index}, 'price', this.value)"></td>
-                <td>${total} টাকা</td>
-                <td><button onclick="removeItem(${index})">মুছুন</button></td>
-            </tr>
+    function addItem() {
+        let row = document.createElement("tr");
+        row.innerHTML = `
+            <td><input type="text" class="productName"></td>
+            <td><input type="number" class="quantity" oninput="calculateTotal()"></td>
+            <td><input type="number" class="unitPrice" oninput="calculateTotal()"></td>
+            <td class="totalPrice">0 টাকা</td>
+            <td><button onclick="removeItem(this)">❌ মুছুন</button></td>
         `;
-    });
-    calculateTotal();
-}
+        invoiceBody.appendChild(row);
+    }
 
-function calculateTotal() {
-    let grandTotal = invoiceItems.reduce((sum, item) => sum + item.quantity * item.price, 0);
-    document.getElementById("grandTotal").innerText = grandTotal;
-}
+    function removeItem(button) {
+        button.parentElement.parentElement.remove();
+        calculateTotal();
+    }
 
-// PDF ডাউনলোড ফাংশন
-function downloadPDF() {
-    const { jsPDF } = window.jspdf;
-    let doc = new jsPDF();
+    function downloadPDF() {
+        const { jsPDF } = window.jspdf;
+        let doc = new jsPDF();
 
-    let customerName = document.getElementById("customerName").value || "অজ্ঞাত কাস্টমার";
+        doc.text("ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার", 10, 10);
+        doc.text("📧 mdemranst0@gmail.com | 📞 01952325903", 10, 20);
 
-    doc.text("কাস্টমারের নাম: " + customerName, 20, 20);
-    let y = 30;
+        let rows = [];
+        document.querySelectorAll("#invoiceBody tr").forEach(row => {
+            let productName = row.querySelector(".productName").value || "";
+            let quantity = row.querySelector(".quantity").value || "";
+            let unitPrice = row.querySelector(".unitPrice").value || "";
+            let totalPrice = row.querySelector(".totalPrice").innerText || "";
 
-    invoiceItems.forEach((item, index) => {
-        let total = item.quantity * item.price;
-        doc.text(`${index + 1}. ${item.name} - ${item.quantity} x ${item.price} = ${total} টাকা`, 20, y);
-        y += 10;
-    });
+            rows.push([productName, quantity, unitPrice, totalPrice]);
+        });
 
-    doc.text("মোট: " + document.getElementById("grandTotal").innerText + " টাকা", 20, y + 10);
-    doc.save("invoice.pdf");
-}
+        doc.autoTable({
+            head: [["পণ্য নাম", "পরিমাণ", "একক মূল্য", "মোট"]],
+            body: rows,
+            startY: 30
+        });
 
-document.addEventListener("DOMContentLoaded", renderTable);
+        doc.text("মোট মূল্য: " + grandTotalElement.innerText, 10, doc.autoTable.previous.finalY + 10);
+        doc.save("invoice.pdf");
+    }
+
+    window.addItem = addItem;
+    window.removeItem = removeItem;
+    window.calculateTotal = calculateTotal;
+    window.downloadPDF = downloadPDF;
+});
