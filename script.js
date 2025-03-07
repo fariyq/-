@@ -5,16 +5,14 @@ document.addEventListener("DOMContentLoaded", function () {
     let addItemBtn = document.getElementById("addItemBtn");
     let downloadPdfBtn = document.getElementById("downloadPdfBtn");
 
-    // স্বয়ংক্রিয় ইনভয়েস নাম্বার সেটআপ
     function generateInvoiceNumber() {
         let today = new Date();
-        let datePart = today.getFullYear().toString() + (today.getMonth() + 1).toString().padStart(2, '0') + today.getDate().toString().padStart(2, '0');
+        let datePart = today.getFullYear() + "" + (today.getMonth() + 1).toString().padStart(2, '0') + today.getDate().toString().padStart(2, '0');
         let randomPart = Math.floor(1000 + Math.random() * 9000);
         return "INV-" + datePart + "-" + randomPart;
     }
     invoiceNumberElement.value = generateInvoiceNumber();
 
-    // মোট দাম হিসাব
     function calculateTotal() {
         let rows = document.querySelectorAll("#invoiceBody tr");
         let grandTotal = 0;
@@ -30,15 +28,14 @@ document.addEventListener("DOMContentLoaded", function () {
         grandTotalElement.innerText = grandTotal.toFixed(2) + " টাকা";
     }
 
-    // নতুন আইটেম যোগ করা
     function addItem() {
         let row = document.createElement("tr");
         row.innerHTML = `
             <td><input type="text" class="productName" placeholder="পণ্য নাম"></td>
-            <td><input type="number" class="quantity" placeholder="পরিমাণ"></td>
-            <td><input type="number" class="unitPrice" placeholder="একক মূল্য"></td>
+            <td><input type="number" class="quantity" placeholder="পরিমাণ" min="1"></td>
+            <td><input type="number" class="unitPrice" placeholder="একক মূল্য" min="0"></td>
             <td class="totalPrice">0 টাকা</td>
-            <td><button class="removeBtn">❌ মুছুন</button></td>
+            <td><button class="removeBtn">❌</button></td>
         `;
 
         row.querySelector(".quantity").addEventListener("input", calculateTotal);
@@ -51,7 +48,6 @@ document.addEventListener("DOMContentLoaded", function () {
         invoiceBody.appendChild(row);
     }
 
-    // PDF ডাউনলোড ফাংশন
     function downloadPDF() {
         const { jsPDF } = window.jspdf;
         let doc = new jsPDF();
@@ -75,6 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         doc.autoTable({ head: [["পণ্য নাম", "পরিমাণ", "একক মূল্য", "মোট"]], body: rows, startY: 50 });
 
+        doc.text("মোট মূল্য: " + grandTotalElement.innerText, 10, doc.autoTable.previous.finalY + 10);
         doc.save("invoice.pdf");
     }
 
