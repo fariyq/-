@@ -1,7 +1,7 @@
 let invoiceItems = [];
 
 function addItem() {
-    invoiceItems.push({ name: "", quantity: 1, price: 0, total: 0 });
+    invoiceItems.push({ name: "", quantity: 1, price: 0 });
     renderTable();
 }
 
@@ -16,70 +16,10 @@ function updateItem(index, field, value) {
     } else {
         invoiceItems[index][field] = parseFloat(value) || 0;
     }
-    invoiceItems[index].total = invoiceItems[index].quantity * invoiceItems[index].price;
-    renderTable();
-}
-
-function renderTable() {
-    let tableBody = document.getElementById("invoiceBody");
-    tableBody.innerHTML = "";
-
-    invoiceItems.forEach((item, index) => {
-        let row = document.createElement("tr");
-
-        row.innerHTML = `
-            <td><input type="text" value="${item.name}" oninput="updateItem(${index}, 'name', this.value)"></td>
-            <td><input type="number" value="${item.quantity}" min="1" oninput="updateItem(${index}, 'quantity', this.value)"></td>
-            <td><input type="number" value="${item.price}" min="0" oninput="updateItem(${index}, 'price', this.value)"></td>
-            <td>${item.total} টাকা</td>
-            <td><button onclick="removeItem(${index})">মুছুন</button></td>
-        `;
-        tableBody.appendChild(row);
-    });
-
     calculateTotal();
 }
 
-function calculateTotal() {
-    let grandTotal = invoiceItems.reduce((sum, item) => sum + item.total, 0);
-    document.getElementById("grandTotal").innerText = grandTotal;
-}
-
-function downloadPDF() {
-    const { jsPDF } = window.jspdf;
-    let doc = new jsPDF();
-    
-    doc.text("ইনভয়েস", 20, 20);
-    let y = 30;
-
-    invoiceItems.forEach((item, index) => {
-        let total = item.quantity * item.price;
-        doc.text(`${index + 1}. ${item.name} - ${item.quantity} x ${item.price} = ${total} টাকা`, 20, y);
-        y += 10;
-    });
-
-    doc.text("মোট: " + document.getElementById("grandTotal").innerText + " টাকা", 20, y + 10);
-    doc.save("invoice.pdf");
-}
-
-// পেজ লোড হলে টেবিল রেন্ডার হবে
-document.addEventListener("DOMContentLoaded", renderTable);function downloadPDF() {
-    const { jsPDF } = window.jspdf;
-    let doc = new jsPDF();
-
-    doc.setFont("helvetica"); // বাংলা ফন্ট সাপোর্ট করতে হলে কাস্টম ফন্ট লোড করতে হবে
-    doc.text("ইনভয়েস", 20, 20);
-    let y = 30;
-
-    invoiceItems.forEach((item, index) => {
-        let total = item.quantity * item.price;
-        doc.text(`${index + 1}. ${item.name} - ${item.quantity} x ${item.price} = ${total} টাকা`, 20, y);
-        y += 10;
-    });
-
-    doc.text("মোট: " + document.getElementById("grandTotal").innerText + " টাকা", 20, y + 10);
-    doc.save("invoice.pdf");
-}function renderTable() {
+function renderTable() {
     let tableBody = document.getElementById("invoiceBody");
     tableBody.innerHTML = "";
     invoiceItems.forEach((item, index) => {
@@ -95,20 +35,22 @@ document.addEventListener("DOMContentLoaded", renderTable);function downloadPDF(
         `;
     });
     calculateTotal();
-}function downloadPDF() {
+}
+
+function calculateTotal() {
+    let grandTotal = invoiceItems.reduce((sum, item) => sum + item.quantity * item.price, 0);
+    document.getElementById("grandTotal").innerText = grandTotal;
+}
+
+// PDF ডাউনলোড ফাংশন
+function downloadPDF() {
     const { jsPDF } = window.jspdf;
     let doc = new jsPDF();
 
-    let customerName = document.getElementById("customerName").value || "অজানা";
-    let customerPhone = document.getElementById("customerPhone").value || "N/A";
-    let customerAddress = document.getElementById("customerAddress").value || "N/A";
+    let customerName = document.getElementById("customerName").value || "অজ্ঞাত কাস্টমার";
 
-    doc.text("ইনভয়েস", 20, 20);
-    doc.text("কাস্টমার: " + customerName, 20, 30);
-    doc.text("ফোন: " + customerPhone, 20, 40);
-    doc.text("ঠিকানা: " + customerAddress, 20, 50);
-
-    let y = 60;
+    doc.text("কাস্টমারের নাম: " + customerName, 20, 20);
+    let y = 30;
 
     invoiceItems.forEach((item, index) => {
         let total = item.quantity * item.price;
@@ -119,3 +61,5 @@ document.addEventListener("DOMContentLoaded", renderTable);function downloadPDF(
     doc.text("মোট: " + document.getElementById("grandTotal").innerText + " টাকা", 20, y + 10);
     doc.save("invoice.pdf");
 }
+
+document.addEventListener("DOMContentLoaded", renderTable);
