@@ -1,7 +1,7 @@
 let invoiceItems = [];
 
 function addItem() {
-    invoiceItems.push({ name: "", quantity: 1, price: 0 });
+    invoiceItems.push({ name: "", quantity: 1, price: 0, total: 0 });
     renderTable();
 }
 
@@ -16,29 +16,32 @@ function updateItem(index, field, value) {
     } else {
         invoiceItems[index][field] = parseFloat(value) || 0;
     }
-    calculateTotal();
+    invoiceItems[index].total = invoiceItems[index].quantity * invoiceItems[index].price;
+    renderTable();
 }
 
 function renderTable() {
     let tableBody = document.getElementById("invoiceBody");
     tableBody.innerHTML = "";
+
     invoiceItems.forEach((item, index) => {
-        let total = item.quantity * item.price;
-        tableBody.innerHTML += `
-            <tr>
-                <td><input type="text" value="${item.name}" oninput="updateItem(${index}, 'name', this.value)"></td>
-                <td><input type="number" value="${item.quantity}" min="1" oninput="updateItem(${index}, 'quantity', this.value)"></td>
-                <td><input type="number" value="${item.price}" min="0" oninput="updateItem(${index}, 'price', this.value)"></td>
-                <td>${total} টাকা</td>
-                <td><button onclick="removeItem(${index})">মুছুন</button></td>
-            </tr>
+        let row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td><input type="text" value="${item.name}" oninput="updateItem(${index}, 'name', this.value)"></td>
+            <td><input type="number" value="${item.quantity}" min="1" oninput="updateItem(${index}, 'quantity', this.value)"></td>
+            <td><input type="number" value="${item.price}" min="0" oninput="updateItem(${index}, 'price', this.value)"></td>
+            <td>${item.total} টাকা</td>
+            <td><button onclick="removeItem(${index})">মুছুন</button></td>
         `;
+        tableBody.appendChild(row);
     });
+
     calculateTotal();
 }
 
 function calculateTotal() {
-    let grandTotal = invoiceItems.reduce((sum, item) => sum + item.quantity * item.price, 0);
+    let grandTotal = invoiceItems.reduce((sum, item) => sum + item.total, 0);
     document.getElementById("grandTotal").innerText = grandTotal;
 }
 
@@ -59,4 +62,5 @@ function downloadPDF() {
     doc.save("invoice.pdf");
 }
 
+// পেজ লোড হলে টেবিল রেন্ডার হবে
 document.addEventListener("DOMContentLoaded", renderTable);
