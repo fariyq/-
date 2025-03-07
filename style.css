@@ -1,6 +1,8 @@
-/* সাধারণ স্টাইল */
+/* বাংলা ফন্ট যুক্ত করা */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap');
+
 body {
-    font-family: 'SolaimanLipi', Arial, sans-serif; /* বাংলা ফন্ট (আপনার ওয়েবসাইটে যুক্ত করতে হবে) */
+    font-family: 'Noto Sans Bengali', Arial, sans-serif; /* বাংলা ফন্ট */
     text-align: center;
     background-color: #f5f5f5;
     margin: 0;
@@ -23,10 +25,18 @@ body {
     background: white;
     padding: 20px;
     width: 90%;
-    max-width: 700px;
+    max-width: 750px;
     margin: auto;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* ইনভয়েস নাম্বার ও তারিখ */
+.invoice-info {
+    text-align: left;
+    font-size: 16px;
+    margin-bottom: 10px;
+    font-weight: bold;
 }
 
 /* লেবেল */
@@ -35,6 +45,7 @@ label {
     font-weight: bold;
     display: block;
     margin-bottom: 5px;
+    text-align: left;
 }
 
 /* ইনপুট ফিল্ড */
@@ -52,12 +63,14 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 15px;
+    background: #fff;
 }
 
 th, td {
     border: 1px solid #ddd;
-    padding: 10px;
+    padding: 12px;
     text-align: center;
+    font-size: 16px;
 }
 
 th {
@@ -67,9 +80,10 @@ th {
 
 /* বোতাম ডিজাইন */
 button {
+    display: inline-block;
     background-color: #28a745;
     color: white;
-    padding: 12px;
+    padding: 12px 20px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -85,13 +99,15 @@ button:hover {
 /* রিমুভ বোতাম */
 .removeBtn {
     background-color: #dc3545;
+    padding: 10px 15px;
+    font-size: 14px;
 }
 
 .removeBtn:hover {
     background-color: #c82333;
 }
 
-/* রেস্পন্সিভ ডিজাইন */
+/* মোবাইলের জন্য রেস্পন্সিভ ডিজাইন */
 @media (max-width: 600px) {
     .container {
         width: 95%;
