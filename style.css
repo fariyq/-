@@ -1,47 +1,84 @@
+/* সাধারণ স্টাইল */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'SolaimanLipi', Arial, sans-serif;
     text-align: center;
-    margin: 20px;
-    background-color: #f4f4f4;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
 }
 
+/* হেডার স্টাইল */
 .header {
     background-color: #007bff;
     color: white;
-    padding: 10px;
-    margin-bottom: 20px;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
 }
 
+/* কন্টেইনার */
 .container {
     background: white;
     padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0px 0px 10px gray;
-    display: inline-block;
+    width: 90%;
+    max-width: 700px;
+    margin: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* ইনপুট ফিল্ড */
+input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+/* টেবিল ডিজাইন */
 table {
     width: 100%;
-    margin-top: 10px;
     border-collapse: collapse;
+    margin-bottom: 15px;
 }
 
 th, td {
-    border: 1px solid black;
+    border: 1px solid #ddd;
     padding: 10px;
     text-align: center;
 }
 
+th {
+    background-color: #007bff;
+    color: white;
+}
+
+/* বোতাম ডিজাইন */
 button {
-    margin-top: 10px;
-    padding: 10px;
-    cursor: pointer;
     background-color: #28a745;
     color: white;
+    padding: 12px;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 16px;
+    transition: 0.3s;
 }
 
 button:hover {
     background-color: #218838;
+}
+
+/* রিমুভ বোতাম */
+.removeBtn {
+    background-color: #dc3545;
+}
+
+.removeBtn:hover {
+    background-color: #c82333;
 }
