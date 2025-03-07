@@ -95,4 +95,27 @@ document.addEventListener("DOMContentLoaded", renderTable);function downloadPDF(
         `;
     });
     calculateTotal();
+}function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    let doc = new jsPDF();
+
+    let customerName = document.getElementById("customerName").value || "অজানা";
+    let customerPhone = document.getElementById("customerPhone").value || "N/A";
+    let customerAddress = document.getElementById("customerAddress").value || "N/A";
+
+    doc.text("ইনভয়েস", 20, 20);
+    doc.text("কাস্টমার: " + customerName, 20, 30);
+    doc.text("ফোন: " + customerPhone, 20, 40);
+    doc.text("ঠিকানা: " + customerAddress, 20, 50);
+
+    let y = 60;
+
+    invoiceItems.forEach((item, index) => {
+        let total = item.quantity * item.price;
+        doc.text(`${index + 1}. ${item.name} - ${item.quantity} x ${item.price} = ${total} টাকা`, 20, y);
+        y += 10;
+    });
+
+    doc.text("মোট: " + document.getElementById("grandTotal").innerText + " টাকা", 20, y + 10);
+    doc.save("invoice.pdf");
 }
