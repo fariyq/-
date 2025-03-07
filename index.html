@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ইনভয়েস সিস্টেম</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.21/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body>
     <div class="header">
@@ -14,10 +16,8 @@
 
     <div class="container">
         <h2>ইনভয়েস তৈরি করুন</h2>
-        
-        <!-- কাস্টমারের নাম ইনপুট -->
         <label for="customerName">কাস্টমারের নাম:</label>
-        <input type="text" id="customerName" placeholder="কাস্টমারের নাম লিখুন">
+        <input type="text" id="customerName" placeholder="কাস্টমারের নাম লিখুন"><br><br>
 
         <table>
             <thead>
@@ -34,7 +34,7 @@
 
         <button onclick="addItem()">+ আইটেম যোগ করুন</button>
 
-        <h3>মোট মূল্য: <span id="grandTotal">0</span> টাকা</h3>
+        <h3>মোট মূল্য: <span id="grandTotal">0 টাকা</span></h3>
 
         <button onclick="downloadPDF()">📄 PDF ডাউনলোড</button>
     </div>
