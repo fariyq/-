@@ -2,19 +2,16 @@ document.addEventListener("DOMContentLoaded", function () {
     let invoiceBody = document.getElementById("invoiceBody");
     let grandTotalElement = document.getElementById("grandTotal");
     let invoiceNumberElement = document.getElementById("invoiceNumber");
+    let addItemBtn = document.getElementById("addItemBtn");
+    let downloadPdfBtn = document.getElementById("downloadPdfBtn");
 
     // স্বয়ংক্রিয় ইনভয়েস নাম্বার সেটআপ
     function generateInvoiceNumber() {
         let today = new Date();
-        let datePart = today.getFullYear().toString() + 
-                       (today.getMonth() + 1).toString().padStart(2, '0') + 
-                       today.getDate().toString().padStart(2, '0') + 
-                       today.getHours().toString().padStart(2, '0') + 
-                       today.getMinutes().toString().padStart(2, '0') + 
-                       today.getSeconds().toString().padStart(2, '0');
-        return "INV-" + datePart;
+        let datePart = today.getFullYear().toString() + (today.getMonth() + 1).toString().padStart(2, '0') + today.getDate().toString().padStart(2, '0');
+        let randomPart = Math.floor(1000 + Math.random() * 9000);
+        return "INV-" + datePart + "-" + randomPart;
     }
-
     invoiceNumberElement.value = generateInvoiceNumber();
 
     // মোট দাম হিসাব
@@ -58,11 +55,8 @@ document.addEventListener("DOMContentLoaded", function () {
     function downloadPDF() {
         const { jsPDF } = window.jspdf;
         let doc = new jsPDF();
-
         let today = new Date();
         let invoiceDate = today.toLocaleDateString("bn-BD");
-
-        doc.setFont("helvetica");
 
         doc.text("ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার", 10, 10);
         doc.text("📧 mdemranst0@gmail.com | 📞 01952325903", 10, 20);
@@ -79,16 +73,11 @@ document.addEventListener("DOMContentLoaded", function () {
             rows.push([productName, quantity, unitPrice, totalPrice]);
         });
 
-        doc.autoTable({
-            head: [["পণ্য নাম", "পরিমাণ", "একক মূল্য", "মোট"]],
-            body: rows,
-            startY: 50
-        });
+        doc.autoTable({ head: [["পণ্য নাম", "পরিমাণ", "একক মূল্য", "মোট"]], body: rows, startY: 50 });
 
-        doc.text("মোট মূল্য: " + grandTotalElement.innerText, 10, doc.autoTable.previous.finalY + 10);
         doc.save("invoice.pdf");
     }
 
-    document.getElementById("downloadBtn").addEventListener("click", downloadPDF);
-    document.getElementById("addItemBtn").addEventListener("click", addItem);
+    addItemBtn.addEventListener("click", addItem);
+    downloadPdfBtn.addEventListener("click", downloadPDF);
 });
