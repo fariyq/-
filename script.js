@@ -11,30 +11,34 @@ function removeItem(index) {
 }
 
 function updateItem(index, field, value) {
-    invoiceItems[index][field] = field === "name" ? value : parseFloat(value) || 0;
-    renderTable();
+    if (field === "name") {
+        invoiceItems[index][field] = value;
+    } else {
+        invoiceItems[index][field] = parseFloat(value) || 0;
+    }
+    calculateTotal();
 }
 
 function renderTable() {
     let tableBody = document.getElementById("invoiceBody");
     tableBody.innerHTML = "";
-    let grandTotal = 0;
-
     invoiceItems.forEach((item, index) => {
         let total = item.quantity * item.price;
-        grandTotal += total;
-
         tableBody.innerHTML += `
             <tr>
                 <td><input type="text" value="${item.name}" oninput="updateItem(${index}, 'name', this.value)"></td>
-                <td><input type="number" value="${item.quantity}" min="1" oninput="updateItem(${index}, 'quantity', this.value);"></td>
-                <td><input type="number" value="${item.price}" min="0" oninput="updateItem(${index}, 'price', this.value);"></td>
+                <td><input type="number" value="${item.quantity}" min="1" oninput="updateItem(${index}, 'quantity', this.value)"></td>
+                <td><input type="number" value="${item.price}" min="0" oninput="updateItem(${index}, 'price', this.value)"></td>
                 <td>${total} টাকা</td>
                 <td><button onclick="removeItem(${index})">মুছুন</button></td>
             </tr>
         `;
     });
+    calculateTotal();
+}
 
+function calculateTotal() {
+    let grandTotal = invoiceItems.reduce((sum, item) => sum + item.quantity * item.price, 0);
     document.getElementById("grandTotal").innerText = grandTotal;
 }
 
@@ -54,3 +58,5 @@ function downloadPDF() {
     doc.text("মোট: " + document.getElementById("grandTotal").innerText + " টাকা", 20, y + 10);
     doc.save("invoice.pdf");
 }
+
+document.addEventListener("DOMContentLoaded", renderTable);
