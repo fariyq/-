@@ -34,15 +34,24 @@
             <tbody id="invoiceBody"></tbody>
         </table>
 
-        <button id="addItemBtn">+ আইটেম যোগ করুন</button>
+        <button onclick="addItem()">+ আইটেম যোগ করুন</button>
 
         <h3>মোট মূল্য: <span id="grandTotal">0 টাকা</span></h3>
 
-        <button id="downloadPdfBtn">📄 PDF ডাউনলোড</button>
+        <div class="signature-section">
+            <div class="signature-box">
+                <p>কাস্টমারের স্বাক্ষর:</p>
+                <div class="signature-line"></div>
+            </div>
+            <div class="signature-box">
+                <p>বিক্রেতার স্বাক্ষর:</p>
+                <div class="signature-line"></div>
+            </div>
+        </div>
+
+        <button onclick="printInvoice()">🖨️ প্রিন্ট করুন</button>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.21/jspdf.plugin.autotable.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
