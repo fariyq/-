@@ -124,4 +124,26 @@ button:hover {
         width: 100%;
         margin-bottom: 20px;
     }
+}@media print {
+    body {
+        font-size: 10px; /* লেখার সাইজ ছোট */
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse; /* টেবিলের ফাঁকা কমানো */
+    }
+    th, td {
+        padding: 3px; /* ঘরের ভেতরের ফাঁকা কমানো */
+        font-size: 10px;
+    }
+    th {
+        background-color: #ddd;
+    }
+    .signature {
+        margin-top: 5px;
+        font-size: 10px;
+    }
+    .print-btn {
+        display: none; /* প্রিন্টে বাটন লুকিয়ে রাখা */
+    }
 }
