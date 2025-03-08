@@ -1,43 +1,63 @@
+/* সাধারণ স্টাইল */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'SolaimanLipi', Arial, sans-serif;
     text-align: center;
     background-color: #f5f5f5;
     margin: 0;
     padding: 0;
 }
 
+/* হেডার স্টাইল */
 .header {
     background-color: #007bff;
     color: white;
     padding: 15px;
     margin-bottom: 15px;
+    border-radius: 5px;
     font-size: 18px;
+    font-weight: bold;
 }
 
+/* কন্টেইনার */
 .container {
     background: white;
     padding: 20px;
     width: 90%;
     max-width: 700px;
     margin: auto;
+    border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* লেবেল */
+label {
+    font-size: 16px;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* ইনপুট ফিল্ড */
 input {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
 }
 
+/* টেবিল ডিজাইন */
 table {
     width: 100%;
     border-collapse: collapse;
+    margin-bottom: 15px;
 }
 
 th, td {
     border: 1px solid #ddd;
     padding: 10px;
+    text-align: center;
 }
 
 th {
@@ -45,22 +65,63 @@ th {
     color: white;
 }
 
+/* বোতাম ডিজাইন */
 button {
     background-color: #28a745;
     color: white;
     padding: 12px;
     border: none;
+    border-radius: 4px;
     cursor: pointer;
+    margin-top: 10px;
+    font-size: 16px;
+    transition: 0.3s;
 }
 
 button:hover {
     background-color: #218838;
 }
 
-.removeBtn {
-    background-color: #dc3545;
+/* স্বাক্ষর সেকশন */
+.signature-section {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
 }
 
-.removeBtn:hover {
-    background-color: #c82333;
+.signature-box {
+    width: 45%;
+    text-align: center;
+}
+
+.signature-line {
+    border-top: 2px solid black;
+    margin-top: 30px;
+}
+
+/* রেস্পন্সিভ ডিজাইন */
+@media (max-width: 600px) {
+    .container {
+        width: 95%;
+        padding: 15px;
+    }
+
+    th, td {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    button {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .signature-section {
+        flex-direction: column;
+    }
+
+    .signature-box {
+        width: 100%;
+        margin-bottom: 20px;
+    }
 }
