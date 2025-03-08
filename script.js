@@ -2,12 +2,10 @@ document.addEventListener("DOMContentLoaded", function () {
     let invoiceBody = document.getElementById("invoiceBody");
     let grandTotalElement = document.getElementById("grandTotal");
     let invoiceNumberElement = document.getElementById("invoiceNumber");
-    let addItemBtn = document.getElementById("addItemBtn");
-    let downloadPdfBtn = document.getElementById("downloadPdfBtn");
 
     function generateInvoiceNumber() {
         let today = new Date();
-        let datePart = today.getFullYear() + "" + (today.getMonth() + 1).toString().padStart(2, '0') + today.getDate().toString().padStart(2, '0');
+        let datePart = today.getFullYear().toString() + (today.getMonth() + 1).toString().padStart(2, '0') + today.getDate().toString().padStart(2, '0');
         let randomPart = Math.floor(1000 + Math.random() * 9000);
         return "INV-" + datePart + "-" + randomPart;
     }
@@ -32,10 +30,10 @@ document.addEventListener("DOMContentLoaded", function () {
         let row = document.createElement("tr");
         row.innerHTML = `
             <td><input type="text" class="productName" placeholder="পণ্য নাম"></td>
-            <td><input type="number" class="quantity" placeholder="পরিমাণ" min="1"></td>
-            <td><input type="number" class="unitPrice" placeholder="একক মূল্য" min="0"></td>
+            <td><input type="number" class="quantity" placeholder="পরিমাণ"></td>
+            <td><input type="number" class="unitPrice" placeholder="একক মূল্য"></td>
             <td class="totalPrice">0 টাকা</td>
-            <td><button class="removeBtn">❌</button></td>
+            <td><button class="removeBtn">❌ মুছুন</button></td>
         `;
 
         row.querySelector(".quantity").addEventListener("input", calculateTotal);
@@ -48,9 +46,18 @@ document.addEventListener("DOMContentLoaded", function () {
         invoiceBody.appendChild(row);
     }
 
+    function loadBanglaFont(doc) {
+        let fontUrl = "your_base64_encoded_font_here";  // এখানে আপনার Base64 ফন্ট দিন
+        doc.addFileToVFS("SolaimanLipi.ttf", fontUrl);
+        doc.addFont("SolaimanLipi.ttf", "SolaimanLipi", "normal");
+        doc.setFont("SolaimanLipi");
+    }
+
     function downloadPDF() {
         const { jsPDF } = window.jspdf;
         let doc = new jsPDF();
+        loadBanglaFont(doc);
+
         let today = new Date();
         let invoiceDate = today.toLocaleDateString("bn-BD");
 
@@ -69,12 +76,19 @@ document.addEventListener("DOMContentLoaded", function () {
             rows.push([productName, quantity, unitPrice, totalPrice]);
         });
 
-        doc.autoTable({ head: [["পণ্য নাম", "পরিমাণ", "একক মূল্য", "মোট"]], body: rows, startY: 50 });
+        doc.autoTable({
+            head: [["পণ্য নাম", "পরিমাণ", "একক মূল্য", "মোট"]],
+            body: rows,
+            startY: 50
+        });
 
         doc.text("মোট মূল্য: " + grandTotalElement.innerText, 10, doc.autoTable.previous.finalY + 10);
         doc.save("invoice.pdf");
     }
 
-    addItemBtn.addEventListener("click", addItem);
-    downloadPdfBtn.addEventListener("click", downloadPDF);
+    document.querySelector("button[onclick='downloadPDF()']").addEventListener("click", downloadPDF);
+    document.querySelector("button[onclick='addItem()']").addEventListener("click", addItem);
+
+    window.addItem = addItem;
+    window.calculateTotal = calculateTotal;
 });
