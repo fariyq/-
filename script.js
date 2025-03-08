@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let grandTotalElement = document.getElementById("grandTotal");
     let invoiceNumberElement = document.getElementById("invoiceNumber");
 
+    // স্বয়ংক্রিয় ইনভয়েস নাম্বার সেটআপ
     function generateInvoiceNumber() {
         let today = new Date();
         let datePart = today.getFullYear().toString() + (today.getMonth() + 1).toString().padStart(2, '0') + today.getDate().toString().padStart(2, '0');
@@ -11,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     invoiceNumberElement.value = generateInvoiceNumber();
 
+    // মোট দাম হিসাব
     function calculateTotal() {
         let rows = document.querySelectorAll("#invoiceBody tr");
         let grandTotal = 0;
@@ -26,6 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
         grandTotalElement.innerText = grandTotal.toFixed(2) + " টাকা";
     }
 
+    // নতুন আইটেম যোগ করা
     function addItem() {
         let row = document.createElement("tr");
         row.innerHTML = `
@@ -33,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <td><input type="number" class="quantity" placeholder="পরিমাণ"></td>
             <td><input type="number" class="unitPrice" placeholder="একক মূল্য"></td>
             <td class="totalPrice">0 টাকা</td>
-            <td><button class="removeBtn">❌ মুছুন</button></td>
+            <td><button class="removeBtn">❌</button></td>
         `;
 
         row.querySelector(".quantity").addEventListener("input", calculateTotal);
@@ -46,49 +49,10 @@ document.addEventListener("DOMContentLoaded", function () {
         invoiceBody.appendChild(row);
     }
 
-    function loadBanglaFont(doc) {
-        let fontUrl = "your_base64_encoded_font_here";  // এখানে আপনার Base64 ফন্ট দিন
-        doc.addFileToVFS("SolaimanLipi.ttf", fontUrl);
-        doc.addFont("SolaimanLipi.ttf", "SolaimanLipi", "normal");
-        doc.setFont("SolaimanLipi");
+    function printInvoice() {
+        window.print();
     }
-
-    function downloadPDF() {
-        const { jsPDF } = window.jspdf;
-        let doc = new jsPDF();
-        loadBanglaFont(doc);
-
-        let today = new Date();
-        let invoiceDate = today.toLocaleDateString("bn-BD");
-
-        doc.text("ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার", 10, 10);
-        doc.text("📧 mdemranst0@gmail.com | 📞 01952325903", 10, 20);
-        doc.text("ইনভয়েস নাম্বার: " + invoiceNumberElement.value, 10, 30);
-        doc.text("তারিখ: " + invoiceDate, 10, 40);
-
-        let rows = [];
-        document.querySelectorAll("#invoiceBody tr").forEach(row => {
-            let productName = row.querySelector(".productName").value || "";
-            let quantity = row.querySelector(".quantity").value || "";
-            let unitPrice = row.querySelector(".unitPrice").value || "";
-            let totalPrice = row.querySelector(".totalPrice").innerText || "";
-
-            rows.push([productName, quantity, unitPrice, totalPrice]);
-        });
-
-        doc.autoTable({
-            head: [["পণ্য নাম", "পরিমাণ", "একক মূল্য", "মোট"]],
-            body: rows,
-            startY: 50
-        });
-
-        doc.text("মোট মূল্য: " + grandTotalElement.innerText, 10, doc.autoTable.previous.finalY + 10);
-        doc.save("invoice.pdf");
-    }
-
-    document.querySelector("button[onclick='downloadPDF()']").addEventListener("click", downloadPDF);
-    document.querySelector("button[onclick='addItem()']").addEventListener("click", addItem);
 
     window.addItem = addItem;
-    window.calculateTotal = calculateTotal;
+    window.printInvoice = printInvoice;
 });
