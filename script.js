@@ -5,14 +5,10 @@ document.addEventListener("DOMContentLoaded", function () {
     let currentDateElement = document.getElementById("currentDate");
     let currentTimeElement = document.getElementById("currentTime");
 
-    // **ইনভয়েস নাম্বার তৈরি করা (HAL সহ)**
+    // **শুধু ক্রমিক নম্বর তৈরি করা (তারিখ ছাড়া)**
     function generateInvoiceNumber() {
-        let today = new Date();
-        let datePart = today.getFullYear().toString() + 
-            (today.getMonth() + 1).toString().padStart(2, '0') + 
-            today.getDate().toString().padStart(2, '0');
-        let randomPart = Math.floor(1000 + Math.random() * 9000); 
-        return "HAL-" + datePart + "-" + randomPart;
+        let randomPart = Math.floor(100000 + Math.random() * 900000); 
+        return "HAL-" + randomPart;
     }
     invoiceNumberElement.value = generateInvoiceNumber();
 
