@@ -2,15 +2,31 @@ document.addEventListener("DOMContentLoaded", function () {
     let invoiceBody = document.getElementById("invoiceBody");
     let grandTotalElement = document.getElementById("grandTotal");
     let invoiceNumberElement = document.getElementById("invoiceNumber");
+    let currentDateElement = document.getElementById("currentDate");
+    let currentTimeElement = document.getElementById("currentTime");
 
-    // স্বয়ংক্রিয় ইনভয়েস নাম্বার সেটআপ
+    // **ইনভয়েস নাম্বার তৈরি করা (HAL সহ)**
     function generateInvoiceNumber() {
         let today = new Date();
-        let datePart = today.getFullYear().toString() + (today.getMonth() + 1).toString().padStart(2, '0') + today.getDate().toString().padStart(2, '0');
-        let randomPart = Math.floor(1000 + Math.random() * 9000);
-        return "INV-" + datePart + "-" + randomPart;
+        let datePart = today.getFullYear().toString() + 
+            (today.getMonth() + 1).toString().padStart(2, '0') + 
+            today.getDate().toString().padStart(2, '0');
+        let randomPart = Math.floor(1000 + Math.random() * 9000); 
+        return "HAL-" + datePart + "-" + randomPart;
     }
     invoiceNumberElement.value = generateInvoiceNumber();
+
+    // **তারিখ ও সময় অটো আপডেট করা**
+    function updateDateTime() {
+        let now = new Date();
+        let dateStr = now.toLocaleDateString("bn-BD");
+        let timeStr = now.toLocaleTimeString("bn-BD");
+
+        currentDateElement.innerText = dateStr;
+        currentTimeElement.innerText = timeStr;
+    }
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
 
     // মোট দাম হিসাব
     function calculateTotal() {
@@ -29,14 +45,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // নতুন আইটেম যোগ করা
-    function addItem() {
+    window.addItem = function() {
         let row = document.createElement("tr");
         row.innerHTML = `
             <td><input type="text" class="productName" placeholder="পণ্য নাম"></td>
             <td><input type="number" class="quantity" placeholder="পরিমাণ"></td>
             <td><input type="number" class="unitPrice" placeholder="একক মূল্য"></td>
             <td class="totalPrice">0 টাকা</td>
-            <td><button class="removeBtn">❌</button></td>
+            <td><button class="removeBtn">❌ মুছুন</button></td>
         `;
 
         row.querySelector(".quantity").addEventListener("input", calculateTotal);
@@ -49,10 +65,8 @@ document.addEventListener("DOMContentLoaded", function () {
         invoiceBody.appendChild(row);
     }
 
-    function printInvoice() {
+    // প্রিন্ট ফাংশন
+    window.printInvoice = function() {
         window.print();
-    }
-
-    window.addItem = addItem;
-    window.printInvoice = printInvoice;
+    };
 });
