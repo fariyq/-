@@ -40,10 +40,19 @@ document.addEventListener("DOMContentLoaded", function () {
         grandTotalElement.innerText = grandTotal.toFixed(2) + " টাকা";
     }
 
+    // ক্রমিক নম্বর আপডেট ফাংশন
+    function updateSerialNumbers() {
+        let rows = document.querySelectorAll("#invoiceBody tr");
+        rows.forEach((row, index) => {
+            row.querySelector(".serialNumber").innerText = index + 1; // ১ থেকে শুরু হবে
+        });
+    }
+
     // নতুন আইটেম যোগ করা
     window.addItem = function() {
         let row = document.createElement("tr");
         row.innerHTML = `
+            <td class="serialNumber"></td> <!-- ক্রমিক নম্বর কলাম -->
             <td><input type="text" class="productName" placeholder="পণ্য নাম"></td>
             <td><input type="number" class="quantity" placeholder="পরিমাণ"></td>
             <td><input type="number" class="unitPrice" placeholder="একক মূল্য"></td>
@@ -56,10 +65,12 @@ document.addEventListener("DOMContentLoaded", function () {
         row.querySelector(".removeBtn").addEventListener("click", function () {
             row.remove();
             calculateTotal();
+            updateSerialNumbers(); // ক্রমিক নম্বর আপডেট
         });
 
         invoiceBody.appendChild(row);
-    }
+        updateSerialNumbers(); // নতুন আইটেম যোগ হলে ক্রমিক নম্বর আপডেট
+    };
 
     // প্রিন্ট ফাংশন
     window.printInvoice = function() {
