@@ -146,4 +146,45 @@ button:hover {
     .print-btn {
         display: none; /* প্রিন্টে বাটন লুকিয়ে রাখা */
     }
+}/* টেবিল স্টাইল ঠিক করা */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td, th {
+    border: 1px solid #ddd;
+    padding: 5px; /* padding কমানো */
+    font-size: 14px; /* ফন্ট সাইজ ছোট করা */
+}
+
+/* ইনপুট ফিল্ডের উচ্চতা কমানো */
+input {
+    height: 25px; /* ইনপুটের উচ্চতা কমানো */
+    font-size: 14px;
+    padding: 2px;
+}
+
+/* বোতামের উচ্চতা ও মার্জিন কমানো */
+button {
+    height: 30px;
+    font-size: 14px;
+    padding: 3px 8px;
+    margin: 2px;
+}
+
+/* প্রিন্ট ভিউ অপ্টিমাইজ করার জন্য */
+@media print {
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    
+    table {
+        font-size: 12px; /* প্রিন্টে ফন্ট আরও ছোট করা */
+    }
+
+    button {
+        display: none; /* প্রিন্ট করার সময় বোতাম লুকানো */
+    }
 }
