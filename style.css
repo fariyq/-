@@ -67,11 +67,16 @@ th {
     color: white;
 }
 
+/* টেবিলের সেলগুলোর মধ্যে ডান দিকে বসানোর জন্য */
+.invoice-table .right-align {
+    text-align: right;
+}
+
 /* মোট মূল্য, অবশিষ্ট টাকা, ফেরত টাকা ডান পাশে ছোট অক্ষরে দেখানোর জন্য */
 .total-section {
     display: flex;
-    justify-content: space-between;
-    font-size: 14px;
+    justify-content: flex-end; /* এখানে পরিবর্তন করেছি */
+    font-size: 12px; /* আক্ষরিক আকার ছোট করা হয়েছে */
     font-weight: bold;
     margin-top: 10px;
     color: #333;
@@ -155,15 +160,30 @@ button:hover {
     }
     
     .total-section {
-        font-size: 12px;
+        font-size: 10px; /* আরও ছোট আকার */
     }
 
     table {
-        font-size: 12px;
+        font-size: 10px; /* আরও ছোট আকার */
     }
 
     .container {
         width: 100%;
         padding: 10px;
+    }
+
+    /* "ইনভয়েস তৈরি করুন" বাদ দিয়ে ইনভয়েস নম্বর দেখাবে */
+    .header {
+        text-align: center;
+        font-size: 18px;
+    }
+
+    .total-section {
+        font-size: 10px;
+        display: block;
+    }
+
+    .signature-section {
+        display: none;
     }
 }
