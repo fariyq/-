@@ -25,58 +25,38 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         grandTotalElement.innerText = grandTotal.toFixed(2) + " টাকা";
-        calculateDue(); 
+        calculateDue();
     }
 
     window.calculateDue = function () {
         let grandTotal = parseFloat(grandTotalElement.innerText.replace(" টাকা", "")) || 0;
         let paidAmount = parseFloat(paidAmountElement.value) || 0;
         let dueAmount = grandTotal - paidAmount;
-        let returnAmount = 0;
-
-        if (dueAmount < 0) {
-            returnAmount = Math.abs(dueAmount);
-            dueAmount = 0;
-        }
+        let returnAmount = dueAmount < 0 ? Math.abs(dueAmount) : 0;
+        dueAmount = dueAmount > 0 ? dueAmount : 0;
 
         dueAmountElement.innerText = dueAmount.toFixed(2) + " টাকা";
         returnAmountElement.innerText = returnAmount.toFixed(2) + " টাকা";
-
-        if (dueAmount === 0 && paidAmount > 0) {
-            paymentStatusElement.style.display = "block";
-        } else {
-            paymentStatusElement.style.display = "none";
-        }
+        paymentStatusElement.style.display = dueAmount === 0 && paidAmount > 0 ? "block" : "none";
     };
-
-    function updateSerialNumbers() {
-        let rows = document.querySelectorAll("#invoiceBody tr");
-        rows.forEach((row, index) => {
-            row.querySelector(".serialNumber").innerText = index + 1;
-        });
-    }
 
     window.addItem = function() {
         let row = document.createElement("tr");
-        row.innerHTML = `
-            <td class="serialNumber"></td>
-            <td><input type="text" class="productName"></td>
-            <td><input type="number" class="quantity"></td>
-            <td><input type="number" class="unitPrice"></td>
-            <td class="totalPrice">0 টাকা</td>
-            <td class="no-print"><button class="removeBtn">❌</button></td>
-        `;
+        row.innerHTML = `<td class="serialNumber"></td>
+                         <td><input type="text" class="productName"></td>
+                         <td><input type="number" class="quantity"></td>
+                         <td><input type="number" class="unitPrice"></td>
+                         <td class="totalPrice">0 টাকা</td>
+                         <td class="no-print"><button class="removeBtn">❌</button></td>`;
 
         row.querySelector(".quantity").addEventListener("input", calculateTotal);
         row.querySelector(".unitPrice").addEventListener("input", calculateTotal);
         row.querySelector(".removeBtn").addEventListener("click", function () {
             row.remove();
             calculateTotal();
-            updateSerialNumbers();
         });
 
         invoiceBody.appendChild(row);
-        updateSerialNumbers();
     };
 
     window.printInvoice = function() {
