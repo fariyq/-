@@ -39,13 +39,14 @@
 
         <button onclick="addItem()">+ আইটেম যোগ করুন</button>
 
-        <h3>মোট মূল্য: <span id="grandTotal">0 টাকা</span></h3>
+        <div class="total-section">
+            <p>মোট মূল্য: <span id="grandTotal">0 টাকা</span></p>
+            <p>অবশিষ্ট টাকা: <span id="dueAmount">0 টাকা</span></p>
+            <p>ফেরত টাকা: <span id="returnAmount">0 টাকা</span></p>
+        </div>
 
         <label for="paidAmount">জমা টাকা:</label>
         <input type="number" id="paidAmount" oninput="calculateDue()" placeholder="জমা টাকা লিখুন"><br><br>
-
-        <h3>অবশিষ্ট টাকা: <span id="dueAmount">0 টাকা</span></h3>
-        <h3>ফেরত টাকা: <span id="returnAmount">0 টাকা</span></h3>
 
         <h3 id="paymentStatus" style="color: green; display: none;">✅ পরিশোধিত</h3>
 
