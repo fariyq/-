@@ -1,66 +1,49 @@
-/* সাধারণ স্টাইল */
 body {
-    font-family: 'SolaimanLipi', Arial, sans-serif;
-    text-align: center;
-    background-color: #f5f5f5;
+    font-family: Arial, sans-serif;
     margin: 0;
-    padding: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+    text-align: center;
 }
 
-/* হেডার স্টাইল */
-.header {
-    background-color: #007bff;
-    color: white;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: bold;
-}
-
-/* কন্টেইনার */
 .container {
     background: white;
-    padding: 10px;
-    width: 90%;
-    max-width: 650px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
     margin: auto;
-    border-radius: 8px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* লেবেল */
-label {
-    font-size: 14px;
-    font-weight: bold;
-    display: block;
-    margin-bottom: 4px;
+input, button {
+    padding: 10px;
+    margin: 5px;
+    width: 90%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
-/* ইনপুট ফিল্ড */
-input {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
+button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
 }
 
-/* টেবিল ডিজাইন */
+button:hover {
+    background-color: #218838;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 10px;
-    table-layout: fixed;
-    font-size: 12px; /* ছোট করা হয়েছে */
+    margin-top: 10px;
 }
 
 th, td {
     border: 1px solid #ddd;
-    padding: 6px;
+    padding: 8px;
     text-align: center;
-    word-wrap: break-word;
 }
 
 th {
@@ -68,124 +51,18 @@ th {
     color: white;
 }
 
-/* মোট মূল্য, অবশিষ্ট টাকা, ফেরত টাকা ডান পাশে ছোট করে দেখানোর জন্য */
-.total-section {
-    display: flex;
-    justify-content: flex-end;
-    font-size: 11px;
-    font-weight: bold;
-    margin-top: 8px;
-    color: #333;
-}
-
-/* ডান সাইটে মোট মূল্য, জমা টাকা, অবশিষ্ট টাকা, ফেরত টাকা */
-.total-info {
-    text-align: right;
-}
-
-.total-info p {
-    margin: 4px 0;
-}
-
-/* বোতাম ডিজাইন */
-button {
-    background-color: #28a745;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 8px;
-    font-size: 14px;
-    transition: 0.3s;
-}
-
-button:hover {
-    background-color: #218838;
-}
-
-/* স্বাক্ষর সেকশন */
 .signature-section {
     display: flex;
     justify-content: space-between;
-    margin-top: 15px;
+    margin-top: 20px;
 }
 
 .signature-box {
-    width: 45%;
     text-align: center;
+    width: 45%;
 }
 
 .signature-line {
-    border-top: 2px solid black;
-    margin-top: 25px;
-}
-
-/* রেস্পন্সিভ ডিজাইন */
-@media (max-width: 600px) {
-    .container {
-        width: 95%;
-        padding: 10px;
-    }
-
-    th, td {
-        padding: 5px;
-        font-size: 10px;
-    }
-
-    button {
-        padding: 8px;
-        font-size: 12px;
-    }
-
-    .signature-section {
-        flex-direction: column;
-    }
-
-    .signature-box {
-        width: 100%;
-        margin-bottom: 15px;
-    }
-}
-
-/* প্রিন্ট ভিউ অপ্টিমাইজ করা */
-@media print {
-    body {
-        margin: 0;
-        padding: 0;
-    }
-    
-    .total-section {
-        font-size: 10px;
-    }
-
-    table {
-        font-size: 10px;
-    }
-
-    .container {
-        width: 100%;
-        padding: 8px;
-    }
-
-    /* হেডার ছোট করা */
-    .header {
-        text-align: center;
-        font-size: 14px;
-    }
-
-    .total-section {
-        font-size: 10px;
-        display: block;
-    }
-
-    .signature-section {
-        display: none;
-    }
-
-    /* প্রিন্টের সময় এই অপশনগুলো লুকানো হবে */
-    button,  
-    .add-item-button {  
-        display: none !important;  
-    }
+    border-top: 1px solid black;
+    margin-top: 10px;
 }
