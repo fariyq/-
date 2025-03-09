@@ -6,14 +6,28 @@ document.addEventListener("DOMContentLoaded", function () {
     let returnAmountElement = document.getElementById("returnAmount");
     let paymentStatusElement = document.getElementById("paymentStatus");
     let invoiceNumberElement = document.getElementById("invoiceNumber");
+    let currentDateElement = document.getElementById("currentDate");
+    let currentTimeElement = document.getElementById("currentTime");
 
-    // ইনভয়েস নাম্বার জেনারেট করার ফাংশন
+    // 🔹 **তারিখ ও সময় আপডেট করার ফাংশন**
+    function updateDateTime() {
+        let now = new Date();
+        let date = now.toLocaleDateString("bn-BD"); // বাংলা ফরম্যাটে তারিখ
+        let time = now.toLocaleTimeString("bn-BD"); // বাংলা ফরম্যাটে সময়
+
+        currentDateElement.innerText = date;
+        currentTimeElement.innerText = time;
+    }
+    setInterval(updateDateTime, 1000); // **প্রতি সেকেন্ডে সময় আপডেট হবে**
+    updateDateTime(); // **পেজ লোডের সাথে সাথে একবার চালাবে**
+
+    // 🔹 **ইনভয়েস নাম্বার জেনারেট করার ফাংশন**
     function generateInvoiceNumber() {
-        let randomNumber = Math.floor(100000 + Math.random() * 900000); // ৬ সংখ্যার র‍্যান্ডম নাম্বার
-        invoiceNumberElement.value = "INV-" + randomNumber; 
+        let randomNumber = Math.floor(100000 + Math.random() * 900000);
+        invoiceNumberElement.value = "INV-" + randomNumber;
     }
 
-    // মোট টাকার হিসাব করা
+    // 🔹 **মোট টাকার হিসাব করা**
     function calculateTotal() {
         let rows = document.querySelectorAll("#invoiceBody tr");
         let grandTotal = 0;
@@ -27,10 +41,10 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         grandTotalElement.innerText = grandTotal.toFixed(2) + " টাকা";
-        calculateDue(); 
+        calculateDue();
     }
 
-    // বাকি টাকা এবং ফেরত টাকা গণনা করা
+    // 🔹 **বাকি টাকা এবং ফেরত টাকা গণনা করা**
     window.calculateDue = function () {
         let grandTotal = parseFloat(grandTotalElement.innerText.replace(" টাকা", "")) || 0;
         let paidAmount = parseFloat(paidAmountElement.value) || 0;
@@ -42,8 +56,8 @@ document.addEventListener("DOMContentLoaded", function () {
             dueAmount = 0;
         }
 
-        dueAmountElement.innerText = "বাকি টাকা: " + dueAmount.toFixed(2) + " টাকা"; // **বাকি টাকা হিসেবে দেখাবে**
-        returnAmountElement.innerText = "ফেরত টাকা: " + returnAmount.toFixed(2) + " টাকা"; // **ফেরত টাকা দেখাবে**
+        dueAmountElement.innerText = dueAmount.toFixed(2) + " টাকা";
+        returnAmountElement.innerText = returnAmount.toFixed(2) + " টাকা";
 
         if (dueAmount === 0 && paidAmount > 0) {
             paymentStatusElement.style.display = "block";
@@ -59,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // নতুন আইটেম যোগ করা
+    // 🔹 **নতুন আইটেম যোগ করা**
     window.addItem = function() {
         let row = document.createElement("tr");
         row.innerHTML = `
@@ -83,14 +97,14 @@ document.addEventListener("DOMContentLoaded", function () {
         updateSerialNumbers();
     };
 
-    // ইনভয়েস প্রিন্ট করা
+    // 🔹 **ইনভয়েস প্রিন্ট করা**
     window.printInvoice = function() {
         window.print();
     };
 
-    // পেইড অ্যামাউন্ট ইনপুট দিলে সাথে সাথে হিসাব আপডেট হবে
+    // 🔹 **পেইড অ্যামাউন্ট ইনপুট দিলে সাথে সাথে হিসাব আপডেট হবে**
     paidAmountElement.addEventListener("input", calculateDue);
 
-    // পেজ লোড হলে ইনভয়েস নাম্বার তৈরি করবে
+    // 🔹 **পেজ লোড হলে ইনভয়েস নাম্বার তৈরি করবে**
     generateInvoiceNumber();
 });
