@@ -25,7 +25,7 @@
         <table>
             <thead>
                 <tr>
-                    <th>ক্রমিক</th> <!-- নতুন কলাম -->
+                    <th>ক্রমিক</th> 
                     <th>পণ্য নাম</th>
                     <th>পরিমাণ</th>
                     <th>একক মূল্য</th>
@@ -39,6 +39,13 @@
         <button onclick="addItem()">+ আইটেম যোগ করুন</button>
 
         <h3>মোট মূল্য: <span id="grandTotal">0 টাকা</span></h3>
+
+        <!-- নতুন ফিচার -->
+        <label for="paidAmount">জমা টাকা:</label>
+        <input type="number" id="paidAmount" oninput="calculateDue()" placeholder="জমা টাকা লিখুন"><br><br>
+
+        <h3>অবশিষ্ট টাকা: <span id="dueAmount">0 টাকা</span></h3>
+        <h3 id="paymentStatus" style="color: green; display: none;">✅ পরিশোধিত</h3>
 
         <div class="signature-section">
             <div class="signature-box">
