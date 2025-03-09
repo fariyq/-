@@ -1,29 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
     let invoiceBody = document.getElementById("invoiceBody");
     let grandTotalElement = document.getElementById("grandTotal");
-    let invoiceNumberElement = document.getElementById("invoiceNumber");
-    let currentDateElement = document.getElementById("currentDate");
-    let currentTimeElement = document.getElementById("currentTime");
-    let paidAmountElement = document.getElementById("paidAmount"); 
-    let dueAmountElement = document.getElementById("dueAmount"); 
-    let paymentStatusElement = document.getElementById("paymentStatus"); 
-
-    function generateInvoiceNumber() {
-        let randomPart = Math.floor(100000 + Math.random() * 900000); 
-        return "INV-" + randomPart;
-    }
-    invoiceNumberElement.innerText = generateInvoiceNumber();
-
-    function updateDateTime() {
-        let now = new Date();
-        let dateStr = now.toLocaleDateString("bn-BD");
-        let timeStr = now.toLocaleTimeString("bn-BD");
-
-        currentDateElement.innerText = dateStr;
-        currentTimeElement.innerText = timeStr;
-    }
-    updateDateTime();
-    setInterval(updateDateTime, 1000);
+    let paidAmountElement = document.getElementById("paidAmount");
+    let dueAmountElement = document.getElementById("dueAmount");
+    let returnAmountElement = document.getElementById("returnAmount");
+    let paymentStatusElement = document.getElementById("paymentStatus");
 
     function calculateTotal() {
         let rows = document.querySelectorAll("#invoiceBody tr");
@@ -45,12 +26,15 @@ document.addEventListener("DOMContentLoaded", function () {
         let grandTotal = parseFloat(grandTotalElement.innerText) || 0;
         let paidAmount = parseFloat(paidAmountElement.value) || 0;
         let dueAmount = grandTotal - paidAmount;
+        let returnAmount = 0;
 
         if (dueAmount < 0) {
+            returnAmount = Math.abs(dueAmount);
             dueAmount = 0;
         }
 
         dueAmountElement.innerText = dueAmount.toFixed(2) + " টাকা";
+        returnAmountElement.innerText = returnAmount.toFixed(2) + " টাকা";
 
         if (dueAmount === 0 && paidAmount > 0) {
             paymentStatusElement.style.display = "block";
