@@ -67,11 +67,21 @@ th {
 
 /* মোট মূল্য, অবশিষ্ট টাকা, ফেরত টাকা ডান পাশে ছোট অক্ষরে দেখানোর জন্য */
 .total-section {
-    text-align: right; /* ডান পাশে দেখাবে */
-    font-size: 14px; /* ছোট ফন্ট */
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
     font-weight: bold;
     margin-top: 10px;
     color: #333;
+}
+
+/* ডান সাইটে মোট মূল্য, জমা টাকা, অবশিষ্ট টাকা, ফেরত টাকা */
+.total-info {
+    text-align: right; /* ডান পাশে দেখাবে */
+}
+
+.total-info p {
+    margin: 5px 0;
 }
 
 /* বোতাম ডিজাইন */
@@ -149,3 +159,4 @@ button:hover {
     table {
         font-size: 12px;
     }
+}
