@@ -16,15 +16,11 @@
     <div class="container">
         <h2>ইনভয়েস তৈরি করুন</h2>
 
-        <div class="invoice-details">
-            <label for="invoiceNumber">ইনভয়েস:</label>
-            <span id="invoiceNumber"></span>
-        </div>
+        <label for="invoiceNumber">ইনভয়েস নাম্বার:</label>
+        <input type="text" id="invoiceNumber" readonly><br><br>
 
         <label for="customerName">কাস্টমারের নাম:</label>
-        <input type="text" id="customerName" placeholder="কাস্টমারের নাম লিখুন">
-        <label for="customerPhone">ফোন নম্বর:</label>
-        <input type="text" id="customerPhone" placeholder="ফোন নম্বর লিখুন"><br><br>
+        <input type="text" id="customerName" placeholder="কাস্টমারের নাম লিখুন"><br><br>
 
         <table>
             <thead>
@@ -44,11 +40,11 @@
 
         <h3>মোট মূল্য: <span id="grandTotal">0 টাকা</span></h3>
 
-        <div class="payment-section">
-            <label for="paidAmount">জমা:</label>
-            <input type="number" id="paidAmount" oninput="calculateDue()" placeholder="৳">
-            <span id="dueAmount">0 টাকা</span>
-        </div>
+        <label for="paidAmount">জমা টাকা:</label>
+        <input type="number" id="paidAmount" oninput="calculateDue()" placeholder="জমা টাকা লিখুন"><br><br>
+
+        <h3>অবশিষ্ট টাকা: <span id="dueAmount">0 টাকা</span></h3>
+        <h3>ফেরত টাকা: <span id="returnAmount">0 টাকা</span></h3>
 
         <h3 id="paymentStatus" style="color: green; display: none;">✅ পরিশোধিত</h3>
 
