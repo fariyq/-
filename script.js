@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
     updateDateTime();
     setInterval(updateDateTime, 1000);
 
-    // মোট দাম হিসাব করা
+    // **মোট দাম হিসাব করা**
     function calculateTotal() {
         let rows = document.querySelectorAll("#invoiceBody tr");
         let grandTotal = 0;
@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         dueAmountElement.innerText = dueAmount.toFixed(2) + " টাকা";
-        changeAmountElement.innerText = changeAmount > 0 ? changeAmount.toFixed(2) + " টাকা ফেরত দিন" : "";
+        changeAmountElement.innerText = changeAmount > 0 ? changeAmount.toFixed(2) + " টাকা ফেরত দিন" : "০ টাকা";
 
         if (dueAmount === 0 && paidAmount > 0) {
             paymentStatusElement.style.display = "block"; // ✅ পরিশোধিত দেখাবে
@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     };
 
-    // ক্রমিক নম্বর আপডেট ফাংশন
+    // **ক্রমিক নম্বর আপডেট ফাংশন**
     function updateSerialNumbers() {
         let rows = document.querySelectorAll("#invoiceBody tr");
         rows.forEach((row, index) => {
@@ -76,14 +76,14 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // নতুন আইটেম যোগ করা
+    // **নতুন আইটেম যোগ করা**
     window.addItem = function() {
         let row = document.createElement("tr");
         row.innerHTML = `
             <td class="serialNumber"></td> <!-- ক্রমিক নম্বর কলাম -->
             <td><input type="text" class="productName" placeholder="পণ্য নাম"></td>
-            <td><input type="number" class="quantity" placeholder="পরিমাণ"></td>
-            <td><input type="number" class="unitPrice" placeholder="একক মূল্য"></td>
+            <td><input type="number" class="quantity" placeholder="পরিমাণ" min="1"></td>
+            <td><input type="number" class="unitPrice" placeholder="একক মূল্য" min="0"></td>
             <td class="totalPrice">0 টাকা</td>
             <td><button class="removeBtn">❌ মুছুন</button></td>
         `;
@@ -100,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
         updateSerialNumbers(); // নতুন আইটেম যোগ হলে ক্রমিক নম্বর আপডেট
     };
 
-    // প্রিন্ট ফাংশন
+    // **প্রিন্ট ফাংশন**
     window.printInvoice = function() {
         window.print();
     };
