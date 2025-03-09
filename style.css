@@ -4,6 +4,7 @@ body {
     padding: 20px;
     background-color: #f4f4f4;
     text-align: center;
+    font-size: 14px; /* পুরো সাইটের ফন্ট ছোট */
 }
 
 .header {
@@ -11,39 +12,48 @@ body {
     color: white;
     padding: 10px;
     border-radius: 5px;
+    font-size: 16px; /* হেডারের লেখা স্পষ্ট রাখার জন্য */
 }
 
 .container {
     background: white;
-    padding: 20px;
-    margin-top: 20px;
+    padding: 15px;
+    margin-top: 15px;
     border-radius: 5px;
+    width: 90%;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 10px;
+    font-size: 12px; /* টেবিলের লেখা ছোট */
 }
 
 th, td {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 6px;
+    text-align: left;
 }
 
 .total-section {
     text-align: right;
-    margin-top: 20px;
+    margin-top: 10px;
+    font-size: 12px; /* টোটাল অংশ ছোট করা */
 }
 
 .signature-section {
     display: flex;
     justify-content: space-between;
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 .signature-box {
     width: 45%;
+    font-size: 12px;
 }
 
 .signature-line {
@@ -52,13 +62,34 @@ th, td {
 }
 
 button {
-    padding: 10px;
+    padding: 8px;
     margin-top: 10px;
     cursor: pointer;
+    font-size: 14px;
 }
 
+/* **প্রিন্টের জন্য অপ্টিমাইজেশন** */
 @media print {
     .no-print {
-        display: none;
+        display: none !important;
+    }
+    body {
+        font-size: 12px; /* প্রিন্টের জন্য আরো ছোট ফন্ট */
+    }
+    .header {
+        font-size: 14px;
+        padding: 5px;
+    }
+    .container {
+        padding: 10px;
+    }
+    table {
+        font-size: 10px; /* প্রিন্টের সময় টেবিল লেখা ছোট */
+    }
+    th, td {
+        padding: 4px;
+    }
+    .total-section {
+        font-size: 10px;
     }
 }
