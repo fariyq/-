@@ -6,28 +6,12 @@ document.addEventListener("DOMContentLoaded", function () {
     let returnAmountElement = document.getElementById("returnAmount");
     let paymentStatusElement = document.getElementById("paymentStatus");
     let invoiceNumberElement = document.getElementById("invoiceNumber");
-    let currentDateElement = document.getElementById("currentDate");
-    let currentTimeElement = document.getElementById("currentTime");
 
-    // 🔹 **তারিখ ও সময় আপডেট করার ফাংশন**
-    function updateDateTime() {
-        let now = new Date();
-        let date = now.toLocaleDateString("bn-BD"); // বাংলা ফরম্যাটে তারিখ
-        let time = now.toLocaleTimeString("bn-BD"); // বাংলা ফরম্যাটে সময়
-
-        currentDateElement.innerText = date;
-        currentTimeElement.innerText = time;
-    }
-    setInterval(updateDateTime, 1000); // **প্রতি সেকেন্ডে সময় আপডেট হবে**
-    updateDateTime(); // **পেজ লোডের সাথে সাথে একবার চালাবে**
-
-    // 🔹 **ইনভয়েস নাম্বার জেনারেট করার ফাংশন**
     function generateInvoiceNumber() {
         let randomNumber = Math.floor(100000 + Math.random() * 900000);
-        invoiceNumberElement.value = "INV-" + randomNumber;
+        invoiceNumberElement.value = "INV-" + randomNumber; 
     }
 
-    // 🔹 **মোট টাকার হিসাব করা**
     function calculateTotal() {
         let rows = document.querySelectorAll("#invoiceBody tr");
         let grandTotal = 0;
@@ -41,10 +25,9 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         grandTotalElement.innerText = grandTotal.toFixed(2) + " টাকা";
-        calculateDue();
+        calculateDue(); 
     }
 
-    // 🔹 **বাকি টাকা এবং ফেরত টাকা গণনা করা**
     window.calculateDue = function () {
         let grandTotal = parseFloat(grandTotalElement.innerText.replace(" টাকা", "")) || 0;
         let paidAmount = parseFloat(paidAmountElement.value) || 0;
@@ -73,16 +56,15 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // 🔹 **নতুন আইটেম যোগ করা**
     window.addItem = function() {
         let row = document.createElement("tr");
         row.innerHTML = `
             <td class="serialNumber"></td>
-            <td><input type="text" class="productName" placeholder="পণ্য নাম"></td>
-            <td><input type="number" class="quantity" placeholder="পরিমাণ"></td>
-            <td><input type="number" class="unitPrice" placeholder="একক মূল্য"></td>
+            <td><input type="text" class="productName"></td>
+            <td><input type="number" class="quantity"></td>
+            <td><input type="number" class="unitPrice"></td>
             <td class="totalPrice">0 টাকা</td>
-            <td><button class="removeBtn">❌</button></td>
+            <td class="no-print"><button class="removeBtn">❌</button></td>
         `;
 
         row.querySelector(".quantity").addEventListener("input", calculateTotal);
@@ -97,14 +79,9 @@ document.addEventListener("DOMContentLoaded", function () {
         updateSerialNumbers();
     };
 
-    // 🔹 **ইনভয়েস প্রিন্ট করা**
     window.printInvoice = function() {
         window.print();
     };
 
-    // 🔹 **পেইড অ্যামাউন্ট ইনপুট দিলে সাথে সাথে হিসাব আপডেট হবে**
-    paidAmountElement.addEventListener("input", calculateDue);
-
-    // 🔹 **পেজ লোড হলে ইনভয়েস নাম্বার তৈরি করবে**
     generateInvoiceNumber();
 });
