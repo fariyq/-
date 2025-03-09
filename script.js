@@ -4,17 +4,18 @@ document.addEventListener("DOMContentLoaded", function () {
     let invoiceNumberElement = document.getElementById("invoiceNumber");
     let currentDateElement = document.getElementById("currentDate");
     let currentTimeElement = document.getElementById("currentTime");
-    let paidAmountElement = document.getElementById("paidAmount"); // গ্রাহকের দেওয়া টাকা ইনপুট
-    let dueAmountElement = document.getElementById("dueAmount"); // বাকি টাকা দেখাবে
-    let changeAmountElement = document.getElementById("changeAmount"); // ফেরত টাকা দেখাবে
-    let paymentStatusElement = document.getElementById("paymentStatus"); // পরিশোধিত স্ট্যাটাস
+    let paidAmountElement = document.getElementById("paidAmount");
+    let dueAmountElement = document.getElementById("dueAmount");
+    let changeAmountElement = document.getElementById("changeAmount");
+    let paymentStatusElement = document.getElementById("paymentStatus");
+    let customerPhoneElement = document.getElementById("customerPhone");
 
-    // **ইনভয়েস নম্বর তৈরি করা**
+    // **ইনভয়েস নম্বর তৈরি করা (ছোট করে দেখাবে)**
     function generateInvoiceNumber() {
-        let randomPart = Math.floor(100000 + Math.random() * 900000); 
-        return "HAL-" + randomPart;
+        let randomPart = Math.floor(1000 + Math.random() * 9000);
+        return "INV-" + randomPart;
     }
-    invoiceNumberElement.value = generateInvoiceNumber();
+    invoiceNumberElement.innerText = generateInvoiceNumber();
 
     // **তারিখ ও সময় অটো আপডেট করা**
     function updateDateTime() {
@@ -28,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
     updateDateTime();
     setInterval(updateDateTime, 1000);
 
-    // **মোট দাম হিসাব করা**
+    // মোট দাম হিসাব করা
     function calculateTotal() {
         let rows = document.querySelectorAll("#invoiceBody tr");
         let grandTotal = 0;
@@ -43,10 +44,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
         grandTotalElement.innerText = grandTotal.toFixed(2) + " টাকা";
 
-        calculateDue(); // মোট দাম পরিবর্তন হলে অবশিষ্ট টাকা আপডেট হবে
+        calculateDue();
     }
 
-    // **জমা টাকা ও ফেরত টাকা হিসাব করা**
+    // **জমা টাকা ও অবশিষ্ট টাকা হিসাব করা (ডান পাশে দেখাবে)**
     window.calculateDue = function () {
         let grandTotal = parseFloat(grandTotalElement.innerText) || 0;
         let paidAmount = parseFloat(paidAmountElement.value) || 0;
@@ -54,36 +55,36 @@ document.addEventListener("DOMContentLoaded", function () {
         let changeAmount = 0;
 
         if (dueAmount < 0) {
-            changeAmount = Math.abs(dueAmount); // যদি গ্রাহক বেশি টাকা দেন, তাহলে সেটা ফেরত টাকা
-            dueAmount = 0; // বাকি টাকা শূন্য দেখাবে
+            changeAmount = Math.abs(dueAmount);
+            dueAmount = 0;
         }
 
         dueAmountElement.innerText = dueAmount.toFixed(2) + " টাকা";
-        changeAmountElement.innerText = changeAmount > 0 ? changeAmount.toFixed(2) + " টাকা ফেরত দিন" : "০ টাকা";
+        changeAmountElement.innerText = changeAmount > 0 ? changeAmount.toFixed(2) + " টাকা ফেরত দিন" : "";
 
         if (dueAmount === 0 && paidAmount > 0) {
-            paymentStatusElement.style.display = "block"; // ✅ পরিশোধিত দেখাবে
+            paymentStatusElement.style.display = "block";
         } else {
-            paymentStatusElement.style.display = "none"; // লুকিয়ে রাখবে
+            paymentStatusElement.style.display = "none";
         }
     };
 
-    // **ক্রমিক নম্বর আপডেট ফাংশন**
+    // ক্রমিক নম্বর আপডেট ফাংশন
     function updateSerialNumbers() {
         let rows = document.querySelectorAll("#invoiceBody tr");
         rows.forEach((row, index) => {
-            row.querySelector(".serialNumber").innerText = index + 1; // ১ থেকে শুরু হবে
+            row.querySelector(".serialNumber").innerText = index + 1;
         });
     }
 
-    // **নতুন আইটেম যোগ করা**
+    // নতুন আইটেম যোগ করা
     window.addItem = function() {
         let row = document.createElement("tr");
         row.innerHTML = `
-            <td class="serialNumber"></td> <!-- ক্রমিক নম্বর কলাম -->
+            <td class="serialNumber"></td>
             <td><input type="text" class="productName" placeholder="পণ্য নাম"></td>
-            <td><input type="number" class="quantity" placeholder="পরিমাণ" min="1"></td>
-            <td><input type="number" class="unitPrice" placeholder="একক মূল্য" min="0"></td>
+            <td><input type="number" class="quantity" placeholder="পরিমাণ"></td>
+            <td><input type="number" class="unitPrice" placeholder="একক মূল্য"></td>
             <td class="totalPrice">0 টাকা</td>
             <td><button class="removeBtn">❌ মুছুন</button></td>
         `;
@@ -93,14 +94,27 @@ document.addEventListener("DOMContentLoaded", function () {
         row.querySelector(".removeBtn").addEventListener("click", function () {
             row.remove();
             calculateTotal();
-            updateSerialNumbers(); // ক্রমিক নম্বর আপডেট
+            updateSerialNumbers();
         });
 
         invoiceBody.appendChild(row);
-        updateSerialNumbers(); // নতুন আইটেম যোগ হলে ক্রমিক নম্বর আপডেট
+        updateSerialNumbers();
     };
 
-    // **প্রিন্ট ফাংশন**
+    // **কাস্টমারের নাম ও ফোন নম্বর একসাথে দেখাবে**
+    window.updateCustomerInfo = function () {
+        let customerName = document.getElementById("customerName").value;
+        let customerPhone = customerPhoneElement.value;
+        let displayText = customerName;
+
+        if (customerPhone) {
+            displayText += " (" + customerPhone + ")";
+        }
+
+        document.getElementById("customerDisplay").innerText = displayText;
+    };
+
+    // প্রিন্ট ফাংশন
     window.printInvoice = function() {
         window.print();
     };
