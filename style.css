@@ -52,12 +52,14 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 15px;
+    table-layout: fixed;  /* টেবিলের কলাম স্থির করার জন্য */
 }
 
 th, td {
     border: 1px solid #ddd;
-    padding: 10px;
+    padding: 8px;
     text-align: center;
+    word-wrap: break-word;  /* দীর্ঘ শব্দ টেবিলের মধ্যে ভেঙে যাবে */
 }
 
 th {
@@ -126,8 +128,8 @@ button:hover {
     }
 
     th, td {
-        padding: 8px;
-        font-size: 14px;
+        padding: 6px;
+        font-size: 12px;
     }
 
     button {
@@ -158,5 +160,10 @@ button:hover {
 
     table {
         font-size: 12px;
+    }
+
+    .container {
+        width: 100%;
+        padding: 10px;
     }
 }
