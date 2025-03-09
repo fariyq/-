@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
         calculateDue(); 
     }
 
-    // অবশিষ্ট টাকা এবং ফেরত টাকা গণনা করা
+    // বাকি টাকা এবং ফেরত টাকা গণনা করা
     window.calculateDue = function () {
         let grandTotal = parseFloat(grandTotalElement.innerText.replace(" টাকা", "")) || 0;
         let paidAmount = parseFloat(paidAmountElement.value) || 0;
@@ -42,8 +42,8 @@ document.addEventListener("DOMContentLoaded", function () {
             dueAmount = 0;
         }
 
-        dueAmountElement.innerText = dueAmount.toFixed(2) + " টাকা"; // অবশিষ্ট টাকা হিসেবে দেখাবে
-        returnAmountElement.innerText = returnAmount.toFixed(2) + " টাকা"; // ফেরত টাকা দেখাবে
+        dueAmountElement.innerText = "বাকি টাকা: " + dueAmount.toFixed(2) + " টাকা"; // **বাকি টাকা হিসেবে দেখাবে**
+        returnAmountElement.innerText = "ফেরত টাকা: " + returnAmount.toFixed(2) + " টাকা"; // **ফেরত টাকা দেখাবে**
 
         if (dueAmount === 0 && paidAmount > 0) {
             paymentStatusElement.style.display = "block";
