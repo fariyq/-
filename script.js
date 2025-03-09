@@ -4,20 +4,16 @@ document.addEventListener("DOMContentLoaded", function () {
     let invoiceNumberElement = document.getElementById("invoiceNumber");
     let currentDateElement = document.getElementById("currentDate");
     let currentTimeElement = document.getElementById("currentTime");
-    let paidAmountElement = document.getElementById("paidAmount");
-    let dueAmountElement = document.getElementById("dueAmount");
-    let changeAmountElement = document.getElementById("changeAmount");
-    let paymentStatusElement = document.getElementById("paymentStatus");
-    let customerPhoneElement = document.getElementById("customerPhone");
+    let paidAmountElement = document.getElementById("paidAmount"); 
+    let dueAmountElement = document.getElementById("dueAmount"); 
+    let paymentStatusElement = document.getElementById("paymentStatus"); 
 
-    // **ইনভয়েস নম্বর তৈরি করা (ছোট করে দেখাবে)**
     function generateInvoiceNumber() {
-        let randomPart = Math.floor(1000 + Math.random() * 9000);
+        let randomPart = Math.floor(100000 + Math.random() * 900000); 
         return "INV-" + randomPart;
     }
     invoiceNumberElement.innerText = generateInvoiceNumber();
 
-    // **তারিখ ও সময় অটো আপডেট করা**
     function updateDateTime() {
         let now = new Date();
         let dateStr = now.toLocaleDateString("bn-BD");
@@ -29,7 +25,6 @@ document.addEventListener("DOMContentLoaded", function () {
     updateDateTime();
     setInterval(updateDateTime, 1000);
 
-    // মোট দাম হিসাব করা
     function calculateTotal() {
         let rows = document.querySelectorAll("#invoiceBody tr");
         let grandTotal = 0;
@@ -43,24 +38,19 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         grandTotalElement.innerText = grandTotal.toFixed(2) + " টাকা";
-
         calculateDue();
     }
 
-    // **জমা টাকা ও অবশিষ্ট টাকা হিসাব করা (ডান পাশে দেখাবে)**
     window.calculateDue = function () {
         let grandTotal = parseFloat(grandTotalElement.innerText) || 0;
         let paidAmount = parseFloat(paidAmountElement.value) || 0;
         let dueAmount = grandTotal - paidAmount;
-        let changeAmount = 0;
 
         if (dueAmount < 0) {
-            changeAmount = Math.abs(dueAmount);
             dueAmount = 0;
         }
 
         dueAmountElement.innerText = dueAmount.toFixed(2) + " টাকা";
-        changeAmountElement.innerText = changeAmount > 0 ? changeAmount.toFixed(2) + " টাকা ফেরত দিন" : "";
 
         if (dueAmount === 0 && paidAmount > 0) {
             paymentStatusElement.style.display = "block";
@@ -69,7 +59,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     };
 
-    // ক্রমিক নম্বর আপডেট ফাংশন
     function updateSerialNumbers() {
         let rows = document.querySelectorAll("#invoiceBody tr");
         rows.forEach((row, index) => {
@@ -77,7 +66,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // নতুন আইটেম যোগ করা
     window.addItem = function() {
         let row = document.createElement("tr");
         row.innerHTML = `
@@ -86,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <td><input type="number" class="quantity" placeholder="পরিমাণ"></td>
             <td><input type="number" class="unitPrice" placeholder="একক মূল্য"></td>
             <td class="totalPrice">0 টাকা</td>
-            <td><button class="removeBtn">❌ মুছুন</button></td>
+            <td><button class="removeBtn">❌</button></td>
         `;
 
         row.querySelector(".quantity").addEventListener("input", calculateTotal);
@@ -101,20 +89,6 @@ document.addEventListener("DOMContentLoaded", function () {
         updateSerialNumbers();
     };
 
-    // **কাস্টমারের নাম ও ফোন নম্বর একসাথে দেখাবে**
-    window.updateCustomerInfo = function () {
-        let customerName = document.getElementById("customerName").value;
-        let customerPhone = customerPhoneElement.value;
-        let displayText = customerName;
-
-        if (customerPhone) {
-            displayText += " (" + customerPhone + ")";
-        }
-
-        document.getElementById("customerDisplay").innerText = displayText;
-    };
-
-    // প্রিন্ট ফাংশন
     window.printInvoice = function() {
         window.print();
     };
