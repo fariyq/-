@@ -7,11 +7,13 @@ document.addEventListener("DOMContentLoaded", function () {
     let paymentStatusElement = document.getElementById("paymentStatus");
     let invoiceNumberElement = document.getElementById("invoiceNumber");
 
+    // ইনভয়েস নাম্বার জেনারেট করার ফাংশন
     function generateInvoiceNumber() {
-        let randomNumber = Math.floor(100000 + Math.random() * 900000);
+        let randomNumber = Math.floor(100000 + Math.random() * 900000); // ৬ সংখ্যার র‍্যান্ডম নাম্বার
         invoiceNumberElement.value = "INV-" + randomNumber; 
     }
 
+    // মোট টাকার হিসাব করা
     function calculateTotal() {
         let rows = document.querySelectorAll("#invoiceBody tr");
         let grandTotal = 0;
@@ -28,6 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
         calculateDue(); 
     }
 
+    // অবশিষ্ট টাকা এবং ফেরত টাকা গণনা করা
     window.calculateDue = function () {
         let grandTotal = parseFloat(grandTotalElement.innerText.replace(" টাকা", "")) || 0;
         let paidAmount = parseFloat(paidAmountElement.value) || 0;
@@ -39,8 +42,8 @@ document.addEventListener("DOMContentLoaded", function () {
             dueAmount = 0;
         }
 
-        dueAmountElement.innerText = dueAmount.toFixed(2) + " টাকা";
-        returnAmountElement.innerText = returnAmount.toFixed(2) + " টাকা";
+        dueAmountElement.innerText = dueAmount.toFixed(2) + " টাকা"; // অবশিষ্ট টাকা হিসেবে দেখাবে
+        returnAmountElement.innerText = returnAmount.toFixed(2) + " টাকা"; // ফেরত টাকা দেখাবে
 
         if (dueAmount === 0 && paidAmount > 0) {
             paymentStatusElement.style.display = "block";
@@ -56,6 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // নতুন আইটেম যোগ করা
     window.addItem = function() {
         let row = document.createElement("tr");
         row.innerHTML = `
@@ -79,10 +83,14 @@ document.addEventListener("DOMContentLoaded", function () {
         updateSerialNumbers();
     };
 
+    // ইনভয়েস প্রিন্ট করা
     window.printInvoice = function() {
         window.print();
     };
 
+    // পেইড অ্যামাউন্ট ইনপুট দিলে সাথে সাথে হিসাব আপডেট হবে
     paidAmountElement.addEventListener("input", calculateDue);
+
+    // পেজ লোড হলে ইনভয়েস নাম্বার তৈরি করবে
     generateInvoiceNumber();
 });
