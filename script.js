@@ -4,6 +4,9 @@ document.addEventListener("DOMContentLoaded", function () {
     let invoiceNumberElement = document.getElementById("invoiceNumber");
     let currentDateElement = document.getElementById("currentDate");
     let currentTimeElement = document.getElementById("currentTime");
+    let paidAmountElement = document.getElementById("paidAmount"); // জমা টাকা ইনপুট
+    let dueAmountElement = document.getElementById("dueAmount"); // অবশিষ্ট টাকা দেখাবে
+    let paymentStatusElement = document.getElementById("paymentStatus"); // পরিশোধিত লেখা দেখাবে
 
     // **শুধু ক্রমিক নম্বর তৈরি করা (তারিখ ছাড়া)**
     function generateInvoiceNumber() {
@@ -38,7 +41,24 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         grandTotalElement.innerText = grandTotal.toFixed(2) + " টাকা";
+
+        calculateDue(); // মোট দাম পরিবর্তন হলে অবশিষ্ট টাকা আপডেট হবে
     }
+
+    // **জমা টাকা ও অবশিষ্ট টাকা হিসাব করা**
+    window.calculateDue = function () {
+        let grandTotal = parseFloat(grandTotalElement.innerText) || 0;
+        let paidAmount = parseFloat(paidAmountElement.value) || 0;
+        let dueAmount = grandTotal - paidAmount;
+
+        dueAmountElement.innerText = dueAmount.toFixed(2) + " টাকা";
+
+        if (dueAmount <= 0) {
+            paymentStatusElement.style.display = "block"; // ✅ পরিশোধিত দেখাবে
+        } else {
+            paymentStatusElement.style.display = "none"; // লুকিয়ে রাখবে
+        }
+    };
 
     // ক্রমিক নম্বর আপডেট ফাংশন
     function updateSerialNumbers() {
