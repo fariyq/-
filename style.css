@@ -4,20 +4,20 @@ body {
     padding: 20px;
     background-color: #f4f4f4;
     text-align: center;
-    font-size: 14px; /* পুরো সাইটের ফন্ট ছোট */
+    font-size: 14px;
 }
 
 .header {
     background: #007bff;
     color: white;
-    padding: 10px;
+    padding: 15px;
     border-radius: 5px;
-    font-size: 16px; /* হেডারের লেখা স্পষ্ট রাখার জন্য */
+    font-size: 18px;
 }
 
 .container {
     background: white;
-    padding: 15px;
+    padding: 20px;
     margin-top: 15px;
     border-radius: 5px;
     width: 90%;
@@ -30,30 +30,39 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 10px;
-    font-size: 12px; /* টেবিলের লেখা ছোট */
+    font-size: 14px;
 }
 
 th, td {
     border: 1px solid #ddd;
-    padding: 6px;
+    padding: 8px;
     text-align: left;
 }
 
 .total-section {
     text-align: right;
     margin-top: 10px;
-    font-size: 12px; /* টোটাল অংশ ছোট করা */
+    font-size: 14px;
+}
+
+.total-info p {
+    margin: 5px 0;
+    padding: 5px;
+    border: 1px solid #ddd;
+    display: inline-block;
+    min-width: 200px;
+    text-align: right;
 }
 
 .signature-section {
     display: flex;
     justify-content: space-between;
-    margin-top: 15px;
+    margin-top: 20px;
 }
 
 .signature-box {
     width: 45%;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .signature-line {
@@ -62,34 +71,33 @@ th, td {
 }
 
 button {
-    padding: 8px;
+    padding: 10px;
     margin-top: 10px;
     cursor: pointer;
     font-size: 14px;
 }
 
-/* **প্রিন্টের জন্য অপ্টিমাইজেশন** */
 @media print {
     .no-print {
         display: none !important;
     }
     body {
-        font-size: 12px; /* প্রিন্টের জন্য আরো ছোট ফন্ট */
+        font-size: 12px;
     }
     .header {
-        font-size: 14px;
-        padding: 5px;
+        font-size: 16px;
+        padding: 10px;
     }
     .container {
         padding: 10px;
     }
     table {
-        font-size: 10px; /* প্রিন্টের সময় টেবিল লেখা ছোট */
+        font-size: 12px;
     }
     th, td {
-        padding: 4px;
+        padding: 6px;
     }
     .total-section {
-        font-size: 10px;
+        font-size: 12px;
     }
 }
