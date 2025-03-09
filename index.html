@@ -31,25 +31,22 @@
                     <th>পরিমাণ</th>
                     <th>একক মূল্য</th>
                     <th>মোট</th>
-                    <th>অপশন</th>
+                    <th class="no-print">অপশন</th>
                 </tr>
             </thead>
             <tbody id="invoiceBody"></tbody>
         </table>
 
-        <button onclick="addItem()">+ আইটেম যোগ করুন</button>
+        <button class="no-print" onclick="addItem()">+ আইটেম যোগ করুন</button>
 
         <div class="total-section">
             <div class="total-info">
-                <p>মোট মূল্য: <span id="grandTotal">0 টাকা</span></p>
-                <p>জমা টাকা: <span id="paidAmountText">0 টাকা</span></p>
-                <p>বাকি টাকা: <span id="dueAmount">0 টাকা</span></p>
-                <p>ফেরত টাকা: <span id="returnAmount">0 টাকা</span></p>
+                <p><strong>মোট মূল্য:</strong> <span id="grandTotal">0 টাকা</span></p>
+                <p><strong>জমা টাকা:</strong> <input type="number" id="paidAmount" oninput="calculateDue()" placeholder="জমা টাকা লিখুন"></p>
+                <p><strong>বাকি টাকা:</strong> <span id="dueAmount">0 টাকা</span></p>
+                <p><strong>ফেরত টাকা:</strong> <span id="returnAmount">0 টাকা</span></p>
             </div>
         </div>
-
-        <label for="paidAmount">জমা টাকা:</label>
-        <input type="number" id="paidAmount" oninput="calculateDue()" placeholder="জমা টাকা লিখুন"><br><br>
 
         <h3 id="paymentStatus" style="color: green; display: none;">✅ পরিশোধিত</h3>
 
@@ -64,7 +61,7 @@
             </div>
         </div>
 
-        <button onclick="printInvoice()">🖨️ প্রিন্ট করুন</button>
+        <button class="no-print" onclick="printInvoice()">🖨️ প্রিন্ট করুন</button>
     </div>
 
     <script src="script.js"></script>
