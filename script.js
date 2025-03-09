@@ -4,11 +4,12 @@ document.addEventListener("DOMContentLoaded", function () {
     let invoiceNumberElement = document.getElementById("invoiceNumber");
     let currentDateElement = document.getElementById("currentDate");
     let currentTimeElement = document.getElementById("currentTime");
-    let paidAmountElement = document.getElementById("paidAmount"); // জমা টাকা ইনপুট
-    let dueAmountElement = document.getElementById("dueAmount"); // অবশিষ্ট টাকা দেখাবে
-    let paymentStatusElement = document.getElementById("paymentStatus"); // পরিশোধিত লেখা দেখাবে
+    let paidAmountElement = document.getElementById("paidAmount"); // গ্রাহকের দেওয়া টাকা ইনপুট
+    let dueAmountElement = document.getElementById("dueAmount"); // বাকি টাকা দেখাবে
+    let changeAmountElement = document.getElementById("changeAmount"); // ফেরত টাকা দেখাবে
+    let paymentStatusElement = document.getElementById("paymentStatus"); // পরিশোধিত স্ট্যাটাস
 
-    // **শুধু ক্রমিক নম্বর তৈরি করা (তারিখ ছাড়া)**
+    // **ইনভয়েস নম্বর তৈরি করা**
     function generateInvoiceNumber() {
         let randomPart = Math.floor(100000 + Math.random() * 900000); 
         return "HAL-" + randomPart;
@@ -27,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
     updateDateTime();
     setInterval(updateDateTime, 1000);
 
-    // মোট দাম হিসাব
+    // মোট দাম হিসাব করা
     function calculateTotal() {
         let rows = document.querySelectorAll("#invoiceBody tr");
         let grandTotal = 0;
@@ -45,15 +46,22 @@ document.addEventListener("DOMContentLoaded", function () {
         calculateDue(); // মোট দাম পরিবর্তন হলে অবশিষ্ট টাকা আপডেট হবে
     }
 
-    // **জমা টাকা ও অবশিষ্ট টাকা হিসাব করা**
+    // **জমা টাকা ও ফেরত টাকা হিসাব করা**
     window.calculateDue = function () {
         let grandTotal = parseFloat(grandTotalElement.innerText) || 0;
         let paidAmount = parseFloat(paidAmountElement.value) || 0;
         let dueAmount = grandTotal - paidAmount;
+        let changeAmount = 0;
+
+        if (dueAmount < 0) {
+            changeAmount = Math.abs(dueAmount); // যদি গ্রাহক বেশি টাকা দেন, তাহলে সেটা ফেরত টাকা
+            dueAmount = 0; // বাকি টাকা শূন্য দেখাবে
+        }
 
         dueAmountElement.innerText = dueAmount.toFixed(2) + " টাকা";
+        changeAmountElement.innerText = changeAmount > 0 ? changeAmount.toFixed(2) + " টাকা ফেরত দিন" : "";
 
-        if (dueAmount <= 0) {
+        if (dueAmount === 0 && paidAmount > 0) {
             paymentStatusElement.style.display = "block"; // ✅ পরিশোধিত দেখাবে
         } else {
             paymentStatusElement.style.display = "none"; // লুকিয়ে রাখবে
