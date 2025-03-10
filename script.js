@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let paymentStatusElement = document.getElementById("paymentStatus");
     let invoiceNumberElement = document.getElementById("invoiceNumber");
     let invoiceTitleElement = document.querySelector("h2");
+    let originalTitle = invoiceTitleElement.innerText; // আসল টাইটেল সেভ করে রাখা
 
     // তারিখ ও সময় দেখানোর জন্য ফাংশন
     function updateDateTime() {
@@ -16,11 +17,10 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("currentDate").innerText = date;
         document.getElementById("currentTime").innerText = time;
 
-        // প্রতি সেকেন্ডে সময় আপডেট হবে
         setTimeout(updateDateTime, 1000);
     }
 
-    window.updateDateTime = updateDateTime; // HTML থেকে কল করার জন্য
+    window.updateDateTime = updateDateTime;
 
     // ইনভয়েস নাম্বার জেনারেট করা
     function generateInvoiceNumber() {
@@ -82,14 +82,9 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     window.printInvoice = function () {
-        // প্রিন্ট করার আগে টাইটেল পরিবর্তন করা
-        invoiceTitleElement.innerText = "ধন্যবাদ, আবার আসবেন";
+        // প্রিন্ট করার সময় শুধু নীচের লাইন প্রিন্ট হবে
+        alert("প্রিন্ট করা হচ্ছে... ধন্যবাদ, আবার আসবেন।");
         window.print();
-        
-        // প্রিন্ট করার পরে আবার আগের টাইটেল ফিরিয়ে আনা
-        setTimeout(() => {
-            invoiceTitleElement.innerText = "ইনভয়েস তৈরি করুন";
-        }, 1000);
     };
 
     updateDateTime();
