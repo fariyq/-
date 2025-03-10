@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let returnAmountElement = document.getElementById("returnAmount");
     let paymentStatusElement = document.getElementById("paymentStatus");
     let invoiceNumberElement = document.getElementById("invoiceNumber");
-    let headerTitle = document.getElementById("headerTitle");
+    let invoiceTitleElement = document.querySelector("h2");
 
     // তারিখ ও সময় দেখানোর জন্য ফাংশন
     function updateDateTime() {
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // ইনভয়েস নাম্বার জেনারেট করা
     function generateInvoiceNumber() {
         let randomNumber = Math.floor(100000 + Math.random() * 900000);
-        invoiceNumberElement.value = "INV-" + randomNumber; 
+        invoiceNumberElement.value = "INV-" + randomNumber;
     }
 
     window.generateInvoiceNumber = generateInvoiceNumber;
@@ -51,8 +51,6 @@ document.addEventListener("DOMContentLoaded", function () {
         calculateDue();
     }
 
-    window.calculateTotal = calculateTotal;
-
     window.calculateDue = function () {
         let grandTotal = parseFloat(grandTotalElement.innerText.replace(" টাকা", "")) || 0;
         let paidAmount = parseFloat(paidAmountElement.value) || 0;
@@ -65,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
         paymentStatusElement.style.display = dueAmount === 0 && paidAmount > 0 ? "block" : "none";
     };
 
-    window.addItem = function() {
+    window.addItem = function () {
         let row = document.createElement("tr");
         row.innerHTML = `<td class="serialNumber"></td>
                          <td><input type="text" class="productName"></td>
@@ -83,16 +81,15 @@ document.addEventListener("DOMContentLoaded", function () {
         calculateTotal();
     };
 
-    window.printInvoice = function() {
-        // প্রিন্ট করার আগে হেডারের টাইটেল চেঞ্জ করা
-        let originalTitle = headerTitle.innerText;
-        headerTitle.innerText = "ধন্যবাদ, আবার আসবেন";
-        
-        // প্রিন্ট কমান্ড চালানো
+    window.printInvoice = function () {
+        // প্রিন্ট করার আগে টাইটেল পরিবর্তন করা
+        invoiceTitleElement.innerText = "ধন্যবাদ, আবার আসবেন";
         window.print();
         
-        // প্রিন্ট করার পরে আগের টাইটেল ফেরত দেয়া
-        headerTitle.innerText = originalTitle;
+        // প্রিন্ট করার পরে আবার আগের টাইটেল ফিরিয়ে আনা
+        setTimeout(() => {
+            invoiceTitleElement.innerText = "ইনভয়েস তৈরি করুন";
+        }, 1000);
     };
 
     updateDateTime();
