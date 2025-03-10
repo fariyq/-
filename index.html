@@ -6,7 +6,7 @@
     <title>ইনভয়েস সিস্টেম</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body onload="updateDateTime()">
+<body onload="initializeInvoice()">
     <div class="header">
         <h2>ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার</h2>
         <p>📍 গদখালি বাজার বাস স্ট্যান্ড, রহিম সরদার মার্কেট, ঝিকরগাছা, যশোর।</p>
@@ -23,7 +23,7 @@
         <label for="customerName">কাস্টমারের নাম:</label>
         <input type="text" id="customerName" placeholder="কাস্টমারের নাম লিখুন"><br><br>
 
-        <table>
+        <table border="1" style="width: 100%; border-collapse: collapse;">
             <thead>
                 <tr>
                     <th>ক্রমিক</th> 
@@ -64,6 +64,26 @@
         <button class="no-print" onclick="printInvoice()">🖨️ প্রিন্ট করুন</button>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        function initializeInvoice() {
+            updateDateTime();
+            generateInvoiceNumber();
+        }
+
+        function updateDateTime() {
+            const now = new Date();
+            const date = now.toLocaleDateString('bn-BD');
+            const time = now.toLocaleTimeString('bn-BD');
+
+            document.getElementById('currentDate').innerText = date;
+            document.getElementById('currentTime').innerText = time;
+        }
+
+        function generateInvoiceNumber() {
+            const randomNum = Math.floor(1000 + Math.random() * 9000);
+            const invoiceNumber = 'INV-' + randomNum;
+            document.getElementById('invoiceNumber').value = invoiceNumber;
+        }
+    </script>
 </body>
 </html>
