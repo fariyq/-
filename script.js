@@ -7,35 +7,47 @@ document.addEventListener("DOMContentLoaded", function () {
     let paymentStatusElement = document.getElementById("paymentStatus");
     let invoiceNumberElement = document.getElementById("invoiceNumber");
 
+    // তারিখ ও সময় দেখানোর জন্য ফাংশন
+    function updateDateTime() {
+        const now = new Date();
+        const date = now.toLocaleDateString('bn-BD');
+        const time = now.toLocaleTimeString('bn-BD');
+        document.getElementById("currentDate").innerText = date;
+        document.getElementById("currentTime").innerText = time;
+        
+        // প্রতি সেকেন্ডে সময় আপডেট হবে
+        setTimeout(updateDateTime, 1000);
+    }
+    
+    window.updateDateTime = updateDateTime; // HTML থেকে কল করার জন্য
+    
+    // ইনভয়েস নাম্বার জেনারেট করা
     function generateInvoiceNumber() {
         let randomNumber = Math.floor(100000 + Math.random() * 900000);
         invoiceNumberElement.value = "INV-" + randomNumber; 
     }
 
-    function updateDateTime() {
-        const now = new Date();
-        const date = now.toLocaleDateString('bn-BD');
-        const time = now.toLocaleTimeString('bn-BD');
+    window.generateInvoiceNumber = generateInvoiceNumber;
 
-        document.getElementById('currentDate').innerText = date;
-        document.getElementById('currentTime').innerText = time;
-    }
-
+    // মোট হিসাব করা
     function calculateTotal() {
         let rows = document.querySelectorAll("#invoiceBody tr");
         let grandTotal = 0;
 
-        rows.forEach(row => {
+        rows.forEach((row, index) => {
             let quantity = parseFloat(row.querySelector(".quantity").value) || 0;
             let unitPrice = parseFloat(row.querySelector(".unitPrice").value) || 0;
             let totalPrice = quantity * unitPrice;
+
             row.querySelector(".totalPrice").innerText = totalPrice.toFixed(2) + " টাকা";
             grandTotal += totalPrice;
+
+            // ক্রমিক নাম্বার ঠিক করা
+            row.querySelector(".serialNumber").innerText = index + 1;
         });
 
         grandTotalElement.innerText = grandTotal.toFixed(2) + " টাকা";
         calculateDue();
-        updateSerialNumbers();
     }
 
     window.calculateDue = function () {
@@ -50,37 +62,28 @@ document.addEventListener("DOMContentLoaded", function () {
         paymentStatusElement.style.display = dueAmount === 0 && paidAmount > 0 ? "block" : "none";
     };
 
-    function updateSerialNumbers() {
-        let rows = document.querySelectorAll("#invoiceBody tr");
-        rows.forEach((row, index) => {
-            row.querySelector(".serialNumber").innerText = index + 1;
-        });
-    }
-
     window.addItem = function() {
         let row = document.createElement("tr");
         row.innerHTML = `<td class="serialNumber"></td>
                          <td><input type="text" class="productName"></td>
-                         <td><input type="number" class="quantity" min="0"></td>
-                         <td><input type="number" class="unitPrice" min="0"></td>
+                         <td><input type="number" class="quantity" oninput="calculateTotal()"></td>
+                         <td><input type="number" class="unitPrice" oninput="calculateTotal()"></td>
                          <td class="totalPrice">0 টাকা</td>
                          <td class="no-print"><button class="removeBtn">❌</button></td>`;
 
-        row.querySelector(".quantity").addEventListener("input", calculateTotal);
-        row.querySelector(".unitPrice").addEventListener("input", calculateTotal);
         row.querySelector(".removeBtn").addEventListener("click", function () {
             row.remove();
             calculateTotal();
         });
 
         invoiceBody.appendChild(row);
-        updateSerialNumbers();
+        calculateTotal();
     };
 
     window.printInvoice = function() {
         window.print();
     };
 
-    generateInvoiceNumber();
     updateDateTime();
+    generateInvoiceNumber();
 });
