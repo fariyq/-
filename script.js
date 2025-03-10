@@ -31,15 +31,17 @@ document.addEventListener("DOMContentLoaded", function () {
         let grandTotal = 0;
 
         rows.forEach((row, index) => {
-            let quantity = parseFloat(row.querySelector(".quantity").value) || 0;
-            let unitPrice = parseFloat(row.querySelector(".unitPrice").value) || 0;
+            let quantityInput = row.querySelector(".quantity");
+            let unitPriceInput = row.querySelector(".unitPrice");
+            let totalPriceElement = row.querySelector(".totalPrice");
+
+            let quantity = parseFloat(quantityInput.value) || 0;
+            let unitPrice = parseFloat(unitPriceInput.value) || 0;
             let totalPrice = quantity * unitPrice;
 
-            // মোট টাকার ঘর আপডেট করা
-            row.querySelector(".totalPrice").innerText = totalPrice.toFixed(2) + " টাকা";
+            totalPriceElement.innerText = totalPrice.toFixed(2) + " টাকা";
             grandTotal += totalPrice;
 
-            // ক্রমিক নাম্বার আপডেট করা
             row.querySelector(".serialNumber").innerText = index + 1;
         });
 
@@ -56,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         dueAmountElement.innerText = dueAmount.toFixed(2) + " টাকা";
         returnAmountElement.innerText = returnAmount.toFixed(2) + " টাকা";
-        paymentStatusElement.style.display = dueAmount === 0 && paidAmount > 0 ? "block" : "none";
+        paymentStatusElement.style.display = (dueAmount === 0 && paidAmount > 0) ? "block" : "none";
     };
 
     window.addItem = function () {
