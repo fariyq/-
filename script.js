@@ -6,10 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let returnAmountElement = document.getElementById("returnAmount");
     let paymentStatusElement = document.getElementById("paymentStatus");
     let invoiceNumberElement = document.getElementById("invoiceNumber");
-    let invoiceTitleElement = document.querySelector("h2");
-    let originalTitle = invoiceTitleElement.innerText; // আসল টাইটেল সেভ করে রাখা
 
-    // তারিখ ও সময় দেখানোর জন্য ফাংশন
     function updateDateTime() {
         const now = new Date();
         const date = now.toLocaleDateString('bn-BD');
@@ -22,7 +19,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     window.updateDateTime = updateDateTime;
 
-    // ইনভয়েস নাম্বার জেনারেট করা
     function generateInvoiceNumber() {
         let randomNumber = Math.floor(100000 + Math.random() * 900000);
         invoiceNumberElement.value = "INV-" + randomNumber;
@@ -30,7 +26,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     window.generateInvoiceNumber = generateInvoiceNumber;
 
-    // মোট হিসাব করা
     function calculateTotal() {
         let rows = document.querySelectorAll("#invoiceBody tr");
         let grandTotal = 0;
@@ -40,10 +35,11 @@ document.addEventListener("DOMContentLoaded", function () {
             let unitPrice = parseFloat(row.querySelector(".unitPrice").value) || 0;
             let totalPrice = quantity * unitPrice;
 
+            // মোট টাকার ঘর আপডেট করা
             row.querySelector(".totalPrice").innerText = totalPrice.toFixed(2) + " টাকা";
             grandTotal += totalPrice;
 
-            // ক্রমিক নাম্বার ঠিক করা
+            // ক্রমিক নাম্বার আপডেট করা
             row.querySelector(".serialNumber").innerText = index + 1;
         });
 
@@ -69,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
                          <td><input type="text" class="productName"></td>
                          <td><input type="number" class="quantity" oninput="calculateTotal()"></td>
                          <td><input type="number" class="unitPrice" oninput="calculateTotal()"></td>
-                         <td class="totalPrice">0 টাকা</td>
+                         <td class="totalPrice">0.00 টাকা</td>
                          <td class="no-print"><button class="removeBtn">❌</button></td>`;
 
         row.querySelector(".removeBtn").addEventListener("click", function () {
@@ -82,8 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     window.printInvoice = function () {
-        // প্রিন্ট করার সময় শুধু নীচের লাইন প্রিন্ট হবে
-        alert("প্রিন্ট করা হচ্ছে... ধন্যবাদ, আবার আসবেন।");
+        alert("প্রিন্ট করা হচ্ছে... ");
         window.print();
     };
 
