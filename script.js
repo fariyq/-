@@ -49,6 +49,8 @@ document.addEventListener("DOMContentLoaded", function () {
         calculateDue();
     }
 
+    window.calculateTotal = calculateTotal;
+
     window.calculateDue = function () {
         let grandTotal = parseFloat(grandTotalElement.innerText.replace(" টাকা", "")) || 0;
         let paidAmount = parseFloat(paidAmountElement.value) || 0;
@@ -58,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         dueAmountElement.innerText = dueAmount.toFixed(2) + " টাকা";
         returnAmountElement.innerText = returnAmount.toFixed(2) + " টাকা";
-        paymentStatusElement.style.display = (dueAmount === 0 && paidAmount > 0) ? "block" : "none";
+        paymentStatusElement.style.display = dueAmount === 0 && paidAmount > 0 ? "block" : "none";
     };
 
     window.addItem = function () {
@@ -80,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     window.printInvoice = function () {
-        alert("প্রিন্ট করা হচ্ছে... ");
+        alert("প্রিন্ট করা হচ্ছে...");
         window.print();
     };
 
