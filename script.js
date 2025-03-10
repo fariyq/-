@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let returnAmountElement = document.getElementById("returnAmount");
     let paymentStatusElement = document.getElementById("paymentStatus");
     let invoiceNumberElement = document.getElementById("invoiceNumber");
+    let headerTitle = document.getElementById("headerTitle");
 
     // তারিখ ও সময় দেখানোর জন্য ফাংশন
     function updateDateTime() {
@@ -14,13 +15,13 @@ document.addEventListener("DOMContentLoaded", function () {
         const time = now.toLocaleTimeString('bn-BD');
         document.getElementById("currentDate").innerText = date;
         document.getElementById("currentTime").innerText = time;
-        
+
         // প্রতি সেকেন্ডে সময় আপডেট হবে
         setTimeout(updateDateTime, 1000);
     }
-    
+
     window.updateDateTime = updateDateTime; // HTML থেকে কল করার জন্য
-    
+
     // ইনভয়েস নাম্বার জেনারেট করা
     function generateInvoiceNumber() {
         let randomNumber = Math.floor(100000 + Math.random() * 900000);
@@ -49,6 +50,8 @@ document.addEventListener("DOMContentLoaded", function () {
         grandTotalElement.innerText = grandTotal.toFixed(2) + " টাকা";
         calculateDue();
     }
+
+    window.calculateTotal = calculateTotal;
 
     window.calculateDue = function () {
         let grandTotal = parseFloat(grandTotalElement.innerText.replace(" টাকা", "")) || 0;
@@ -81,7 +84,15 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     window.printInvoice = function() {
+        // প্রিন্ট করার আগে হেডারের টাইটেল চেঞ্জ করা
+        let originalTitle = headerTitle.innerText;
+        headerTitle.innerText = "ধন্যবাদ, আবার আসবেন";
+        
+        // প্রিন্ট কমান্ড চালানো
         window.print();
+        
+        // প্রিন্ট করার পরে আগের টাইটেল ফেরত দেয়া
+        headerTitle.innerText = originalTitle;
     };
 
     updateDateTime();
