@@ -12,6 +12,15 @@ document.addEventListener("DOMContentLoaded", function () {
         invoiceNumberElement.value = "INV-" + randomNumber; 
     }
 
+    function updateDateTime() {
+        const now = new Date();
+        const date = now.toLocaleDateString('bn-BD');
+        const time = now.toLocaleTimeString('bn-BD');
+
+        document.getElementById('currentDate').innerText = date;
+        document.getElementById('currentTime').innerText = time;
+    }
+
     function calculateTotal() {
         let rows = document.querySelectorAll("#invoiceBody tr");
         let grandTotal = 0;
@@ -26,6 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         grandTotalElement.innerText = grandTotal.toFixed(2) + " টাকা";
         calculateDue();
+        updateSerialNumbers();
     }
 
     window.calculateDue = function () {
@@ -40,12 +50,19 @@ document.addEventListener("DOMContentLoaded", function () {
         paymentStatusElement.style.display = dueAmount === 0 && paidAmount > 0 ? "block" : "none";
     };
 
+    function updateSerialNumbers() {
+        let rows = document.querySelectorAll("#invoiceBody tr");
+        rows.forEach((row, index) => {
+            row.querySelector(".serialNumber").innerText = index + 1;
+        });
+    }
+
     window.addItem = function() {
         let row = document.createElement("tr");
         row.innerHTML = `<td class="serialNumber"></td>
                          <td><input type="text" class="productName"></td>
-                         <td><input type="number" class="quantity"></td>
-                         <td><input type="number" class="unitPrice"></td>
+                         <td><input type="number" class="quantity" min="0"></td>
+                         <td><input type="number" class="unitPrice" min="0"></td>
                          <td class="totalPrice">0 টাকা</td>
                          <td class="no-print"><button class="removeBtn">❌</button></td>`;
 
@@ -57,6 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         invoiceBody.appendChild(row);
+        updateSerialNumbers();
     };
 
     window.printInvoice = function() {
@@ -64,4 +82,5 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     generateInvoiceNumber();
+    updateDateTime();
 });
