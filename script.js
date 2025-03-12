@@ -6,9 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let returnAmountElement = document.getElementById("returnAmount");
     let paymentStatusElement = document.getElementById("paymentStatus");
     let invoiceNumberElement = document.getElementById("invoiceNumber");
-    let dueDateContainer = document.createElement("div");
-    dueDateContainer.innerHTML = `<label>বাকি টাকা দেওয়ার তারিখ:</label>
-                                  <input type="date" id="dueDate">`;
+    let dueDateContainer = document.getElementById("dueDateContainer");
 
     function updateDateTime() {
         const now = new Date();
@@ -63,17 +61,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
         dueAmountElement.innerText = dueAmount.toFixed(2) + " টাকা";
         returnAmountElement.innerText = returnAmount.toFixed(2) + " টাকা";
-        paymentStatusElement.style.display = dueAmount === 0 && paidAmount > 0 ? "block" : "none";
+        paymentStatusElement.style.display = (dueAmount === 0 && paidAmount > 0) ? "block" : "none";
 
-        // বাকি টাকা থাকলে বাকি টাকা দেওয়ার তারিখের অপশন দেখানো হবে
+        // বাকি টাকা থাকলে বাকি টাকা দেওয়ার তারিখের অপশন দেখানো হবে, না থাকলে লুকানো হবে
         if (dueAmount > 0) {
-            if (!document.getElementById("dueDate")) {
-                document.querySelector(".total-info").appendChild(dueDateContainer);
-            }
+            dueDateContainer.style.display = "block";
         } else {
-            if (document.getElementById("dueDate")) {
-                document.getElementById("dueDate").remove();
-            }
+            dueDateContainer.style.display = "none";  // সম্পূর্ণ টাকা পরিশোধিত হলে সম্পূর্ণভাবে লুকিয়ে যাবে
+            document.getElementById("dueDate").value = ""; // তারিখের ইনপুট ফাঁকা হয়ে যাবে
         }
     };
 
