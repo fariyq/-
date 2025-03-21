@@ -1,10 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () { 
-    const validUserId = "01952325903"; // ইউজার আইডি
-    const validPassword = "2025"; // পাসওয়ার্ড
+    const validUserId = "01952325903"; // সঠিক ইউজার আইডি
+    const validPassword = "2025"; // সঠিক পাসওয়ার্ড
 
     function login() {
-        const userId = document.getElementById("userId").value;
-        const password = document.getElementById("password").value;
+        const userId = document.getElementById("userId").value.trim();
+        const password = document.getElementById("password").value.trim();
         const loginMessage = document.getElementById("loginMessage");
 
         if (userId === validUserId && password === validPassword) {
