@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () { 
-    const validUserId = "01952325903"; // সঠিক ইউজার আইডি
-    const validPassword = "2025"; // সঠিক পাসওয়ার্ড
+    const validUserId = "01952325903";
+    const validPassword = "2025";
 
     function login() {
         const userId = document.getElementById("userId").value.trim();
@@ -10,9 +10,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (userId === validUserId && password === validPassword) {
             document.getElementById("loginSection").style.display = "none";
             document.getElementById("invoiceSection").style.display = "block";
-            alert("লগইন সফল হয়েছে!");
         } else {
-            loginMessage.textContent = "ভুল ইউজার আইডি অথবা পাসওয়ার্ড!";
+            loginMessage.textContent = "❌ ভুল ইউজার আইডি অথবা পাসওয়ার্ড!";
         }
     }
 
@@ -39,13 +38,21 @@ document.addEventListener("DOMContentLoaded", function () {
         `;
 
         invoiceBody.appendChild(row);
+        updateSerialNumbers();
+    }
+
+    function updateSerialNumbers() {
+        const rows = document.querySelectorAll("#invoiceBody tr");
+        rows.forEach((row, index) => {
+            row.children[0].innerText = index + 1;
+        });
     }
 
     window.calculateTotal = function () {
         const rows = document.querySelectorAll("#invoiceBody tr");
         let total = 0;
 
-        rows.forEach((row, index) => {
+        rows.forEach(row => {
             const quantity = parseFloat(row.children[2].querySelector("input").value) || 0;
             const unitPrice = parseFloat(row.children[3].querySelector("input").value) || 0;
             const rowTotal = quantity * unitPrice;
@@ -54,9 +61,11 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         document.getElementById("grandTotal").innerText = total + " টাকা";
+        updateSerialNumbers();
     }
 
     window.printInvoice = function () {
+        alert("প্রিন্ট হচ্ছে...");
         window.print();
     }
 
