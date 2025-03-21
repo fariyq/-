@@ -1,78 +1,100 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const validUserId = "01952325903";
-    const validPassword = "2025";
-
-    function login() {
-        const userId = document.getElementById("userId").value.trim();
-        const password = document.getElementById("password").value.trim();
-        const loginMessage = document.getElementById("loginMessage");
-
-        if (userId === validUserId && password === validPassword) {
-            document.getElementById("loginSection").style.display = "none";
-            document.getElementById("invoiceSection").style.display = "block";
-        } else {
-            loginMessage.textContent = "❌ ভুল ইউজার আইডি অথবা পাসওয়ার্ড!";
-        }
-    }
-
-    window.login = login;
+document.addEventListener("DOMContentLoaded", function () { 
+    let invoiceBody = document.getElementById("invoiceBody");
+    let grandTotalElement = document.getElementById("grandTotal");
+    let paidAmountElement = document.getElementById("paidAmount");
+    let dueAmountElement = document.getElementById("dueAmount");
+    let returnAmountElement = document.getElementById("returnAmount");
+    let paymentStatusElement = document.getElementById("paymentStatus");
+    let invoiceNumberElement = document.getElementById("invoiceNumber");
+    let dueDateContainer = document.getElementById("dueDateContainer");
 
     function updateDateTime() {
         const now = new Date();
-        document.getElementById("currentDate").innerText = now.toLocaleDateString('bn-BD');
-        document.getElementById("currentTime").innerText = now.toLocaleTimeString('bn-BD');
+        const date = now.toLocaleDateString('bn-BD');
+        const time = now.toLocaleTimeString('bn-BD');
+        document.getElementById("currentDate").innerText = date;
+        document.getElementById("currentTime").innerText = time;
+
         setTimeout(updateDateTime, 1000);
     }
 
-    window.addItem = function () {
-        const invoiceBody = document.getElementById("invoiceBody");
-        const row = document.createElement("tr");
+    window.updateDateTime = updateDateTime;
 
-        row.innerHTML = `
-            <td></td>
-            <td><input type="text"></td>
-            <td><input type="number" oninput="calculateTotal()"></td>
-            <td><input type="number" oninput="calculateTotal()"></td>
-            <td class="totalPrice">0 টাকা</td>
-            <td class="no-print"><button onclick="this.closest('tr').remove(); calculateTotal();">❌</button></td>
-        `;
-        
-        invoiceBody.appendChild(row);
-        updateSerialNumbers();
+    function generateInvoiceNumber() {
+        let randomNumber = Math.floor(100000 + Math.random() * 900000);
+        invoiceNumberElement.value = "INV-" + randomNumber;
     }
 
-    function updateSerialNumbers() {
-        const rows = document.querySelectorAll("#invoiceBody tr");
+    window.generateInvoiceNumber = generateInvoiceNumber;
+
+    function calculateTotal() {
+        let rows = document.querySelectorAll("#invoiceBody tr");
+        let grandTotal = 0;
+
         rows.forEach((row, index) => {
-            row.children[0].innerText = index + 1;
-        });
-    }
+            let quantityInput = row.querySelector(".quantity");
+            let unitPriceInput = row.querySelector(".unitPrice");
+            let totalPriceElement = row.querySelector(".totalPrice");
 
-    window.calculateTotal = function () {
-        const rows = document.querySelectorAll("#invoiceBody tr");
-        let total = 0;
+            let quantity = parseFloat(quantityInput.value) || 0;
+            let unitPrice = parseFloat(unitPriceInput.value) || 0;
+            let totalPrice = quantity * unitPrice;
 
-        rows.forEach(row => {
-            const quantity = parseFloat(row.children[2].querySelector("input").value) || 0;
-            const unitPrice = parseFloat(row.children[3].querySelector("input").value) || 0;
-            const rowTotal = quantity * unitPrice;
-            row.children[4].innerText = rowTotal + " টাকা";
-            total += rowTotal;
+            totalPriceElement.innerText = totalPrice.toFixed(2) + " টাকা";
+            grandTotal += totalPrice;
+
+            row.querySelector(".serialNumber").innerText = index + 1;
         });
 
-        document.getElementById("grandTotal").innerText = total + " টাকা";
+        grandTotalElement.innerText = grandTotal.toFixed(2) + " টাকা";
+        calculateDue();
     }
 
-    window.calculateReturn = function () {
-        const total = parseFloat(document.getElementById("grandTotal").innerText) || 0;
-        const paid = parseFloat(document.getElementById("paidAmount").value) || 0;
-        document.getElementById("returnAmount").innerText = (paid - total) + " টাকা";
-    }
+    window.calculateTotal = calculateTotal;
+
+    window.calculateDue = function () {
+        let grandTotal = parseFloat(grandTotalElement.innerText.replace(" টাকা", "")) || 0;
+        let paidAmount = parseFloat(paidAmountElement.value) || 0;
+        let dueAmount = grandTotal - paidAmount;
+        let returnAmount = dueAmount < 0 ? Math.abs(dueAmount) : 0;
+        dueAmount = dueAmount > 0 ? dueAmount : 0;
+
+        dueAmountElement.innerText = dueAmount.toFixed(2) + " টাকা";
+        returnAmountElement.innerText = returnAmount.toFixed(2) + " টাকা";
+        paymentStatusElement.style.display = (dueAmount === 0 && paidAmount > 0) ? "block" : "none";
+
+        // বাকি টাকা থাকলে বাকি টাকা দেওয়ার তারিখের অপশন দেখানো হবে, না থাকলে লুকানো হবে
+        if (dueAmount > 0) {
+            dueDateContainer.style.display = "block";
+        } else {
+            dueDateContainer.style.display = "none";  // সম্পূর্ণ টাকা পরিশোধিত হলে সম্পূর্ণভাবে লুকিয়ে যাবে
+            document.getElementById("dueDate").value = ""; // তারিখের ইনপুট ফাঁকা হয়ে যাবে
+        }
+    };
+
+    window.addItem = function () {
+        let row = document.createElement("tr");
+        row.innerHTML = `<td class="serialNumber"></td>
+                         <td><input type="text" class="productName"></td>
+                         <td><input type="number" class="quantity" oninput="calculateTotal()"></td>
+                         <td><input type="number" class="unitPrice" oninput="calculateTotal()"></td>
+                         <td class="totalPrice">0.00 টাকা</td>
+                         <td class="no-print"><button class="removeBtn">❌</button></td>`;
+
+        row.querySelector(".removeBtn").addEventListener("click", function () {
+            row.remove();
+            calculateTotal();
+        });
+
+        invoiceBody.appendChild(row);
+        calculateTotal();
+    };
 
     window.printInvoice = function () {
-        alert("প্রিন্ট হচ্ছে...");
+        alert("প্রিন্ট করা হচ্ছে...");
         window.print();
-    }
+    };
 
     updateDateTime();
+    generateInvoiceNumber();
 });
