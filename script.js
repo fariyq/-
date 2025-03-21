@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () { 
+document.addEventListener("DOMContentLoaded", function () {
     const validUserId = "01952325903";
     const validPassword = "2025";
 
@@ -34,9 +34,9 @@ document.addEventListener("DOMContentLoaded", function () {
             <td><input type="number" oninput="calculateTotal()"></td>
             <td><input type="number" oninput="calculateTotal()"></td>
             <td class="totalPrice">0 টাকা</td>
-            <td><button onclick="this.closest('tr').remove(); calculateTotal();">❌</button></td>
+            <td class="no-print"><button onclick="this.closest('tr').remove(); calculateTotal();">❌</button></td>
         `;
-
+        
         invoiceBody.appendChild(row);
         updateSerialNumbers();
     }
@@ -61,7 +61,12 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         document.getElementById("grandTotal").innerText = total + " টাকা";
-        updateSerialNumbers();
+    }
+
+    window.calculateReturn = function () {
+        const total = parseFloat(document.getElementById("grandTotal").innerText) || 0;
+        const paid = parseFloat(document.getElementById("paidAmount").value) || 0;
+        document.getElementById("returnAmount").innerText = (paid - total) + " টাকা";
     }
 
     window.printInvoice = function () {
