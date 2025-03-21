@@ -27,6 +27,14 @@
 
         <div class="container">
             <h2>ইনভয়েস তৈরি করুন</h2>
+            <div>
+                <label>কাস্টমারের নাম:</label>
+                <input type="text" id="customerName" placeholder="কাস্টমারের নাম"><br><br>
+                
+                <label>কাস্টমারের নাম্বার:</label>
+                <input type="text" id="customerNumber" placeholder="কাস্টমারের নাম্বার"><br><br>
+            </div>
+
             <table>
                 <thead>
                     <tr>
@@ -35,7 +43,7 @@
                         <th>পরিমাণ</th>
                         <th>একক মূল্য</th>
                         <th>মোট</th>
-                        <th>অপশন</th>
+                        <th class="no-print">অপশন</th>
                     </tr>
                 </thead>
                 <tbody id="invoiceBody"></tbody>
@@ -43,10 +51,11 @@
 
             <button onclick="addItem()">+ আইটেম যোগ করুন</button>
 
-            <div class="total-section">
+            <div>
                 <p>মোট: <span id="grandTotal">0 টাকা</span></p>
+                <p>জমা টাকা: <input type="number" id="paidAmount" oninput="calculateReturn()"> টাকা</p>
+                <p>ফেরত টাকা: <span id="returnAmount">0 টাকা</span></p>
             </div>
-
             <button onclick="printInvoice()">🖨️ প্রিন্ট করুন</button>
         </div>
     </div>
