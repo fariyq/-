@@ -4,76 +4,147 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ইনভয়েস সিস্টেম</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 800px; margin: auto; border: 1px solid #000; padding: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid black; padding: 8px; text-align: center; }
+        .header { text-align: center; font-size: 20px; font-weight: bold; margin-bottom: 10px; }
+        .total-section { margin-top: 10px; text-align: right; }
+        .button-section { margin-top: 10px; text-align: center; }
+        .no-print { display: block; }
+        @media print {
+            .no-print, input, button { display: none !important; } 
+            body { background: white; font-size: 12px; } 
+        }
+    </style>
 </head>
-<body onload="updateDateTime(); generateInvoiceNumber();">
-    <div class="header">
-        <h2>ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার</h2>
-        <p>📍 গদখালি বাজার বাস স্ট্যান্ড, রহিম সরদার মার্কেট, ঝিকরগাছা, যশোর।</p>
-        <p>📧 mdemranst0@gmail.com | 📞 01952325903</p>
-        <p>📅 <span id="currentDate"></span> | ⏰ <span id="currentTime"></span></p>
+<body>
+
+<div class="container">
+    <div class="header">ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার</div>
+    <div>তারিখ: <span id="currentDate"></span> &nbsp; সময়: <span id="currentTime"></span></div>
+    <div>ইনভয়েস নং: <input type="text" id="invoiceNumber" readonly></div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>পণ্যের নাম</th>
+                <th>পরিমাণ</th>
+                <th>একক মূল্য</th>
+                <th>মোট মূল্য</th>
+                <th class="no-print">ডিলিট</th>
+            </tr>
+        </thead>
+        <tbody id="invoiceBody"></tbody>
+    </table>
+
+    <div class="total-section">
+        <strong>মোট টাকা:</strong> <span id="grandTotal">0.00</span> টাকা<br>
+        <label>প্রদত্ত টাকা: <input type="number" id="paidAmount" oninput="calculateDue()"></label><br>
+        <strong>বকেয়া:</strong> <span id="dueAmount">0.00</span> টাকা<br>
+        <strong>ফেরত:</strong> <span id="returnAmount">0.00</span> টাকা<br>
+        <div id="paymentStatus" style="color: green; font-weight: bold; display: none;">পরিশোধ সম্পূর্ণ</div>
     </div>
 
-    <div class="container">
-        <h2>ইনভয়েস তৈরি করুন</h2>
-
-        <label for="invoiceNumber">ইনভয়েস নাম্বার:</label>
-        <input type="text" id="invoiceNumber" readonly><br><br>
-
-        <div class="customer-info">
-            <label for="customerName">কাস্টমারের নাম:</label>
-            <input type="text" id="customerName" placeholder="কাস্টমারের নাম লিখুন">
-            
-            <label for="customerPhone">কাস্টমারের ফোন নাম্বার:</label>
-            <input type="text" id="customerPhone" placeholder="কাস্টমারের ফোন নাম্বার লিখুন">
-        </div>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>ক্রমিক</th> 
-                    <th>পণ্য নাম</th>
-                    <th>পরিমাণ</th>
-                    <th>একক মূল্য</th>
-                    <th>মোট</th>
-                    <th class="no-print">অপশন</th>
-                </tr>
-            </thead>
-            <tbody id="invoiceBody"></tbody>
-        </table>
-
-        <button class="no-print" onclick="addItem()">+ আইটেম যোগ করুন</button>
-
-        <div class="total-section">
-            <div class="total-info">
-                <p><strong>মোট মূল্য:</strong> <span id="grandTotal">0 টাকা</span></p>
-                <p><strong>জমা টাকা:</strong> <input type="number" id="paidAmount" oninput="calculateDue()" placeholder="জমা টাকা লিখুন"></p>
-                <p><strong>বাকি টাকা:</strong> <span id="dueAmount">0 টাকা</span></p>
-                <p><strong>ফেরত টাকা:</strong> <span id="returnAmount">0 টাকা</span></p>
-                
-                <div id="dueDateContainer" style="display: none; margin-top: 10px;">
-                    <label for="dueDate"><strong>বাকি টাকা দেওয়ার তারিখ:</strong></label>
-                    <input type="date" id="dueDate">
-                </div>
-            </div>
-        </div>
-
-        <h3 id="paymentStatus" style="color: green; display: none;">✅ পরিশোধিত</h3>
-
-        <div class="signature-section">
-            <div class="signature-box">
-                <p>কাস্টমারের স্বাক্ষর:</p>
-                <div class="signature-line"></div>
-            </div>
-            <div class="signature-box">
-                <p>বিক্রেতার স্বাক্ষর:</p>
-                <div class="signature-line"></div>
-            </div>
-        </div>
-
-        <button class="no-print" onclick="printInvoice()">🖨️ প্রিন্ট করুন</button>
+    <div class="button-section">
+        <button class="no-print" onclick="addItem()">➕ নতুন পণ্য</button>
+        <button class="no-print" onclick="printInvoice()">🖨️ প্রিন্ট</button>
     </div>
+</div>
 
-    <script src="script.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    let invoiceBody = document.getElementById("invoiceBody");
+    let grandTotalElement = document.getElementById("grandTotal");
+    let paidAmountElement = document.getElementById("paidAmount");
+    let dueAmountElement = document.getElementById("dueAmount");
+    let returnAmountElement = document.getElementById("returnAmount");
+    let paymentStatusElement = document.getElementById("paymentStatus");
+    let invoiceNumberElement = document.getElementById("invoiceNumber");
+
+    function updateDateTime() {
+        const now = new Date();
+        document.getElementById("currentDate").innerText = now.toLocaleDateString('bn-BD');
+        document.getElementById("currentTime").innerText = now.toLocaleTimeString('bn-BD');
+        setTimeout(updateDateTime, 1000);
+    }
+
+    function generateInvoiceNumber() {
+        invoiceNumberElement.value = "INV-" + Math.floor(100000 + Math.random() * 900000);
+    }
+
+    function calculateTotal() {
+        let rows = document.querySelectorAll("#invoiceBody tr");
+        let grandTotal = 0;
+
+        rows.forEach((row, index) => {
+            let quantityInput = row.querySelector(".quantity");
+            let unitPriceInput = row.querySelector(".unitPrice");
+            let totalPriceElement = row.querySelector(".totalPrice");
+
+            let quantity = parseFloat(quantityInput.value) || 0;
+            let unitPrice = parseFloat(unitPriceInput.value) || 0;
+            let totalPrice = quantity * unitPrice;
+
+            totalPriceElement.innerText = totalPrice.toFixed(2) + " টাকা";
+            grandTotal += totalPrice;
+
+            row.querySelector(".serialNumber").innerText = index + 1;
+        });
+
+        grandTotalElement.innerText = grandTotal.toFixed(2) + " টাকা";
+        calculateDue();
+    }
+
+    function calculateDue() {
+        let grandTotal = parseFloat(grandTotalElement.innerText.replace(" টাকা", "")) || 0;
+        let paidAmount = parseFloat(paidAmountElement.value) || 0;
+        let dueAmount = grandTotal - paidAmount;
+        let returnAmount = dueAmount < 0 ? Math.abs(dueAmount) : 0;
+        dueAmount = dueAmount > 0 ? dueAmount : 0;
+
+        dueAmountElement.innerText = dueAmount.toFixed(2) + " টাকা";
+        returnAmountElement.innerText = returnAmount.toFixed(2) + " টাকা";
+        paymentStatusElement.style.display = (dueAmount === 0 && paidAmount > 0) ? "block" : "none";
+    }
+
+    function addItem() {
+        let row = document.createElement("tr");
+        row.innerHTML = `<td class="serialNumber"></td>
+                         <td><input type="text" class="productName"></td>
+                         <td><input type="number" class="quantity" oninput="calculateTotal()"></td>
+                         <td><input type="number" class="unitPrice" oninput="calculateTotal()"></td>
+                         <td class="totalPrice">0.00 টাকা</td>
+                         <td class="no-print"><button class="removeBtn">❌</button></td>`;
+
+        row.querySelector(".removeBtn").addEventListener("click", function () {
+            row.remove();
+            calculateTotal();
+        });
+
+        invoiceBody.appendChild(row);
+        calculateTotal();
+    }
+
+    function printInvoice() {
+        let dueAmount = parseFloat(dueAmountElement.innerText.replace(" টাকা", "")) || 0;
+        if (dueAmount > 0) {
+            alert("বিল বাকি আছে, অনুগ্রহ করে পরিশোধ নিশ্চিত করুন!");
+        }
+        window.print();
+    }
+
+    updateDateTime();
+    generateInvoiceNumber();
+
+    window.calculateTotal = calculateTotal;
+    window.calculateDue = calculateDue;
+    window.addItem = addItem;
+    window.printInvoice = printInvoice;
+});
+</script>
+
 </body>
 </html>
