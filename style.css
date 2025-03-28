@@ -14,6 +14,7 @@ body {
     border-radius: 8px; 
     font-size: 18px; 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    text-align: center; /* হেডার ঠিক করা */
 }
 
 .container { 
@@ -33,6 +34,7 @@ table {
     border-collapse: collapse; 
     margin-top: 10px; 
     font-size: 14px; 
+    table-layout: fixed; /* টেবিল ফিক্সড সাইজে রাখার জন্য */
 }
 
 th, td { 
@@ -41,15 +43,16 @@ th, td {
     text-align: center; 
 }
 
-th { 
-    background-color: #007bff; 
-    color: white; 
-}
-
 td input { 
     width: 100%; 
     box-sizing: border-box; 
     padding: 6px; 
+    text-align: center; /* ইনপুট ফিল্ডের লেখা মাঝখানে আনার জন্য */
+}
+
+th { 
+    background-color: #007bff; 
+    color: white; 
 }
 
 .total-section { 
@@ -77,6 +80,7 @@ td input {
     margin-top: 20px; 
     border-top: 2px solid #007bff; 
     padding-top: 10px; 
+    align-items: center; /* সিগনেচার সেকশন ঠিক রাখা */
 }
 
 .signature-box { 
