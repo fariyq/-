@@ -1,0 +1,10 @@
+@media print {
+    .no-print, input, button { display: none !important; } 
+    body { background: white; font-size: 12px; } 
+    .header { font-size: 16px; padding: 10px; } 
+    .container { padding: 10px; margin: 0; width: 100%; } 
+    table { font-size: 12px; page-break-inside: auto; } 
+    th, td { padding: 6px; } 
+    .total-section { font-size: 12px; } 
+    .signature-section { page-break-inside: avoid; }  
+}
