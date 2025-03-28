@@ -20,13 +20,8 @@
         <label for="invoiceNumber">ইনভয়েস নাম্বার:</label>
         <input type="text" id="invoiceNumber" readonly><br><br>
 
-        <div class="customer-info">
-            <label for="customerName">কাস্টমারের নাম:</label>
-            <input type="text" id="customerName" placeholder="কাস্টমারের নাম লিখুন">
-            
-            <label for="customerPhone">কাস্টমারের ফোন নাম্বার:</label>
-            <input type="text" id="customerPhone" placeholder="কাস্টমারের ফোন নাম্বার লিখুন">
-        </div>
+        <label for="customerName">কাস্টমারের নাম:</label>
+        <input type="text" id="customerName" placeholder="কাস্টমারের নাম লিখুন"><br><br>
 
         <table>
             <thead>
@@ -51,6 +46,7 @@
                 <p><strong>বাকি টাকা:</strong> <span id="dueAmount">0 টাকা</span></p>
                 <p><strong>ফেরত টাকা:</strong> <span id="returnAmount">0 টাকা</span></p>
                 
+                <!-- বাকি টাকা দেওয়ার তারিখ অপশন -->
                 <div id="dueDateContainer" style="display: none; margin-top: 10px;">
                     <label for="dueDate"><strong>বাকি টাকা দেওয়ার তারিখ:</strong></label>
                     <input type="date" id="dueDate">
