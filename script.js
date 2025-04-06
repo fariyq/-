@@ -44,9 +44,7 @@ document.getElementById("goatForm").addEventListener("submit", async (e) => {
   document.getElementById("goatForm").reset();
 });
 
-// Show goat list
-const goatList = document.getElementById("goatList");
-
+// Calculate pregnancy days
 const calculatePregnancyDays = (startDate) => {
   if (!startDate) return "গর্ভাবস্থা শুরু হয়নি";
   const start = new Date(startDate);
@@ -56,6 +54,8 @@ const calculatePregnancyDays = (startDate) => {
   return `${diffDays} দিন`;
 };
 
+// Render Goat List
+const goatList = document.getElementById("goatList");
 const renderGoats = (snapshot) => {
   goatList.innerHTML = "";
   snapshot.forEach(async (docSnap) => {
@@ -63,9 +63,12 @@ const renderGoats = (snapshot) => {
     const div = document.createElement("div");
     div.className = "goat-card";
 
+    const pregDays = calculatePregnancyDays(g.pregnancyStart);
+
     div.innerHTML = `
       <strong>${g.name}</strong> (${g.id})<br/>
-      প্রকার: ${g.type}, গর্ভাবস্থা: ${g.pregnant}<br/>
+      প্রকার: ${g.type}<br/>
+      গর্ভাবস্থা: ${g.pregnant} (${pregDays})<br/>
       <button onclick="viewDetails('${docSnap.id}')">সম্পূর্ণ তথ্য দেখুন</button>
       <hr/>
     `;
@@ -74,7 +77,7 @@ const renderGoats = (snapshot) => {
   });
 };
 
-// View & Update Details
+// View Details
 window.viewDetails = async (id) => {
   const docRef = doc(db, "goats", id);
   const docSnap = await getDoc(docRef);
@@ -106,6 +109,7 @@ window.viewDetails = async (id) => {
   goatList.innerHTML = html;
 };
 
+// Update Goat
 window.updateGoat = async (id) => {
   const updated = {
     name: document.getElementById("d-name").value,
@@ -124,5 +128,39 @@ window.updateGoat = async (id) => {
   alert("তথ্য আপডেট হয়েছে!");
 };
 
-// Real-time update
+// Real-time updates
 onSnapshot(collection(db, "goats"), renderGoats);
+
+// Goat Search
+document.getElementById("searchBtn").addEventListener("click", async () => {
+  const searchId = document.getElementById("searchInput").value.trim();
+  const searchResult = document.getElementById("searchResult");
+
+  if (!searchId) {
+    searchResult.innerHTML = "অনুগ্রহ করে একটি ছাগলের আইডি লিখুন।";
+    return;
+  }
+
+  const snapshot = await getDocs(collection(db, "goats"));
+  let found = false;
+
+  snapshot.forEach(docSnap => {
+    const g = docSnap.data();
+    if (g.id === searchId) {
+      const pregDays = calculatePregnancyDays(g.pregnancyStart);
+      searchResult.innerHTML = `
+        <div class="goat-card">
+          <strong>${g.name}</strong> (${g.id})<br/>
+          প্রকার: ${g.type}<br/>
+          গর্ভাবস্থা: ${g.pregnant} (${pregDays})<br/>
+          <button onclick="viewDetails('${docSnap.id}')">সম্পূর্ণ তথ্য দেখুন</button>
+        </div>
+      `;
+      found = true;
+    }
+  });
+
+  if (!found) {
+    searchResult.innerHTML = "ছাগল পাওয়া যায়নি!";
+  }
+});
