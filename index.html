@@ -56,5 +56,12 @@
   </div>
 
   <script type="module" src="script.js"></script>
+
+  <!-- Notification Permission -->
+  <script>
+    if (Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
+  </script>
 </body>
 </html>
