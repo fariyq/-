@@ -3,50 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ছাগল ব্যবস্থাপনা অ্যাপ</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
-      margin: 0;
-      padding: 20px;
-    }
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      background-color: #ffffff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-    .section-title {
-      font-size: 24px;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    input, select, button {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 20px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-    }
-    button {
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #45a049;
-    }
-  </style>
+  <title>স্বপ্ন খামার - ছাগল ব্যবস্থাপনা</title>
+  
+  <!-- CSS ফাইল লিঙ্ক -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="container">
-  <h1 class="section-title">ছাগল ব্যবস্থাপনা অ্যাপ</h1>
+  <h1 class="section-title">স্বপ্ন খামার - ছাগল ব্যবস্থাপনা</h1>
   
   <h2 class="section-title">ছাগল তালিকা</h2>
   <form id="goat-form">
@@ -74,12 +39,15 @@
 
     <button type="submit">রেকর্ড যুক্ত করুন</button>
   </form>
-  
+
   <h2 class="section-title">গর্ভবতী ছাগলের হিসাব</h2>
   <label for="pregnancy-date">গর্ভধারণের তারিখ:</label>
   <input type="date" id="pregnancy-date">
   <button onclick="calculatePregnancy()">গর্ভধারণের সময়কাল হিসাব করুন</button>
   <p id="pregnancy-duration"></p>
+
+  <h2 class="section-title">ছাগল তথ্য</h2>
+  <div id="goat-list"></div>
 </div>
 
 <script src="script.js"></script>
