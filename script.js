@@ -1,60 +1,107 @@
-// Global array to store goats data
-let goatsData = [];
+// script.js
 
-// Function to handle form submission
-document.getElementById('goat-form').addEventListener('submit', function (e) {
-  e.preventDefault();
-  
-  const goatType = document.getElementById('goat-type').value;
-  const goatId = document.getElementById('goat-id').value;
-  const vaccinationDate = document.getElementById('vaccination-date').value;
-  const foodCost = document.getElementById('food-cost').value;
-  const purchasePrice = document.getElementById('purchase-price').value;
-  const salePrice = document.getElementById('sale-price').value;
+let goats = [];
+let foodVaccinationRecords = [];
+let saleRecords = [];
 
-  const newGoat = {
-    goatType,
-    goatId,
-    vaccinationDate,
-    foodCost,
-    purchasePrice,
-    salePrice,
-    profitLoss: salePrice - purchasePrice
-  };
+// ছাগল যোগ করা
+function addGoat() {
+  const goatId = document.getElementById('goatId').value;
+  const goatAge = document.getElementById('goatAge').value;
+  const goatType = document.getElementById('goatType').value;
+  const purchasePrice = document.getElementById('purchasePrice').value;
 
-  goatsData.push(newGoat);
-  displayGoatsData();
-});
-
-// Function to display goats data
-function displayGoatsData() {
-  const goatListContainer = document.getElementById('goat-list');
-  goatListContainer.innerHTML = '';
-
-  goatsData.forEach(goat => {
-    const goatDiv = document.createElement('div');
-    goatDiv.innerHTML = `
-      <p><strong>ছাগলের ধরন:</strong> ${goat.goatType}</p>
-      <p><strong>আইডি:</strong> ${goat.goatId}</p>
-      <p><strong>টিকা তারিখ:</strong> ${goat.vaccinationDate}</p>
-      <p><strong>খাদ্য খরচ:</strong> ${goat.foodCost}</p>
-      <p><strong>ক্রয়মূল্য:</strong> ${goat.purchasePrice}</p>
-      <p><strong>বিক্রয়মূল্য:</strong> ${goat.salePrice}</p>
-      <p><strong>লাভ/ক্ষতি:</strong> ${goat.profitLoss}</p>
-      <hr />
-    `;
-    goatListContainer.appendChild(goatDiv);
-  });
-}
-
-// Function to calculate pregnancy duration
-function calculatePregnancy() {
-  const pregnancyDate = document.getElementById('pregnancy-date').value;
-  if (!pregnancyDate) {
-    alert("গর্ভধারণের তারিখ প্রদান করুন");
+  if (!goatId || !goatAge || !goatType || !purchasePrice) {
+    alert('সব তথ্য পূর্ণ করুন!');
     return;
   }
 
-  const pregnancyDuration = Math.floor((new Date() - new Date(pregnancyDate)) / (1000 * 60 * 60 * 24));
-  document.getElementById('pregnancy-duration').innerText = `গর্ভবতী ছাগল ${pregnancyDuration} দিন গর্ভবতী।`;
+  const newGoat = {
+    goatId,
+    goatAge,
+    goatType,
+    purchasePrice,
+  };
+
+  goats.push(newGoat);
+  displayGoats();
+  document.getElementById('goatForm').reset();
+}
+
+// ছাগলের রেকর্ড দেখানো
+function displayGoats() {
+  let goatDetails = `<h3>ছাগল রেকর্ড:</h3><ul>`;
+  goats.forEach(goat => {
+    goatDetails += `
+      <li><strong>আইডি:</strong> ${goat.goatId} | <strong>বয়স:</strong> ${goat.goatAge} | <strong>প্রকার:</strong> ${goat.goatType} | <strong>ক্রয়মূল্য:</strong> ৳${goat.purchasePrice}</li>
+    `;
+  });
+  goatDetails += `</ul>`;
+  document.getElementById('goatRecord').innerHTML = goatDetails;
+}
+
+// খাদ্য এবং টিকা যোগ করা
+function addFoodVaccination() {
+  const goatIdFood = document.getElementById('goatIdFood').value;
+  const food = document.getElementById('food').value;
+  const vaccination = document.getElementById('vaccination').value;
+
+  if (!goatIdFood || !food || !vaccination) {
+    alert('সব তথ্য পূর্ণ করুন!');
+    return;
+  }
+
+  const newFoodVaccinationRecord = {
+    goatIdFood,
+    food,
+    vaccination,
+  };
+
+  foodVaccinationRecords.push(newFoodVaccinationRecord);
+  displayFoodVaccination();
+  document.getElementById('foodVaccinationForm').reset();
+}
+
+// খাদ্য এবং টিকার রেকর্ড দেখানো
+function displayFoodVaccination() {
+  let foodVaccinationDetails = `<h3>খাদ্য এবং টিকা রেকর্ড:</h3><ul>`;
+  foodVaccinationRecords.forEach(record => {
+    foodVaccinationDetails += `
+      <li><strong>ছাগলের আইডি:</strong> ${record.goatIdFood} | <strong>খাদ্য:</strong> ${record.food} | <strong>টিকা:</strong> ${record.vaccination}</li>
+    `;
+  });
+  foodVaccinationDetails += `</ul>`;
+  document.getElementById('foodVaccinationRecord').innerHTML = foodVaccinationDetails;
+}
+
+// বিক্রি ফর্মে তথ্য যোগ করা
+function addSale() {
+  const goatIdSale = document.getElementById('goatIdSale').value;
+  const salePrice = document.getElementById('salePrice').value;
+
+  if (!goatIdSale || !salePrice) {
+    alert('সব তথ্য পূর্ণ করুন!');
+    return;
+  }
+
+  const saleRecord = {
+    goatIdSale,
+    salePrice,
+  };
+
+  saleRecords.push(saleRecord);
+  displaySales();
+  document.getElementById('saleForm').reset();
+}
+
+// বিক্রি রেকর্ড দেখানো
+function displaySales() {
+  let saleDetails = `<h3>বিক্রির রেকর্ড:</h3><ul>`;
+  saleRecords.forEach(record => {
+    saleDetails += `
+      <li><strong>ছাগলের আইডি:</strong> ${record.goatIdSale} | <strong>বিক্রির মূল্য:</strong> ৳${record.salePrice}</li>
+    `;
+  });
+  saleDetails += `</ul>`;
+  document.getElementById('saleRecord').innerHTML = saleDetails;
 }
