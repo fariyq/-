@@ -5,28 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>বিশ্বাসের স্বপ্নের খামার</title>
   <link rel="stylesheet" href="style.css" />
-
-  <!-- Firebase SDKs -->
-  <script type="module">
-    // Import the functions you need from the SDKs you need
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-analytics.js";
-
-    // Your web app's Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyAFx9Szt_sbhhtWEqHgIU5jUz3qxD0jOMo",
-      authDomain: "bishwasher-khamar.firebaseapp.com",
-      projectId: "bishwasher-khamar",
-      storageBucket: "bishwasher-khamar.appspot.com",
-      messagingSenderId: "466255017082",
-      appId: "1:466255017082:web:902506f7358dfd5a82b7c3",
-      measurementId: "G-457DQ0ZHHG"
-    };
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-  </script>
 </head>
 <body>
   <div class="container">
@@ -63,8 +41,13 @@
 
       <button type="submit">সংরক্ষণ করুন</button>
     </form>
+
+    <hr/>
+
+    <h2>ছাগলের তালিকা</h2>
+    <div id="goatList"></div>
   </div>
 
-  <script src="script.js"></script>
+  <script type="module" src="script.js"></script>
 </body>
 </html>
