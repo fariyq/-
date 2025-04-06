@@ -1,19 +1,9 @@
-// গর্ভবতী ছাগলের হিসাব
-function calculatePregnancy() {
-  const pregnancyDate = new Date(document.getElementById('pregnancy-date').value);
-  const today = new Date();
-  
-  // গর্ভধারণের তারিখ থেকে বর্তমান তারিখ পর্যন্ত দিন গণনা
-  const diffTime = today - pregnancyDate;
-  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+// Global array to store goats data
+let goatsData = [];
 
-  // গর্ভধারণের সময়কাল প্রদর্শন
-  document.getElementById('pregnancy-duration').textContent = "গর্ভবতী ছাগলটি " + diffDays + " দিন গর্ভবতী।";
-}
-
-// ছাগলের তথ্য রেকর্ড করার ফাংশন
-document.getElementById('goat-form').addEventListener('submit', function(event) {
-  event.preventDefault();  // ফর্মের ডিফল্ট আচরণ রোধ করা
+// Function to handle form submission
+document.getElementById('goat-form').addEventListener('submit', function (e) {
+  e.preventDefault();
   
   const goatType = document.getElementById('goat-type').value;
   const goatId = document.getElementById('goat-id').value;
@@ -21,15 +11,50 @@ document.getElementById('goat-form').addEventListener('submit', function(event) 
   const foodCost = document.getElementById('food-cost').value;
   const purchasePrice = document.getElementById('purchase-price').value;
   const salePrice = document.getElementById('sale-price').value;
-  
-  // এখানে তোমার ডেটা সেভ বা প্রদর্শন করার কোড হবে (যেমন Firebase বা MongoDB দিয়ে)
-  console.log("ছাগল ধরণ:", goatType);
-  console.log("ছাগলের আইডি:", goatId);
-  console.log("টিকা দেওয়ার তারিখ:", vaccinationDate);
-  console.log("খাদ্য খরচ:", foodCost);
-  console.log("ক্রয়মূল্য:", purchasePrice);
-  console.log("বিক্রয়মূল্য:", salePrice);
-  
-  // ফর্ম ফাঁকা করা
-  document.getElementById('goat-form').reset();
+
+  const newGoat = {
+    goatType,
+    goatId,
+    vaccinationDate,
+    foodCost,
+    purchasePrice,
+    salePrice,
+    profitLoss: salePrice - purchasePrice
+  };
+
+  goatsData.push(newGoat);
+  displayGoatsData();
 });
+
+// Function to display goats data
+function displayGoatsData() {
+  const goatListContainer = document.getElementById('goat-list');
+  goatListContainer.innerHTML = '';
+
+  goatsData.forEach(goat => {
+    const goatDiv = document.createElement('div');
+    goatDiv.innerHTML = `
+      <p><strong>ছাগলের ধরন:</strong> ${goat.goatType}</p>
+      <p><strong>আইডি:</strong> ${goat.goatId}</p>
+      <p><strong>টিকা তারিখ:</strong> ${goat.vaccinationDate}</p>
+      <p><strong>খাদ্য খরচ:</strong> ${goat.foodCost}</p>
+      <p><strong>ক্রয়মূল্য:</strong> ${goat.purchasePrice}</p>
+      <p><strong>বিক্রয়মূল্য:</strong> ${goat.salePrice}</p>
+      <p><strong>লাভ/ক্ষতি:</strong> ${goat.profitLoss}</p>
+      <hr />
+    `;
+    goatListContainer.appendChild(goatDiv);
+  });
+}
+
+// Function to calculate pregnancy duration
+function calculatePregnancy() {
+  const pregnancyDate = document.getElementById('pregnancy-date').value;
+  if (!pregnancyDate) {
+    alert("গর্ভধারণের তারিখ প্রদান করুন");
+    return;
+  }
+
+  const pregnancyDuration = Math.floor((new Date() - new Date(pregnancyDate)) / (1000 * 60 * 60 * 24));
+  document.getElementById('pregnancy-duration').innerText = `গর্ভবতী ছাগল ${pregnancyDuration} দিন গর্ভবতী।`;
+}
