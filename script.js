@@ -1,44 +1,28 @@
-// ছাগল তথ্য সংরক্ষণ করার জন্য একটি অ্যারে
-let goats = [];
-
-// ফর্ম সাবমিট হ্যান্ডলিং
-document.getElementById("goat-form").addEventListener("submit", function (event) {
-    event.preventDefault(); // পেজ রিফ্রেশ হওয়া থেকে রোধ করুন
-
-    // ফর্মের তথ্য নিয়ে আসা
-    const name = document.getElementById("name").value;
-    const type = document.getElementById("type").value;
-    const date = document.getElementById("date").value;
-    const price = document.getElementById("price").value;
-    const pregnant = document.getElementById("pregnant").checked;
-
-    // ছাগল তথ্য সংরক্ষণ
-    const goat = {
-        id: Date.now(),
-        name,
-        type,
-        date,
-        price,
-        pregnant
-    };
-    
-    goats.push(goat);
-
-    // ছাগলের তালিকা আপডেট করা
-    updateGoatList();
-
-    // ফর্ম রিসেট করা
-    document.getElementById("goat-form").reset();
+document.getElementById('newGoatBtn').addEventListener('click', () => {
+  document.getElementById('goatForm').style.display = 'block';
 });
 
-// ছাগলের তালিকা প্রদর্শন করার ফাংশন
-function updateGoatList() {
-    const goatList = document.getElementById("goat-list");
-    goatList.innerHTML = '';
+document.getElementById('goatForm').addEventListener('submit', (e) => {
+  e.preventDefault();
 
-    goats.forEach(goat => {
-        const li = document.createElement("li");
-        li.textContent = `ছাগল নাম: ${goat.name}, প্রকার: ${goat.type}, ক্রয় মূল্য: ${goat.price} টাকা, গর্ভাবস্থা: ${goat.pregnant ? 'গর্ভবতী' : 'গর্ভবতী নয়'}`;
-        goatList.appendChild(li);
-    });
-}
+  const data = {
+    name: document.getElementById('goatName').value,
+    id: document.getElementById('goatId').value,
+    type: document.getElementById('goatType').value,
+    purchaseDate: document.getElementById('purchaseDate').value,
+    purchasePrice: document.getElementById('purchasePrice').value,
+    pregnant: document.getElementById('pregnant').value,
+    foodList: document.getElementById('foodList').value,
+    vaccineRecord: document.getElementById('vaccineRecord').value,
+    sellPrice: document.getElementById('sellPrice').value,
+    profit: document.getElementById('profit').value,
+  };
+
+  console.log('ছাগলের তথ্য:', data);
+  alert("ছাগলের তথ্য সফলভাবে সংগ্রহ করা হয়েছে!");
+
+  // Future: Firebase বা অন্য ডেটাবেজে সংরক্ষণ করা হবে
+
+  document.getElementById('goatForm').reset();
+  document.getElementById('goatForm').style.display = 'none';
+});
