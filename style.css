@@ -1,84 +1,93 @@
-/* style.css */
+/* Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap');
 
 body {
   font-family: 'Noto Sans Bengali', sans-serif;
+  background: #f0f4f8;
   margin: 0;
   padding: 0;
-  background: #f9f9f9;
-  color: #333;
 }
 
 .container {
-  max-width: 800px;
+  max-width: 900px;
   margin: auto;
   padding: 20px;
-  background: #ffffff;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  background: white;
   border-radius: 12px;
-  margin-top: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 h1, h2 {
   text-align: center;
-  color: #2e7d32;
+  color: #2b6cb0;
 }
 
 button {
-  background: #2e7d32;
+  background: #2b6cb0;
   color: white;
   border: none;
   padding: 10px 20px;
-  margin-top: 10px;
+  margin: 8px 0;
   border-radius: 8px;
   cursor: pointer;
-  transition: background 0.3s;
+  font-size: 16px;
 }
 
 button:hover {
-  background: #1b5e20;
+  background: #2c5282;
 }
 
 input, select, textarea {
   width: 100%;
   padding: 10px;
-  margin-top: 8px;
-  margin-bottom: 16px;
+  margin: 8px 0;
   border: 1px solid #ccc;
   border-radius: 8px;
   box-sizing: border-box;
-  font-size: 16px;
 }
 
-label {
-  font-weight: bold;
-  margin-top: 10px;
-  display: block;
+textarea {
+  resize: vertical;
 }
 
-#goatList {
-  margin-top: 30px;
+form {
+  background: #e6f0fa;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 12px;
+  border: 1px solid #cbd5e0;
 }
 
 .goat-card {
-  background: #e8f5e9;
-  padding: 16px;
+  background: #f9fafb;
+  padding: 15px;
+  margin: 10px 0;
+  border-left: 5px solid #2b6cb0;
   border-radius: 10px;
-  margin-bottom: 15px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  transition: transform 0.2s;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-.goat-card:hover {
-  transform: scale(1.01);
+.goat-details {
+  background: #fefefe;
+  padding: 20px;
+  border: 2px dashed #2b6cb0;
+  border-radius: 12px;
+  margin-top: 20px;
+}
+
+#searchId {
+  border: 2px solid #4299e1;
+}
+
+hr {
+  border: none;
+  border-top: 2px dashed #ccc;
+  margin: 30px 0;
 }
 
 @media (max-width: 600px) {
   .container {
     padding: 10px;
-  }
-
-  input, select, textarea {
-    font-size: 14px;
   }
 
   button {
