@@ -1,18 +1,43 @@
-function login() {
-  const username = document.getElementById('username').value;
-  const password = document.getElementById('password').value;
+body {
+  font-family: 'SolaimanLipi', sans-serif;
+  background: #f0f9f0;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
 
-  // ডিবাগিং এর জন্য কনসোল লগ
-  console.log("Entered Username:", username);
-  console.log("Entered Password:", password);
+header {
+  background-color: #4CAF50;
+  color: white;
+  padding: 20px 10px;
+}
 
-  // ডেমো ইউজার: admin / 1234
-  if (username === 'admin' && password === '1234') {
-    document.querySelector('.login-form').classList.add('hidden');
-    document.querySelector('.dashboard').classList.remove('hidden');
-    console.log("Login successful!");
-  } else {
-    alert('ভুল ইউজারনেম বা পাসওয়ার্ড!');
-    console.log("Login failed!");
-  }
+.login-form, .dashboard {
+  margin: 30px auto;
+  padding: 20px;
+  max-width: 300px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+input {
+  width: 90%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
 }
