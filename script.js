@@ -163,8 +163,36 @@ window.updateGoat = async (id) => {
   alert("তথ্য আপডেট হয়েছে!");
 };
 
+// Summary Dashboard
+const updateSummary = (snapshot) => {
+  let total = 0;
+  let pregnantCount = 0;
+  let alertCount = 0;
+
+  snapshot.forEach(docSnap => {
+    total++;
+    const g = docSnap.data();
+    if (g.pregnant === "হ্যাঁ") {
+      pregnantCount++;
+      if (g.pregnancyStart) {
+        const days = Math.floor((new Date() - new Date(g.pregnancyStart)) / (1000 * 60 * 60 * 24));
+        if (days >= 145) alertCount++;
+      }
+    }
+  });
+
+  document.getElementById("summary").innerHTML = `
+    মোট ছাগল: ${total} টি<br/>
+    গর্ভবতী ছাগল: ${pregnantCount} টি<br/>
+    ১৪৫+ দিন গর্ভবতী: ${alertCount} টি
+  `;
+};
+
 // Real-time updates
-onSnapshot(collection(db, "goats"), renderGoats);
+onSnapshot(collection(db, "goats"), snapshot => {
+  renderGoats(snapshot);
+  updateSummary(snapshot);
+});
 
 // Goat Search
 document.getElementById("searchBtn").addEventListener("click", async () => {
