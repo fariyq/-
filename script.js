@@ -1,6 +1,6 @@
 // Firebase Config
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, onSnapshot, doc, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, onSnapshot, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAFx9Szt_sbhhtWEqHgIU5jUz3qxD0jOMo",
@@ -66,17 +66,7 @@ const renderGoats = (snapshot) => {
     div.innerHTML = `
       <strong>${g.name}</strong> (${g.id})<br/>
       প্রকার: ${g.type}, গর্ভাবস্থা: ${g.pregnant}<br/>
-      ক্রয়: ${g.price}৳ (${g.date})<br/>
-      বিক্রয়: ${g.sellPrice || "N/A"}৳, লাভ: ${g.profit || "N/A"}৳<br/>
-      খাদ্য: ${g.food}<br/>
-      টিকা: ${g.vaccine}<br/>
-      ${g.type === "গাভিন" ? `
-        <label>গর্ভাবস্থা শুরু তারিখ:
-          <input type="date" id="pregnancyDate-${docSnap.id}" value="${g.pregnancyStart || ''}" />
-        </label>
-        <button onclick="updatePregnancyDate('${docSnap.id}')">সংরক্ষণ</button><br/>
-        গর্ভাবস্থা চলছে: ${calculatePregnancyDays(g.pregnancyStart)}
-      ` : ""}
+      <button onclick="viewDetails('${docSnap.id}')">সম্পূর্ণ তথ্য দেখুন</button>
       <hr/>
     `;
 
@@ -84,48 +74,55 @@ const renderGoats = (snapshot) => {
   });
 };
 
-window.updatePregnancyDate = async (id) => {
-  const dateInput = document.getElementById(`pregnancyDate-${id}`);
-  const newDate = dateInput.value;
-  if (newDate) {
-    await updateDoc(doc(db, "goats", id), {
-      pregnancyStart: newDate
-    });
-    alert("গর্ভাবস্থা শুরুর তারিখ সংরক্ষিত হয়েছে");
-  }
+// View & Update Details
+window.viewDetails = async (id) => {
+  const docRef = doc(db, "goats", id);
+  const docSnap = await getDoc(docRef);
+  const g = docSnap.data();
+
+  const html = `
+    <div class="goat-details">
+      <h3>ছাগলের সম্পূর্ণ তথ্য</h3>
+      <label>নাম: <input id="d-name" value="${g.name}" /></label><br/>
+      <label>আইডি: <input id="d-id" value="${g.id}" disabled/></label><br/>
+      <label>প্রকার: <input id="d-type" value="${g.type}" /></label><br/>
+      <label>ক্রয় তারিখ: <input type="date" id="d-date" value="${g.date}" /></label><br/>
+      <label>ক্রয় মূল্য: <input type="number" id="d-price" value="${g.price}" /></label><br/>
+      <label>গর্ভাবস্থা: 
+        <select id="d-pregnant">
+          <option ${g.pregnant === "না" ? "selected" : ""}>না</option>
+          <option ${g.pregnant === "হ্যাঁ" ? "selected" : ""}>হ্যাঁ</option>
+        </select>
+      </label><br/>
+      <label>গর্ভাবস্থা শুরুর তারিখ: <input type="date" id="d-pregDate" value="${g.pregnancyStart || ''}" /></label><br/>
+      <label>খাদ্য তালিকা:<br/><textarea id="d-food">${g.food}</textarea></label><br/>
+      <label>টিকা:<br/><textarea id="d-vaccine">${g.vaccine}</textarea></label><br/>
+      <label>বিক্রয় মূল্য: <input type="number" id="d-sell" value="${g.sellPrice}" /></label><br/>
+      <label>লাভ: <input type="number" id="d-profit" value="${g.profit}" /></label><br/>
+      <button onclick="updateGoat('${id}')">তথ্য আপডেট করুন</button>
+    </div>
+  `;
+
+  goatList.innerHTML = html;
 };
 
+window.updateGoat = async (id) => {
+  const updated = {
+    name: document.getElementById("d-name").value,
+    type: document.getElementById("d-type").value,
+    date: document.getElementById("d-date").value,
+    price: document.getElementById("d-price").value,
+    pregnant: document.getElementById("d-pregnant").value,
+    pregnancyStart: document.getElementById("d-pregDate").value,
+    food: document.getElementById("d-food").value,
+    vaccine: document.getElementById("d-vaccine").value,
+    sellPrice: document.getElementById("d-sell").value,
+    profit: document.getElementById("d-profit").value
+  };
+
+  await updateDoc(doc(db, "goats", id), updated);
+  alert("তথ্য আপডেট হয়েছে!");
+};
+
+// Real-time update
 onSnapshot(collection(db, "goats"), renderGoats);
-
-
-
-// ✅ নতুন ফিচার: ছাগলের আইডি দিয়ে খোঁজা
-const searchInput = document.createElement("input");
-searchInput.type = "text";
-searchInput.placeholder = "ছাগলের ইউনিক আইডি লিখুন";
-searchInput.id = "searchGoatId";
-searchInput.style.marginTop = "20px";
-
-const searchBtn = document.createElement("button");
-searchBtn.innerText = "খুঁজুন";
-searchBtn.style.marginLeft = "10px";
-
-goatList.parentElement.insertBefore(searchInput, goatList);
-goatList.parentElement.insertBefore(searchBtn, goatList);
-
-searchBtn.addEventListener("click", async () => {
-  const searchId = document.getElementById("searchGoatId").value.trim();
-  if (!searchId) {
-    alert("অনুগ্রহ করে একটি আইডি লিখুন");
-    return;
-  }
-
-  const q = query(collection(db, "goats"), where("id", "==", searchId));
-  const querySnapshot = await getDocs(q);
-
-  if (querySnapshot.empty) {
-    goatList.innerHTML = `<p>এই আইডি দিয়ে কোনো ছাগল পাওয়া যায়নি</p>`;
-  } else {
-    renderGoats(querySnapshot);
-  }
-});
