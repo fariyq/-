@@ -1,6 +1,6 @@
 // Firebase Config
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAFx9Szt_sbhhtWEqHgIU5jUz3qxD0jOMo",
@@ -35,7 +35,8 @@ document.getElementById("goatForm").addEventListener("submit", async (e) => {
     food: document.getElementById("foodList").value,
     vaccine: document.getElementById("vaccineRecord").value,
     sellPrice: document.getElementById("sellPrice").value,
-    profit: document.getElementById("profit").value
+    profit: document.getElementById("profit").value,
+    pregnancyStart: "" // নতুন ফিল্ড, আপাতত খালি থাকবে
   };
 
   await addDoc(collection(db, "goats"), data);
@@ -46,22 +47,52 @@ document.getElementById("goatForm").addEventListener("submit", async (e) => {
 // Show goat list
 const goatList = document.getElementById("goatList");
 
+const calculatePregnancyDays = (startDate) => {
+  if (!startDate) return "গর্ভাবস্থা শুরু হয়নি";
+  const start = new Date(startDate);
+  const now = new Date();
+  const diffTime = now - start;
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  return `${diffDays} দিন`;
+};
+
 const renderGoats = (snapshot) => {
   goatList.innerHTML = "";
-  snapshot.forEach(doc => {
-    const g = doc.data();
+  snapshot.forEach(async (docSnap) => {
+    const g = docSnap.data();
     const div = document.createElement("div");
     div.className = "goat-card";
+
     div.innerHTML = `
       <strong>${g.name}</strong> (${g.id})<br/>
       প্রকার: ${g.type}, গর্ভাবস্থা: ${g.pregnant}<br/>
       ক্রয়: ${g.price}৳ (${g.date})<br/>
       বিক্রয়: ${g.sellPrice || "N/A"}৳, লাভ: ${g.profit || "N/A"}৳<br/>
       খাদ্য: ${g.food}<br/>
-      টিকা: ${g.vaccine}<br/><hr/>
+      টিকা: ${g.vaccine}<br/>
+      ${g.type === "গাভিন" ? `
+        <label>গর্ভাবস্থা শুরু তারিখ:
+          <input type="date" id="pregnancyDate-${docSnap.id}" value="${g.pregnancyStart || ''}" />
+        </label>
+        <button onclick="updatePregnancyDate('${docSnap.id}')">সংরক্ষণ</button><br/>
+        গর্ভাবস্থা চলছে: ${calculatePregnancyDays(g.pregnancyStart)}
+      ` : ""}
+      <hr/>
     `;
+
     goatList.appendChild(div);
   });
+};
+
+window.updatePregnancyDate = async (id) => {
+  const dateInput = document.getElementById(`pregnancyDate-${id}`);
+  const newDate = dateInput.value;
+  if (newDate) {
+    await updateDoc(doc(db, "goats", id), {
+      pregnancyStart: newDate
+    });
+    alert("গর্ভাবস্থা শুরুর তারিখ সংরক্ষিত হয়েছে");
+  }
 };
 
 onSnapshot(collection(db, "goats"), renderGoats);
