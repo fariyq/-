@@ -1,75 +1,35 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ইনভয়েস সিস্টেম</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>স্বপ্ন খামার</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body onload="updateDateTime(); generateInvoiceNumber();">
-    <div class="header">
-        <h2>ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার</h2>
-        <p>📍 গদখালি বাজার বাস স্ট্যান্ড, রহিম সরদার মার্কেট, ঝিকরগাছা, যশোর।</p>
-        <p>📧 mdemranst0@gmail.com | 📞 01952325903</p>
-        <p>📅 <span id="currentDate"></span> | ⏰ <span id="currentTime"></span></p>
-    </div>
+<body>
+  <header>
+    <h1>স্বপ্ন খামার</h1>
+    <p>একটি ডিজিটাল খামার ব্যবস্থাপনা অ্যাপ</p>
+  </header>
 
-    <div class="container">
-        <h2>ইনভয়েস তৈরি করুন</h2>
+  <main>
+    <section class="login-form">
+      <h2>লগইন করুন</h2>
+      <input type="text" id="username" placeholder="ইউজারনেম">
+      <input type="password" id="password" placeholder="পাসওয়ার্ড">
+      <button onclick="login()">লগইন</button>
+    </section>
 
-        <label for="invoiceNumber">ইনভয়েস নাম্বার:</label>
-        <input type="text" id="invoiceNumber" readonly><br><br>
+    <section class="dashboard hidden">
+      <h2>ড্যাশবোর্ড</h2>
+      <ul>
+        <li>পশুর তালিকা</li>
+        <li>খরচের হিসাব</li>
+        <li>বিক্রির হিসাব</li>
+      </ul>
+    </section>
+  </main>
 
-        <label for="customerName">কাস্টমারের নাম:</label>
-        <input type="text" id="customerName" placeholder="কাস্টমারের নাম লিখুন"><br><br>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>ক্রমিক</th> 
-                    <th>পণ্য নাম</th>
-                    <th>পরিমাণ</th>
-                    <th>একক মূল্য</th>
-                    <th>মোট</th>
-                    <th class="no-print">অপশন</th>
-                </tr>
-            </thead>
-            <tbody id="invoiceBody"></tbody>
-        </table>
-
-        <button class="no-print" onclick="addItem()">+ আইটেম যোগ করুন</button>
-
-        <div class="total-section">
-            <div class="total-info">
-                <p><strong>মোট মূল্য:</strong> <span id="grandTotal">0 টাকা</span></p>
-                <p><strong>জমা টাকা:</strong> <input type="number" id="paidAmount" oninput="calculateDue()" placeholder="জমা টাকা লিখুন"></p>
-                <p><strong>বাকি টাকা:</strong> <span id="dueAmount">0 টাকা</span></p>
-                <p><strong>ফেরত টাকা:</strong> <span id="returnAmount">0 টাকা</span></p>
-                
-                <!-- বাকি টাকা দেওয়ার তারিখ অপশন -->
-                <div id="dueDateContainer" style="display: none; margin-top: 10px;">
-                    <label for="dueDate"><strong>বাকি টাকা দেওয়ার তারিখ:</strong></label>
-                    <input type="date" id="dueDate">
-                </div>
-            </div>
-        </div>
-
-        <h3 id="paymentStatus" style="color: green; display: none;">✅ পরিশোধিত</h3>
-
-        <div class="signature-section">
-            <div class="signature-box">
-                <p>কাস্টমারের স্বাক্ষর:</p>
-                <div class="signature-line"></div>
-            </div>
-            <div class="signature-box">
-                <p>বিক্রেতার স্বাক্ষর:</p>
-                <div class="signature-line"></div>
-            </div>
-        </div>
-
-        <button class="no-print" onclick="printInvoice()">🖨️ প্রিন্ট করুন</button>
-    </div>
-
-    <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
