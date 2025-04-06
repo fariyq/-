@@ -4,64 +4,96 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>বিশ্বাসের স্বপ্নের খামার</title>
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f9f4;
+      margin: 0;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    .container {
+      margin: 20px auto;
+      max-width: 600px;
+      background-color: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .goat-card {
+      background-color: #ecf0f1;
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 10px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #27ae60;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background-color: #219150;
+    }
+  </style>
 </head>
 <body>
+  <h1>বিশ্বাসের স্বপ্নের খামার</h1>
+
   <div class="container">
-    <h1>বিশ্বাসের স্বপ্নের খামার</h1>
+    <h2>সারাংশ</h2>
+    <div id="summary" class="goat-card">
+      লোড হচ্ছে...
+    </div>
+  </div>
+
+  <div class="container">
+    <h2>ছাগল খোঁজ করুন</h2>
+    <input type="text" id="searchInput" placeholder="ছাগলের আইডি লিখুন" />
+    <button id="searchBtn">খোঁজ করুন</button>
+    <div id="searchResult"></div>
+  </div>
+
+  <div class="container">
     <button id="newGoatBtn">নতুন ছাগল যুক্ত করুন</button>
-
     <form id="goatForm" style="display:none;">
-      <h2>নতুন ছাগলের তথ্য</h2>
-      <input type="text" placeholder="ছাগলের নাম" id="goatName" required />
-      <input type="text" placeholder="ছাগলের ইউনিক আইডি" id="goatId" required />
-      
-      <select id="goatType" required>
-        <option value="">প্রকার নির্বাচন করুন</option>
-        <option value="খাসি">খাসি</option>
-        <option value="গাভিন">গাভিন</option>
-        <option value="গ্রামীণ">গ্রামীণ</option>
+      <input type="text" id="goatName" placeholder="ছাগলের নাম" required />
+      <input type="text" id="goatId" placeholder="ছাগলের আইডি" required />
+      <input type="text" id="goatType" placeholder="প্রকার" required />
+      <label>ক্রয়ের তারিখ:</label>
+      <input type="date" id="purchaseDate" />
+      <input type="number" id="purchasePrice" placeholder="ক্রয় মূল্য" />
+      <label>গর্ভবতী কি?</label>
+      <select id="pregnant">
+        <option>না</option>
+        <option>হ্যাঁ</option>
       </select>
-
-      <input type="date" id="purchaseDate" required />
-      <input type="number" placeholder="ক্রয় মূল্য" id="purchasePrice" required />
-      
-      <label>
-        গর্ভাবস্থা আছে?
-        <select id="pregnant">
-          <option value="না">না</option>
-          <option value="হ্যাঁ">হ্যাঁ</option>
-        </select>
-      </label>
-
       <textarea id="foodList" placeholder="খাদ্য তালিকা"></textarea>
-      <textarea id="vaccineRecord" placeholder="টিকার রেকর্ড"></textarea>
-      <input type="number" placeholder="বিক্রয় মূল্য (যদি থাকে)" id="sellPrice" />
-      <input type="number" placeholder="লাভ (যদি থাকে)" id="profit" />
-
+      <textarea id="vaccineRecord" placeholder="টিকার বিবরণ"></textarea>
+      <input type="number" id="sellPrice" placeholder="বিক্রয় মূল্য" />
+      <input type="number" id="profit" placeholder="লাভ" />
       <button type="submit">সংরক্ষণ করুন</button>
     </form>
+  </div>
 
-    <hr/>
-
-    <h2>ছাগলের আইডি দিয়ে খুঁজুন</h2>
-    <input type="text" id="searchId" placeholder="ছাগলের ইউনিক আইডি লিখুন" />
-    <button id="searchBtn">খুঁজুন</button>
-    <div id="searchResult"></div>
-
-    <hr/>
-
-    <h2>ছাগলের তালিকা</h2>
+  <div class="container">
+    <h2>ছাগল তালিকা</h2>
     <div id="goatList"></div>
   </div>
 
   <script type="module" src="script.js"></script>
-
-  <!-- Notification Permission -->
-  <script>
-    if (Notification.permission !== "granted") {
-      Notification.requestPermission();
-    }
-  </script>
 </body>
 </html>
