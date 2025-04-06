@@ -1,71 +1,46 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>স্বপ্ন খামার - ছাগল ব্যবস্থাপনা</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>স্বপ্ন খামার অ্যাপ</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <div class="container">
-    <h1>স্বপ্ন খামার - ছাগল ব্যবস্থাপনা</h1>
+    <header>
+        <h1>স্বপ্ন খামার</h1>
+    </header>
 
-    <!-- ছাগল তথ্য ফর্ম -->
-    <form id="goatForm">
-      <h2>ছাগল যোগ করুন</h2>
-      
-      <label for="goatId">ছাগলের আইডি:</label>
-      <input type="text" id="goatId" required><br><br>
-      
-      <label for="goatAge">ছাগলের বয়স:</label>
-      <input type="number" id="goatAge" required><br><br>
-      
-      <label for="goatType">ছাগলের প্রকার:</label>
-      <select id="goatType" required>
-        <option value="dairy">গাভীন (Dairy)</option>
-        <option value="meat">খাসি (Khasi)</option>
-        <option value="village">গ্রামীণ (Village)</option>
-      </select><br><br>
+    <div class="content">
+        <h2>নতুন ছাগল যুক্ত করুন</h2>
+        <form id="goat-form">
+            <label for="name">ছাগলের নাম:</label>
+            <input type="text" id="name" placeholder="ছাগলের নাম লিখুন" required>
 
-      <label for="purchasePrice">ক্রয়মূল্য:</label>
-      <input type="number" id="purchasePrice" required><br><br>
-      
-      <button type="button" onclick="addGoat()">ছাগল যোগ করুন</button>
-    </form>
+            <label for="type">ছাগলের প্রকার:</label>
+            <select id="type">
+                <option value="dairy">গাভীন</option>
+                <option value="khasi">খাসি</option>
+                <option value="village">গ্রামীণ</option>
+            </select>
 
-    <!-- খাদ্য এবং টিকা তথ্য -->
-    <h2>খাদ্য এবং টিকা তথ্য</h2>
-    <form id="foodVaccinationForm">
-      <label for="goatIdFood">ছাগলের আইডি:</label>
-      <input type="text" id="goatIdFood" required><br><br>
+            <label for="date">ক্রয় তারিখ:</label>
+            <input type="date" id="date" required>
 
-      <label for="food">খাদ্য:</label>
-      <input type="text" id="food" required><br><br>
+            <label for="price">ক্রয় মূল্য (টাকা):</label>
+            <input type="number" id="price" placeholder="মূল্য লিখুন" required>
 
-      <label for="vaccination">টিকা:</label>
-      <input type="text" id="vaccination" required><br><br>
+            <label for="pregnant">গর্ভাবস্থা:</label>
+            <input type="checkbox" id="pregnant"> গর্ভবতী
 
-      <button type="button" onclick="addFoodVaccination()">খাদ্য এবং টিকা যোগ করুন</button>
-    </form>
+            <button type="submit">সংরক্ষণ করুন</button>
+        </form>
+        
+        <h3>ছাগল তালিকা</h3>
+        <ul id="goat-list"></ul>
+    </div>
 
-    <!-- বিক্রি ফর্ম -->
-    <h2>ছাগল বিক্রি করুন</h2>
-    <form id="saleForm">
-      <label for="goatIdSale">ছাগলের আইডি:</label>
-      <input type="text" id="goatIdSale" required><br><br>
-
-      <label for="salePrice">বিক্রির মূল্য:</label>
-      <input type="number" id="salePrice" required><br><br>
-
-      <button type="button" onclick="addSale()">বিক্রি করুন</button>
-    </form>
-
-    <div id="goatRecord"></div>
-    <div id="foodVaccinationRecord"></div>
-    <div id="saleRecord"></div>
-  </div>
-
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
