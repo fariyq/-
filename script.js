@@ -6,7 +6,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyAFx9Szt_sbhhtWEqHgIU5jUz3qxD0jOMo",
   authDomain: "bishwasher-khamar.firebaseapp.com",
   projectId: "bishwasher-khamar",
-  storageBucket: "bishwasher-khamar.firebasestorage.app",
+  storageBucket: "bishwasher-khamar.appspot.com",
   messagingSenderId: "466255017082",
   appId: "1:466255017082:web:902506f7358dfd5a82b7c3",
   measurementId: "G-457DQ0ZHHG"
@@ -56,24 +56,59 @@ const calculatePregnancyDays = (startDate) => {
 
 // Render Goat List
 const goatList = document.getElementById("goatList");
+
 const renderGoats = (snapshot) => {
   goatList.innerHTML = "";
+
+  if (Notification.permission !== "granted") {
+    Notification.requestPermission();
+  }
+
   snapshot.forEach(async (docSnap) => {
     const g = docSnap.data();
     const div = document.createElement("div");
     div.className = "goat-card";
 
     const pregDays = calculatePregnancyDays(g.pregnancyStart);
+    let alertMessage = "";
+    let highlightStyle = "";
+    let playAudio = false;
 
+    if (g.pregnant === "হ্যাঁ" && g.pregnancyStart) {
+      const start = new Date(g.pregnancyStart);
+      const now = new Date();
+      const diffTime = now - start;
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+      if (diffDays >= 145) {
+        alertMessage = `<div style="color:red; font-weight:bold;">গর্ভাবস্থার ${diffDays} দিন পূর্ণ হয়েছে!</div>`;
+        highlightStyle = "background-color: #ffcccc;";
+        playAudio = true;
+
+        if (Notification.permission === "granted") {
+          new Notification("গর্ভবতী ছাগলের সতর্কতা!", {
+            body: `${g.name} (${g.id}) এর ${diffDays} দিন গর্ভাবস্থা পূর্ণ হয়েছে!`,
+          });
+        }
+      }
+    }
+
+    div.setAttribute("style", highlightStyle);
     div.innerHTML = `
       <strong>${g.name}</strong> (${g.id})<br/>
       প্রকার: ${g.type}<br/>
       গর্ভাবস্থা: ${g.pregnant} (${pregDays})<br/>
+      ${alertMessage}
       <button onclick="viewDetails('${docSnap.id}')">সম্পূর্ণ তথ্য দেখুন</button>
       <hr/>
     `;
 
     goatList.appendChild(div);
+
+    if (playAudio) {
+      const audio = new Audio("https://www.soundjay.com/buttons/sounds/beep-07.mp3");
+      audio.play();
+    }
   });
 };
 
