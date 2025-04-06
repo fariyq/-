@@ -1,46 +1,48 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>স্বপ্ন খামার অ্যাপ</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>বিশ্বাসের স্বপ্নের খামার</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="container">
+    <h1>বিশ্বাসের স্বপ্নের খামার</h1>
+    <button id="newGoatBtn">নতুন ছাগল যুক্ত করুন</button>
 
-    <header>
-        <h1>স্বপ্ন খামার</h1>
-    </header>
+    <form id="goatForm" style="display:none;">
+      <h2>নতুন ছাগলের তথ্য</h2>
+      <input type="text" placeholder="ছাগলের নাম" id="goatName" required />
+      <input type="text" placeholder="ছাগলের ইউনিক আইডি" id="goatId" required />
+      
+      <select id="goatType" required>
+        <option value="">প্রকার নির্বাচন করুন</option>
+        <option value="খাসি">খাসি</option>
+        <option value="গাভিন">গাভিন</option>
+        <option value="গ্রামীণ">গ্রামীণ</option>
+      </select>
 
-    <div class="content">
-        <h2>নতুন ছাগল যুক্ত করুন</h2>
-        <form id="goat-form">
-            <label for="name">ছাগলের নাম:</label>
-            <input type="text" id="name" placeholder="ছাগলের নাম লিখুন" required>
+      <input type="date" id="purchaseDate" required />
+      <input type="number" placeholder="ক্রয় মূল্য" id="purchasePrice" required />
+      
+      <label>
+        গর্ভাবস্থা আছে?
+        <select id="pregnant">
+          <option value="না">না</option>
+          <option value="হ্যাঁ">হ্যাঁ</option>
+        </select>
+      </label>
 
-            <label for="type">ছাগলের প্রকার:</label>
-            <select id="type">
-                <option value="dairy">গাভীন</option>
-                <option value="khasi">খাসি</option>
-                <option value="village">গ্রামীণ</option>
-            </select>
+      <textarea id="foodList" placeholder="খাদ্য তালিকা"></textarea>
+      <textarea id="vaccineRecord" placeholder="টিকার রেকর্ড"></textarea>
+      <input type="number" placeholder="বিক্রয় মূল্য (যদি থাকে)" id="sellPrice" />
+      <input type="number" placeholder="লাভ (যদি থাকে)" id="profit" />
 
-            <label for="date">ক্রয় তারিখ:</label>
-            <input type="date" id="date" required>
+      <button type="submit">সংরক্ষণ করুন</button>
+    </form>
+  </div>
 
-            <label for="price">ক্রয় মূল্য (টাকা):</label>
-            <input type="number" id="price" placeholder="মূল্য লিখুন" required>
-
-            <label for="pregnant">গর্ভাবস্থা:</label>
-            <input type="checkbox" id="pregnant"> গর্ভবতী
-
-            <button type="submit">সংরক্ষণ করুন</button>
-        </form>
-        
-        <h3>ছাগল তালিকা</h3>
-        <ul id="goat-list"></ul>
-    </div>
-
-    <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
