@@ -1,6 +1,6 @@
 // Firebase Config
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, onSnapshot, doc, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAFx9Szt_sbhhtWEqHgIU5jUz3qxD0jOMo",
@@ -36,7 +36,7 @@ document.getElementById("goatForm").addEventListener("submit", async (e) => {
     vaccine: document.getElementById("vaccineRecord").value,
     sellPrice: document.getElementById("sellPrice").value,
     profit: document.getElementById("profit").value,
-    pregnancyStart: "" // নতুন ফিল্ড, আপাতত খালি থাকবে
+    pregnancyStart: ""
   };
 
   await addDoc(collection(db, "goats"), data);
@@ -96,3 +96,36 @@ window.updatePregnancyDate = async (id) => {
 };
 
 onSnapshot(collection(db, "goats"), renderGoats);
+
+
+
+// ✅ নতুন ফিচার: ছাগলের আইডি দিয়ে খোঁজা
+const searchInput = document.createElement("input");
+searchInput.type = "text";
+searchInput.placeholder = "ছাগলের ইউনিক আইডি লিখুন";
+searchInput.id = "searchGoatId";
+searchInput.style.marginTop = "20px";
+
+const searchBtn = document.createElement("button");
+searchBtn.innerText = "খুঁজুন";
+searchBtn.style.marginLeft = "10px";
+
+goatList.parentElement.insertBefore(searchInput, goatList);
+goatList.parentElement.insertBefore(searchBtn, goatList);
+
+searchBtn.addEventListener("click", async () => {
+  const searchId = document.getElementById("searchGoatId").value.trim();
+  if (!searchId) {
+    alert("অনুগ্রহ করে একটি আইডি লিখুন");
+    return;
+  }
+
+  const q = query(collection(db, "goats"), where("id", "==", searchId));
+  const querySnapshot = await getDocs(q);
+
+  if (querySnapshot.empty) {
+    goatList.innerHTML = `<p>এই আইডি দিয়ে কোনো ছাগল পাওয়া যায়নি</p>`;
+  } else {
+    renderGoats(querySnapshot);
+  }
+});
