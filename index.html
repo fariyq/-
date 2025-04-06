@@ -2,36 +2,86 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>স্বপ্ন খামার</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ছাগল ব্যবস্থাপনা অ্যাপ</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .section-title {
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <h1>স্বপ্ন খামার</h1>
-    <p>একটি ডিজিটাল খামার ব্যবস্থাপনা অ্যাপ</p>
-  </header>
 
-  <main>
-    <!-- লগইন ফর্ম -->
-    <section class="login-form">
-      <h2>লগইন করুন</h2>
-      <input type="text" id="username" placeholder="ইউজারনেম">
-      <input type="password" id="password" placeholder="পাসওয়ার্ড">
-      <button onclick="login()">লগইন</button>
-    </section>
+<div class="container">
+  <h1 class="section-title">ছাগল ব্যবস্থাপনা অ্যাপ</h1>
+  
+  <h2 class="section-title">ছাগল তালিকা</h2>
+  <form id="goat-form">
+    <label for="goat-type">ছাগলের ধরন:</label>
+    <select id="goat-type">
+      <option value="dairy">দুধের ছাগল</option>
+      <option value="khasi">খাসি ছাগল</option>
+      <option value="village">গ্রামীণ ছাগল</option>
+    </select>
 
-    <!-- ড্যাশবোর্ড (এটি ডিফল্টভাবে লুকানো থাকবে) -->
-    <section class="dashboard hidden">
-      <h2>ড্যাশবোর্ড</h2>
-      <ul>
-        <li>পশুর তালিকা</li>
-        <li>খরচের হিসাব</li>
-        <li>বিক্রির হিসাব</li>
-      </ul>
-    </section>
-  </main>
+    <label for="goat-id">ছাগলের আইডি:</label>
+    <input type="text" id="goat-id" placeholder="ছাগলের আইডি লিখুন" required>
 
-  <script src="script.js"></script>
+    <label for="vaccination-date">টিকা দেওয়ার তারিখ:</label>
+    <input type="date" id="vaccination-date" required>
+
+    <label for="food-cost">খাদ্যের খরচ:</label>
+    <input type="number" id="food-cost" placeholder="খাদ্য খরচ" required>
+
+    <label for="purchase-price">ক্রয়মূল্য:</label>
+    <input type="number" id="purchase-price" placeholder="ক্রয়মূল্য" required>
+
+    <label for="sale-price">বিক্রয়মূল্য:</label>
+    <input type="number" id="sale-price" placeholder="বিক্রয়মূল্য" required>
+
+    <button type="submit">রেকর্ড যুক্ত করুন</button>
+  </form>
+  
+  <h2 class="section-title">গর্ভবতী ছাগলের হিসাব</h2>
+  <label for="pregnancy-date">গর্ভধারণের তারিখ:</label>
+  <input type="date" id="pregnancy-date">
+  <button onclick="calculatePregnancy()">গর্ভধারণের সময়কাল হিসাব করুন</button>
+  <p id="pregnancy-duration"></p>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
