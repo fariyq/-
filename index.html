@@ -1,99 +1,75 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>বিশ্বাসের স্বপ্নের খামার</title>
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background-color: #f4f9f4;
-      margin: 0;
-      padding: 20px;
-    }
-    h1, h2 {
-      text-align: center;
-      color: #2c3e50;
-    }
-    .container {
-      margin: 20px auto;
-      max-width: 600px;
-      background-color: white;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    .goat-card {
-      background-color: #ecf0f1;
-      margin: 10px 0;
-      padding: 15px;
-      border-radius: 10px;
-    }
-    input, select, textarea {
-      width: 100%;
-      padding: 8px;
-      margin: 5px 0 10px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    button {
-      background-color: #27ae60;
-      color: white;
-      padding: 10px 15px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    button:hover {
-      background-color: #219150;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ইনভয়েস সিস্টেম</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <h1>বিশ্বাসের স্বপ্নের খামার</h1>
-
-  <div class="container">
-    <h2>সারাংশ</h2>
-    <div id="summary" class="goat-card">
-      লোড হচ্ছে...
+<body onload="updateDateTime(); generateInvoiceNumber();">
+    <div class="header">
+        <h2>ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার</h2>
+        <p>📍 গদখালি বাজার বাস স্ট্যান্ড, রহিম সরদার মার্কেট, ঝিকরগাছা, যশোর।</p>
+        <p>📧 mdemranst0@gmail.com | 📞 01952325903</p>
+        <p>📅 <span id="currentDate"></span> | ⏰ <span id="currentTime"></span></p>
     </div>
-  </div>
 
-  <div class="container">
-    <h2>ছাগল খোঁজ করুন</h2>
-    <input type="text" id="searchInput" placeholder="ছাগলের আইডি লিখুন" />
-    <button id="searchBtn">খোঁজ করুন</button>
-    <div id="searchResult"></div>
-  </div>
+    <div class="container">
+        <h2>ইনভয়েস তৈরি করুন</h2>
 
-  <div class="container">
-    <button id="newGoatBtn">নতুন ছাগল যুক্ত করুন</button>
-    <form id="goatForm" style="display:none;">
-      <input type="text" id="goatName" placeholder="ছাগলের নাম" required />
-      <input type="text" id="goatId" placeholder="ছাগলের আইডি" required />
-      <input type="text" id="goatType" placeholder="প্রকার" required />
-      <label>ক্রয়ের তারিখ:</label>
-      <input type="date" id="purchaseDate" />
-      <input type="number" id="purchasePrice" placeholder="ক্রয় মূল্য" />
-      <label>গর্ভবতী কি?</label>
-      <select id="pregnant">
-        <option>না</option>
-        <option>হ্যাঁ</option>
-      </select>
-      <textarea id="foodList" placeholder="খাদ্য তালিকা"></textarea>
-      <textarea id="vaccineRecord" placeholder="টিকার বিবরণ"></textarea>
-      <input type="number" id="sellPrice" placeholder="বিক্রয় মূল্য" />
-      <input type="number" id="profit" placeholder="লাভ" />
-      <button type="submit">সংরক্ষণ করুন</button>
-    </form>
-  </div>
+        <label for="invoiceNumber">ইনভয়েস নাম্বার:</label>
+        <input type="text" id="invoiceNumber" readonly><br><br>
 
-  <div class="container">
-    <h2>ছাগল তালিকা</h2>
-    <div id="goatList"></div>
-  </div>
+        <label for="customerName">কাস্টমারের নাম:</label>
+        <input type="text" id="customerName" placeholder="কাস্টমারের নাম লিখুন"><br><br>
 
-  <script type="module" src="script.js"></script>
+        <table>
+            <thead>
+                <tr>
+                    <th>ক্রমিক</th> 
+                    <th>পণ্য নাম</th>
+                    <th>পরিমাণ</th>
+                    <th>একক মূল্য</th>
+                    <th>মোট</th>
+                    <th class="no-print">অপশন</th>
+                </tr>
+            </thead>
+            <tbody id="invoiceBody"></tbody>
+        </table>
+
+        <button class="no-print" onclick="addItem()">+ আইটেম যোগ করুন</button>
+
+        <div class="total-section">
+            <div class="total-info">
+                <p><strong>মোট মূল্য:</strong> <span id="grandTotal">0 টাকা</span></p>
+                <p><strong>জমা টাকা:</strong> <input type="number" id="paidAmount" oninput="calculateDue()" placeholder="জমা টাকা লিখুন"></p>
+                <p><strong>বাকি টাকা:</strong> <span id="dueAmount">0 টাকা</span></p>
+                <p><strong>ফেরত টাকা:</strong> <span id="returnAmount">0 টাকা</span></p>
+                
+                <!-- বাকি টাকা দেওয়ার তারিখ অপশন -->
+                <div id="dueDateContainer" style="display: none; margin-top: 10px;">
+                    <label for="dueDate"><strong>বাকি টাকা দেওয়ার তারিখ:</strong></label>
+                    <input type="date" id="dueDate">
+                </div>
+            </div>
+        </div>
+
+        <h3 id="paymentStatus" style="color: green; display: none;">✅ পরিশোধিত</h3>
+
+        <div class="signature-section">
+            <div class="signature-box">
+                <p>কাস্টমারের স্বাক্ষর:</p>
+                <div class="signature-line"></div>
+            </div>
+            <div class="signature-box">
+                <p>বিক্রেতার স্বাক্ষর:</p>
+                <div class="signature-line"></div>
+            </div>
+        </div>
+
+        <button class="no-print" onclick="printInvoice()">🖨️ প্রিন্ট করুন</button>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
