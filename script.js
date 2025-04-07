@@ -1,229 +1,100 @@
-// Firebase Config
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, onSnapshot, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+document.addEventListener("DOMContentLoaded", function () { 
+    let invoiceBody = document.getElementById("invoiceBody");
+    let grandTotalElement = document.getElementById("grandTotal");
+    let paidAmountElement = document.getElementById("paidAmount");
+    let dueAmountElement = document.getElementById("dueAmount");
+    let returnAmountElement = document.getElementById("returnAmount");
+    let paymentStatusElement = document.getElementById("paymentStatus");
+    let invoiceNumberElement = document.getElementById("invoiceNumber");
+    let dueDateContainer = document.getElementById("dueDateContainer");
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAFx9Szt_sbhhtWEqHgIU5jUz3qxD0jOMo",
-  authDomain: "bishwasher-khamar.firebaseapp.com",
-  projectId: "bishwasher-khamar",
-  storageBucket: "bishwasher-khamar.appspot.com",
-  messagingSenderId: "466255017082",
-  appId: "1:466255017082:web:902506f7358dfd5a82b7c3",
-  measurementId: "G-457DQ0ZHHG"
-};
+    function updateDateTime() {
+        const now = new Date();
+        const date = now.toLocaleDateString('bn-BD');
+        const time = now.toLocaleTimeString('bn-BD');
+        document.getElementById("currentDate").innerText = date;
+        document.getElementById("currentTime").innerText = time;
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+        setTimeout(updateDateTime, 1000);
+    }
 
-// Toggle form
-document.getElementById("newGoatBtn").addEventListener("click", () => {
-  const form = document.getElementById("goatForm");
-  form.style.display = form.style.display === "none" ? "block" : "none";
-});
+    window.updateDateTime = updateDateTime;
 
-// Save new goat
-document.getElementById("goatForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
+    function generateInvoiceNumber() {
+        let randomNumber = Math.floor(100000 + Math.random() * 900000);
+        invoiceNumberElement.value = "INV-" + randomNumber;
+    }
 
-  const data = {
-    name: document.getElementById("goatName").value,
-    id: document.getElementById("goatId").value,
-    type: document.getElementById("goatType").value,
-    date: document.getElementById("purchaseDate").value,
-    price: document.getElementById("purchasePrice").value,
-    pregnant: document.getElementById("pregnant").value,
-    food: document.getElementById("foodList").value,
-    vaccine: document.getElementById("vaccineRecord").value,
-    sellPrice: document.getElementById("sellPrice").value,
-    profit: document.getElementById("profit").value,
-    pregnancyStart: ""
-  };
+    window.generateInvoiceNumber = generateInvoiceNumber;
 
-  await addDoc(collection(db, "goats"), data);
-  alert("তথ্য সংরক্ষণ হয়েছে!");
-  document.getElementById("goatForm").reset();
-});
+    function calculateTotal() {
+        let rows = document.querySelectorAll("#invoiceBody tr");
+        let grandTotal = 0;
 
-// Calculate pregnancy days
-const calculatePregnancyDays = (startDate) => {
-  if (!startDate) return "গর্ভাবস্থা শুরু হয়নি";
-  const start = new Date(startDate);
-  const now = new Date();
-  const diffTime = now - start;
-  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-  return `${diffDays} দিন`;
-};
+        rows.forEach((row, index) => {
+            let quantityInput = row.querySelector(".quantity");
+            let unitPriceInput = row.querySelector(".unitPrice");
+            let totalPriceElement = row.querySelector(".totalPrice");
 
-// Render Goat List
-const goatList = document.getElementById("goatList");
+            let quantity = parseFloat(quantityInput.value) || 0;
+            let unitPrice = parseFloat(unitPriceInput.value) || 0;
+            let totalPrice = quantity * unitPrice;
 
-const renderGoats = (snapshot) => {
-  goatList.innerHTML = "";
+            totalPriceElement.innerText = totalPrice.toFixed(2) + " টাকা";
+            grandTotal += totalPrice;
 
-  if (Notification.permission !== "granted") {
-    Notification.requestPermission();
-  }
+            row.querySelector(".serialNumber").innerText = index + 1;
+        });
 
-  snapshot.forEach(async (docSnap) => {
-    const g = docSnap.data();
-    const div = document.createElement("div");
-    div.className = "goat-card";
+        grandTotalElement.innerText = grandTotal.toFixed(2) + " টাকা";
+        calculateDue();
+    }
 
-    const pregDays = calculatePregnancyDays(g.pregnancyStart);
-    let alertMessage = "";
-    let highlightStyle = "";
-    let playAudio = false;
+    window.calculateTotal = calculateTotal;
 
-    if (g.pregnant === "হ্যাঁ" && g.pregnancyStart) {
-      const start = new Date(g.pregnancyStart);
-      const now = new Date();
-      const diffTime = now - start;
-      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    window.calculateDue = function () {
+        let grandTotal = parseFloat(grandTotalElement.innerText.replace(" টাকা", "")) || 0;
+        let paidAmount = parseFloat(paidAmountElement.value) || 0;
+        let dueAmount = grandTotal - paidAmount;
+        let returnAmount = dueAmount < 0 ? Math.abs(dueAmount) : 0;
+        dueAmount = dueAmount > 0 ? dueAmount : 0;
 
-      if (diffDays >= 145) {
-        alertMessage = `<div style="color:red; font-weight:bold;">গর্ভাবস্থার ${diffDays} দিন পূর্ণ হয়েছে!</div>`;
-        highlightStyle = "background-color: #ffcccc;";
-        playAudio = true;
+        dueAmountElement.innerText = dueAmount.toFixed(2) + " টাকা";
+        returnAmountElement.innerText = returnAmount.toFixed(2) + " টাকা";
+        paymentStatusElement.style.display = (dueAmount === 0 && paidAmount > 0) ? "block" : "none";
 
-        if (Notification.permission === "granted") {
-          new Notification("গর্ভবতী ছাগলের সতর্কতা!", {
-            body: `${g.name} (${g.id}) এর ${diffDays} দিন গর্ভাবস্থা পূর্ণ হয়েছে!`,
-          });
+        // বাকি টাকা থাকলে বাকি টাকা দেওয়ার তারিখের অপশন দেখানো হবে, না থাকলে লুকানো হবে
+        if (dueAmount > 0) {
+            dueDateContainer.style.display = "block";
+        } else {
+            dueDateContainer.style.display = "none";  // সম্পূর্ণ টাকা পরিশোধিত হলে সম্পূর্ণভাবে লুকিয়ে যাবে
+            document.getElementById("dueDate").value = ""; // তারিখের ইনপুট ফাঁকা হয়ে যাবে
         }
-      }
-    }
+    };
 
-    div.setAttribute("style", highlightStyle);
-    div.innerHTML = `
-      <strong>${g.name}</strong> (${g.id})<br/>
-      প্রকার: ${g.type}<br/>
-      গর্ভাবস্থা: ${g.pregnant} (${pregDays})<br/>
-      ${alertMessage}
-      <button onclick="viewDetails('${docSnap.id}')">সম্পূর্ণ তথ্য দেখুন</button>
-      <hr/>
-    `;
+    window.addItem = function () {
+        let row = document.createElement("tr");
+        row.innerHTML = `<td class="serialNumber"></td>
+                         <td><input type="text" class="productName"></td>
+                         <td><input type="number" class="quantity" oninput="calculateTotal()"></td>
+                         <td><input type="number" class="unitPrice" oninput="calculateTotal()"></td>
+                         <td class="totalPrice">0.00 টাকা</td>
+                         <td class="no-print"><button class="removeBtn">❌</button></td>`;
 
-    goatList.appendChild(div);
+        row.querySelector(".removeBtn").addEventListener("click", function () {
+            row.remove();
+            calculateTotal();
+        });
 
-    if (playAudio) {
-      const audio = new Audio("https://www.soundjay.com/buttons/sounds/beep-07.mp3");
-      audio.play();
-    }
-  });
-};
+        invoiceBody.appendChild(row);
+        calculateTotal();
+    };
 
-// View Details
-window.viewDetails = async (id) => {
-  const docRef = doc(db, "goats", id);
-  const docSnap = await getDoc(docRef);
-  const g = docSnap.data();
+    window.printInvoice = function () {
+        alert("প্রিন্ট করা হচ্ছে...");
+        window.print();
+    };
 
-  const html = `
-    <div class="goat-details">
-      <h3>ছাগলের সম্পূর্ণ তথ্য</h3>
-      <label>নাম: <input id="d-name" value="${g.name}" /></label><br/>
-      <label>আইডি: <input id="d-id" value="${g.id}" disabled/></label><br/>
-      <label>প্রকার: <input id="d-type" value="${g.type}" /></label><br/>
-      <label>ক্রয় তারিখ: <input type="date" id="d-date" value="${g.date}" /></label><br/>
-      <label>ক্রয় মূল্য: <input type="number" id="d-price" value="${g.price}" /></label><br/>
-      <label>গর্ভাবস্থা: 
-        <select id="d-pregnant">
-          <option ${g.pregnant === "না" ? "selected" : ""}>না</option>
-          <option ${g.pregnant === "হ্যাঁ" ? "selected" : ""}>হ্যাঁ</option>
-        </select>
-      </label><br/>
-      <label>গর্ভাবস্থা শুরুর তারিখ: <input type="date" id="d-pregDate" value="${g.pregnancyStart || ''}" /></label><br/>
-      <label>খাদ্য তালিকা:<br/><textarea id="d-food">${g.food}</textarea></label><br/>
-      <label>টিকা:<br/><textarea id="d-vaccine">${g.vaccine}</textarea></label><br/>
-      <label>বিক্রয় মূল্য: <input type="number" id="d-sell" value="${g.sellPrice}" /></label><br/>
-      <label>লাভ: <input type="number" id="d-profit" value="${g.profit}" /></label><br/>
-      <button onclick="updateGoat('${id}')">তথ্য আপডেট করুন</button>
-    </div>
-  `;
-
-  goatList.innerHTML = html;
-};
-
-// Update Goat
-window.updateGoat = async (id) => {
-  const updated = {
-    name: document.getElementById("d-name").value,
-    type: document.getElementById("d-type").value,
-    date: document.getElementById("d-date").value,
-    price: document.getElementById("d-price").value,
-    pregnant: document.getElementById("d-pregnant").value,
-    pregnancyStart: document.getElementById("d-pregDate").value,
-    food: document.getElementById("d-food").value,
-    vaccine: document.getElementById("d-vaccine").value,
-    sellPrice: document.getElementById("d-sell").value,
-    profit: document.getElementById("d-profit").value
-  };
-
-  await updateDoc(doc(db, "goats", id), updated);
-  alert("তথ্য আপডেট হয়েছে!");
-};
-
-// Summary Dashboard
-const updateSummary = (snapshot) => {
-  let total = 0;
-  let pregnantCount = 0;
-  let alertCount = 0;
-
-  snapshot.forEach(docSnap => {
-    total++;
-    const g = docSnap.data();
-    if (g.pregnant === "হ্যাঁ") {
-      pregnantCount++;
-      if (g.pregnancyStart) {
-        const days = Math.floor((new Date() - new Date(g.pregnancyStart)) / (1000 * 60 * 60 * 24));
-        if (days >= 145) alertCount++;
-      }
-    }
-  });
-
-  document.getElementById("summary").innerHTML = `
-    মোট ছাগল: ${total} টি<br/>
-    গর্ভবতী ছাগল: ${pregnantCount} টি<br/>
-    ১৪৫+ দিন গর্ভবতী: ${alertCount} টি
-  `;
-};
-
-// Real-time updates
-onSnapshot(collection(db, "goats"), snapshot => {
-  renderGoats(snapshot);
-  updateSummary(snapshot);
-});
-
-// Goat Search
-document.getElementById("searchBtn").addEventListener("click", async () => {
-  const searchId = document.getElementById("searchInput").value.trim();
-  const searchResult = document.getElementById("searchResult");
-
-  if (!searchId) {
-    searchResult.innerHTML = "অনুগ্রহ করে একটি ছাগলের আইডি লিখুন।";
-    return;
-  }
-
-  const snapshot = await getDocs(collection(db, "goats"));
-  let found = false;
-
-  snapshot.forEach(docSnap => {
-    const g = docSnap.data();
-    if (g.id === searchId) {
-      const pregDays = calculatePregnancyDays(g.pregnancyStart);
-      searchResult.innerHTML = `
-        <div class="goat-card">
-          <strong>${g.name}</strong> (${g.id})<br/>
-          প্রকার: ${g.type}<br/>
-          গর্ভাবস্থা: ${g.pregnant} (${pregDays})<br/>
-          <button onclick="viewDetails('${docSnap.id}')">সম্পূর্ণ তথ্য দেখুন</button>
-        </div>
-      `;
-      found = true;
-    }
-  });
-
-  if (!found) {
-    searchResult.innerHTML = "ছাগল পাওয়া যায়নি!";
-  }
+    updateDateTime();
+    generateInvoiceNumber();
 });
