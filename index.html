@@ -3,71 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ইনভয়েস সিস্টেম</title>
+    <title>ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার - ইনভয়েস</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body onload="updateDateTime(); generateInvoiceNumber();">
+<body>
     <div class="header">
-        <h2>ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার</h2>
-        <p>📍 গদখালি বাজার বাস স্ট্যান্ড, রহিম সরদার মার্কেট, ঝিকরগাছা, যশোর।</p>
-        <p>📧 mdemranst0@gmail.com | 📞 01952325903</p>
-        <p>📅 <span id="currentDate"></span> | ⏰ <span id="currentTime"></span></p>
+        <h1>ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার</h1>
+        <p>গদখালি বাজার বাস স্ট্যান্ড, রহিম সরদার মার্কেট, ঝিকরগাছা, যশোর</p>
+        <div>তারিখ: <span id="currentDate"></span> | সময়: <span id="currentTime"></span></div>
     </div>
 
     <div class="container">
-        <h2>ইনভয়েস তৈরি করুন</h2>
+        <!-- কাস্টমারের তথ্য -->
+        <div class="customer-info">
+            <label for="customerName">কাস্টমারের নাম:</label>
+            <input type="text" id="customerName" placeholder="কাস্টমারের নাম লিখুন"><br><br>
 
-        <label for="invoiceNumber">ইনভয়েস নাম্বার:</label>
-        <input type="text" id="invoiceNumber" readonly><br><br>
+            <label for="customerPhone">কাস্টমারের ফোন নাম্বার:</label>
+            <input type="text" id="customerPhone" placeholder="কাস্টমারের ফোন নাম্বার লিখুন"><br><br>
+        </div>
 
-        <label for="customerName">কাস্টমারের নাম:</label>
-        <input type="text" id="customerName" placeholder="কাস্টমারের নাম লিখুন"><br><br>
+        <!-- ইনভয়েস তথ্য -->
+        <div class="invoice-info">
+            <label for="invoiceNumber">ইনভয়েস নম্বর:</label>
+            <input type="text" id="invoiceNumber" readonly><br><br>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>ক্রমিক</th> 
-                    <th>পণ্য নাম</th>
-                    <th>পরিমাণ</th>
-                    <th>একক মূল্য</th>
-                    <th>মোট</th>
-                    <th class="no-print">অপশন</th>
-                </tr>
-            </thead>
-            <tbody id="invoiceBody"></tbody>
-        </table>
+            <table id="invoiceTable">
+                <thead>
+                    <tr>
+                        <th>ক্রমিক</th>
+                        <th>পণ্যের নাম</th>
+                        <th>পরিমাণ</th>
+                        <th>একক মূল্য</th>
+                        <th>মোট মূল্য</th>
+                        <th>অপশন</th>
+                    </tr>
+                </thead>
+                <tbody id="invoiceBody">
+                    <!-- পণ্যের ইনপুট এখানে আসবে -->
+                </tbody>
+            </table>
+            <button onclick="addItem()">নতুন পণ্য যোগ করুন</button>
+        </div>
 
-        <button class="no-print" onclick="addItem()">+ আইটেম যোগ করুন</button>
-
+        <!-- মোট মূল্য এবং পরিশোধ -->
         <div class="total-section">
             <div class="total-info">
-                <p><strong>মোট মূল্য:</strong> <span id="grandTotal">0 টাকা</span></p>
-                <p><strong>জমা টাকা:</strong> <input type="number" id="paidAmount" oninput="calculateDue()" placeholder="জমা টাকা লিখুন"></p>
-                <p><strong>বাকি টাকা:</strong> <span id="dueAmount">0 টাকা</span></p>
-                <p><strong>ফেরত টাকা:</strong> <span id="returnAmount">0 টাকা</span></p>
-                
-                <!-- বাকি টাকা দেওয়ার তারিখ অপশন -->
-                <div id="dueDateContainer" style="display: none; margin-top: 10px;">
-                    <label for="dueDate"><strong>বাকি টাকা দেওয়ার তারিখ:</strong></label>
-                    <input type="date" id="dueDate">
-                </div>
+                <p>মোট মূল্য: <span id="grandTotal">0.00 টাকা</span></p>
+                <p>পেমেন্ট করা: <input type="number" id="paidAmount" oninput="calculateDue()"></p>
+                <p>বাকি টাকা: <span id="dueAmount">0.00 টাকা</span></p>
+                <p>ফেরত টাকা: <span id="returnAmount">0.00 টাকা</span></p>
+            </div>
+            <div id="dueDateContainer" style="display:none;">
+                <label for="dueDate">বাকি টাকা দেওয়ার তারিখ:</label>
+                <input type="date" id="dueDate">
             </div>
         </div>
 
-        <h3 id="paymentStatus" style="color: green; display: none;">✅ পরিশোধিত</h3>
-
+        <!-- সিগনেচার -->
         <div class="signature-section">
             <div class="signature-box">
-                <p>কাস্টমারের স্বাক্ষর:</p>
+                <label>কাস্টমারের সিগনেচার</label>
                 <div class="signature-line"></div>
             </div>
             <div class="signature-box">
-                <p>বিক্রেতার স্বাক্ষর:</p>
+                <label>বিক্রেতার সিগনেচার</label>
                 <div class="signature-line"></div>
             </div>
         </div>
 
-        <button class="no-print" onclick="printInvoice()">🖨️ প্রিন্ট করুন</button>
+        <button onclick="printInvoice()">প্রিন্ট</button>
     </div>
 
     <script src="script.js"></script>
