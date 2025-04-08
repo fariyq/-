@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () { 
     let invoiceBody = document.getElementById("invoiceBody");
     let grandTotalElement = document.getElementById("grandTotal");
     let paidAmountElement = document.getElementById("paidAmount");
@@ -46,54 +46,4 @@ document.addEventListener("DOMContentLoaded", function () {
             row.querySelector(".serialNumber").innerText = index + 1;
         });
 
-        grandTotalElement.innerText = grandTotal.toFixed(2) + " টাকা";
-        calculateDue();
-    }
-
-    window.calculateTotal = calculateTotal;
-
-    window.calculateDue = function () {
-        let grandTotal = parseFloat(grandTotalElement.innerText.replace(" টাকা", "")) || 0;
-        let paidAmount = parseFloat(paidAmountElement.value) || 0;
-        let dueAmount = grandTotal - paidAmount;
-        let returnAmount = dueAmount < 0 ? Math.abs(dueAmount) : 0;
-        dueAmount = dueAmount > 0 ? dueAmount : 0;
-
-        dueAmountElement.innerText = dueAmount.toFixed(2) + " টাকা";
-        returnAmountElement.innerText = returnAmount.toFixed(2) + " টাকা";
-        paymentStatusElement.style.display = (dueAmount === 0 && paidAmount > 0) ? "block" : "none";
-
-        if (dueAmount > 0) {
-            dueDateContainer.style.display = "block";
-        } else {
-            dueDateContainer.style.display = "none";
-            document.getElementById("dueDate").value = "";
-        }
-    };
-
-    window.addItem = function () {
-        let row = document.createElement("tr");
-        row.innerHTML = `<td class="serialNumber"></td>
-                         <td><input type="text" class="productName"></td>
-                         <td><input type="number" class="quantity" oninput="calculateTotal()"></td>
-                         <td><input type="number" class="unitPrice" oninput="calculateTotal()"></td>
-                         <td class="totalPrice">0.00 টাকা</td>
-                         <td class="no-print"><button class="removeBtn">❌</button></td>`;
-
-        row.querySelector(".removeBtn").addEventListener("click", function () {
-            row.remove();
-            calculateTotal();
-        });
-
-        invoiceBody.appendChild(row);
-        calculateTotal();
-    };
-
-    window.printInvoice = function () {
-        alert("প্রিন্ট করা হচ্ছে...");
-        window.print();
-    };
-
-    updateDateTime();
-    generateInvoiceNumber();
-});
+        grandTotalElement.innerText = grandTotal.toFixed(2) + "
