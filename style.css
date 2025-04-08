@@ -26,21 +26,6 @@ body {
     margin-right: auto;
 }
 
-.invoice-info {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
-
-.invoice-info label {
-    font-weight: bold;
-}
-
-.invoice-info input {
-    padding: 5px;
-    width: 200px;
-}
-
 table {
     width: 100%;
     border-collapse: collapse;
@@ -70,7 +55,7 @@ td input {
     font-size: 14px;
 }
 
-.total-section p {
+.total-info p {
     margin: 5px 0;
     padding: 5px;
     border: 1px solid #ddd;
@@ -110,6 +95,22 @@ button {
 
 button:hover {
     background-color: #0056b3;
+}
+
+.customer-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.customer-name {
+    text-align: left;
+    flex: 1;
+}
+
+.customer-phone {
+    text-align: right;
+    flex: 1;
 }
 
 @media print {
