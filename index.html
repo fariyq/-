@@ -24,6 +24,7 @@
         // Initialize Firebase
         const app = firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
+        const invoicesRef = database.ref("invoices");
     </script>
 </head>
 <body onload="updateDateTime(); generateInvoiceNumber();">
@@ -90,13 +91,12 @@
             </div>
         </div>
 
-        <button class="no-print" onclick="printInvoice()">🖨️ প্রিন্ট করুন</button>
+        <button class="no-print" onclick="saveInvoice()">💾 সংরক্ষণ করুন</button>
 
         <!-- ইনভয়েস সার্চ করার জন্য -->
-        <label for="searchInvoiceNumber">ইনভয়েস নাম্বার দিয়ে খুঁজুন:</label>
-        <input type="text" id="searchInvoiceNumber" placeholder="ইনভয়েস নাম্বার লিখুন">
+        <label for="searchPhoneNumber">মোবাইল নাম্বার দিয়ে খুঁজুন:</label>
+        <input type="text" id="searchPhoneNumber" placeholder="কাস্টমারের ফোন নাম্বার লিখুন">
         <button onclick="searchInvoice()">খুঁজুন</button>
-
     </div>
 
     <script src="script.js"></script>
