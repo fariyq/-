@@ -79,14 +79,3 @@ document.addEventListener("DOMContentLoaded", function () {
                          <td><input type="number" class="unitPrice" oninput="calculateTotal()"></td>
                          <td class="totalPrice">0.00 টাকা</td>
                          <td class="no-print"><button class="removeBtn">❌</button></td>`;
-
-        row.querySelector(".removeBtn").addEventListener("click", function () {
-            row.remove();
-            calculateTotal();
-        });
-
-        invoiceBody.appendChild(row);
-        calculateTotal();
-    };
-
-    window
