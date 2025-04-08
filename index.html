@@ -24,43 +24,6 @@
         // Initialize Firebase
         const app = firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
-
-        function saveInvoiceToFirebase() {
-            const invoiceNumber = document.getElementById("invoiceNumber").value;
-            const customerName = document.getElementById("customerName").value;
-            const items = [];
-            const rows = document.getElementById("invoiceBody").children;
-            for (let row of rows) {
-                const productName = row.querySelector(".productName").value;
-                const quantity = row.querySelector(".quantity").value;
-                const price = row.querySelector(".price").value;
-                const total = row.querySelector(".total").innerText;
-                items.push({ productName, quantity, price, total });
-            }
-
-            const totalAmount = document.getElementById("grandTotal").innerText.replace(" টাকা", "");
-            const paidAmount = document.getElementById("paidAmount").value;
-            const dueAmount = document.getElementById("dueAmount").innerText.replace(" টাকা", "");
-            const returnAmount = document.getElementById("returnAmount").innerText.replace(" টাকা", "");
-            const dueDate = document.getElementById("dueDate").value;
-
-            // Save data to Firebase Realtime Database
-            const invoiceRef = database.ref("invoices/" + invoiceNumber);
-            invoiceRef.set({
-                customerName,
-                items,
-                totalAmount,
-                paidAmount,
-                dueAmount,
-                returnAmount,
-                dueDate,
-                date: new Date().toISOString()
-            }).then(() => {
-                alert("ইনভয়েস সেভ হয়েছে!");
-            }).catch(error => {
-                console.error("Error saving invoice: ", error);
-            });
-        }
     </script>
 </head>
 <body onload="updateDateTime(); generateInvoiceNumber();">
@@ -79,6 +42,9 @@
 
         <label for="customerName">কাস্টমারের নাম:</label>
         <input type="text" id="customerName" placeholder="কাস্টমারের নাম লিখুন"><br><br>
+
+        <label for="customerPhone">কাস্টমারের ফোন নাম্বার:</label>
+        <input type="text" id="customerPhone" placeholder="কাস্টমারের ফোন নাম্বার লিখুন"><br><br>
 
         <table>
             <thead>
@@ -131,8 +97,6 @@
         <input type="text" id="searchInvoiceNumber" placeholder="ইনভয়েস নাম্বার লিখুন">
         <button onclick="searchInvoice()">খুঁজুন</button>
 
-        <!-- সেভ করার জন্য বাটন -->
-        <button class="no-print" onclick="saveInvoiceToFirebase()">💾 সেভ করুন</button>
     </div>
 
     <script src="script.js"></script>
