@@ -63,12 +63,11 @@ document.addEventListener("DOMContentLoaded", function () {
         returnAmountElement.innerText = returnAmount.toFixed(2) + " টাকা";
         paymentStatusElement.style.display = (dueAmount === 0 && paidAmount > 0) ? "block" : "none";
 
-        // বাকি টাকা থাকলে বাকি টাকা দেওয়ার তারিখের অপশন দেখানো হবে, না থাকলে লুকানো হবে
         if (dueAmount > 0) {
             dueDateContainer.style.display = "block";
         } else {
-            dueDateContainer.style.display = "none";  // সম্পূর্ণ টাকা পরিশোধিত হলে সম্পূর্ণভাবে লুকিয়ে যাবে
-            document.getElementById("dueDate").value = ""; // তারিখের ইনপুট ফাঁকা হয়ে যাবে
+            dueDateContainer.style.display = "none";  
+            document.getElementById("dueDate").value = ""; 
         }
     };
 
@@ -90,11 +89,4 @@ document.addEventListener("DOMContentLoaded", function () {
         calculateTotal();
     };
 
-    window.printInvoice = function () {
-        alert("প্রিন্ট করা হচ্ছে...");
-        window.print();
-    };
-
-    updateDateTime();
-    generateInvoiceNumber();
-});
+    window
