@@ -1,13 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () { 
-    let invoiceBody = document.getElementById("invoiceBody");
-    let grandTotalElement = document.getElementById("grandTotal");
-    let paidAmountElement = document.getElementById("paidAmount");
-    let dueAmountElement = document.getElementById("dueAmount");
-    let returnAmountElement = document.getElementById("returnAmount");
-    let paymentStatusElement = document.getElementById("paymentStatus");
-    let invoiceNumberElement = document.getElementById("invoiceNumber");
-    let dueDateContainer = document.getElementById("dueDateContainer");
-
+    // তারিখ ও সময় আপডেট করা
     function updateDateTime() {
         const now = new Date();
         const date = now.toLocaleDateString('bn-BD');
@@ -18,32 +10,36 @@ document.addEventListener("DOMContentLoaded", function () {
         setTimeout(updateDateTime, 1000);
     }
 
-    window.updateDateTime = updateDateTime;
-
+    updateDateTime();
+    
+    // ইনভয়েস নম্বর তৈরি
     function generateInvoiceNumber() {
         let randomNumber = Math.floor(100000 + Math.random() * 900000);
-        invoiceNumberElement.value = "INV-" + randomNumber;
+        document.getElementById("invoiceNumber").value = "INV-" + randomNumber;
     }
 
-    window.generateInvoiceNumber = generateInvoiceNumber;
+    // আইটেম যোগ করার ফাংশন
+    function addItem() {
+        let tableBody = document.getElementById("invoiceBody");
+        let row = document.createElement("tr");
 
+        row.innerHTML = `
+            <td class="serialNumber">1</td>
+            <td><input type="text" class="itemName" placeholder="পণ্য নাম"></td>
+            <td><input type="number" class="quantity" placeholder="পরিমাণ" oninput="calculateTotal()"></td>
+            <td><input type="number" class="unitPrice" placeholder="একক মূল্য" oninput="calculateTotal()"></td>
+            <td class="totalPrice">0.00 টাকা</td>
+            <td><button onclick="deleteItem(this)">❌</button></td>
+        `;
+        tableBody.appendChild(row);
+    }
+
+    // আইটেম মুছে ফেলার ফাংশন
+    function deleteItem(button) {
+        button.closest("tr").remove();
+        calculateTotal();
+    }
+
+    // মোট হিসাব করার ফাংশন
     function calculateTotal() {
-        let rows = document.querySelectorAll("#invoiceBody tr");
-        let grandTotal = 0;
-
-        rows.forEach((row, index) => {
-            let quantityInput = row.querySelector(".quantity");
-            let unitPriceInput = row.querySelector(".unitPrice");
-            let totalPriceElement = row.querySelector(".totalPrice");
-
-            let quantity = parseFloat(quantityInput.value) || 0;
-            let unitPrice = parseFloat(unitPriceInput.value) || 0;
-            let totalPrice = quantity * unitPrice;
-
-            totalPriceElement.innerText = totalPrice.toFixed(2) + " টাকা";
-            grandTotal += totalPrice;
-
-            row.querySelector(".serialNumber").innerText = index + 1;
-        });
-
-        grandTotalElement.innerText = grandTotal.toFixed(2) + "
+        let rows = document.querySelector
