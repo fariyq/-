@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let paymentStatusElement = document.getElementById("paymentStatus");
     let invoiceNumberElement = document.getElementById("invoiceNumber");
     let dueDateContainer = document.getElementById("dueDateContainer");
+    let customerPhoneElement = document.getElementById("customerPhone");
 
     function updateDateTime() {
         const now = new Date();
@@ -79,3 +80,31 @@ document.addEventListener("DOMContentLoaded", function () {
                          <td><input type="number" class="unitPrice" oninput="calculateTotal()"></td>
                          <td class="totalPrice">0.00 টাকা</td>
                          <td class="no-print"><button class="removeBtn">❌</button></td>`;
+
+        row.querySelector(".removeBtn").addEventListener("click", function () {
+            row.remove();
+            calculateTotal();
+        });
+
+        invoiceBody.appendChild(row);
+        calculateTotal();
+    };
+
+    window.printInvoice = function () {
+        window.print();
+    };
+
+    window.searchInvoice = function () {
+        let invoiceNumber = document.getElementById("searchInvoiceNumber").value;
+        // Firebase code for searching by invoice number
+        const invoiceRef = database.ref('invoices/' + invoiceNumber);
+        invoiceRef.once('value').then(function(snapshot) {
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                alert("Invoice Found! Customer: " + data.customerName);
+            } else {
+                alert("Invoice not found!");
+            }
+        });
+    };
+});
