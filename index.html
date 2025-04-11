@@ -5,27 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ইনভয়েস সিস্টেম</title>
     <link rel="stylesheet" href="style.css">
-
-    <!-- Firebase SDK Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-database.js"></script>
-    <script>
-        // Firebase config (আপনার Firebase কনফিগ)
-        const firebaseConfig = {
-            apiKey: "AIzaSyAFx9Szt_sbhhtWEqHgIU5jUz3qxD0jOMo",
-            authDomain: "bishwasher-khamar.firebaseapp.com",
-            projectId: "bishwasher-khamar",
-            storageBucket: "bishwasher-khamar.firebasestorage.app",
-            messagingSenderId: "466255017082",
-            appId: "1:466255017082:web:902506f7358dfd5a82b7c3",
-            measurementId: "G-457DQ0ZHHG"
-        };
-
-        // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-        const invoicesRef = database.ref("invoices");
-    </script>
 </head>
 <body onload="updateDateTime(); generateInvoiceNumber();">
     <div class="header">
@@ -43,9 +22,6 @@
 
         <label for="customerName">কাস্টমারের নাম:</label>
         <input type="text" id="customerName" placeholder="কাস্টমারের নাম লিখুন"><br><br>
-
-        <label for="customerPhone">কাস্টমারের ফোন নাম্বার:</label>
-        <input type="text" id="customerPhone" placeholder="কাস্টমারের ফোন নাম্বার লিখুন"><br><br>
 
         <table>
             <thead>
@@ -90,14 +66,8 @@
                 <div class="signature-line"></div>
             </div>
         </div>
-     <button class="no-print" onclick="printInvoice()">🖨️ প্রিন্ট করুন</button>
-    </div>
-        <button class="no-print" onclick="saveInvoice()">💾 সংরক্ষণ করুন</button>
 
-        <!-- ইনভয়েস সার্চ করার জন্য -->
-        <label for="searchPhoneNumber">মোবাইল নাম্বার দিয়ে খুঁজুন:</label>
-        <input type="text" id="searchPhoneNumber" placeholder="কাস্টমারের ফোন নাম্বার লিখুন">
-        <button onclick="searchInvoice()">খুঁজুন</button>
+        <button class="no-print" onclick="printInvoice()">🖨️ প্রিন্ট করুন</button>
     </div>
 
     <script src="script.js"></script>
