@@ -20,49 +20,53 @@
 
   <main>
 
+    <!-- Dashboard -->
     <section id="dashboard">
-  <h2>ড্যাশবোর্ড</h2>
+      <h2>ড্যাশবোর্ড</h2>
+      <p>মোট বিক্রয়: ৳ <span id="totalSales">0</span></p>
+      <p>মোট লাভ: ৳ <span id="totalProfit">0</span></p>
+      <p>মোট বিক্রিত পণ্য: <span id="totalQty">0</span> পিস</p>
+    </section>
 
-  <p>মোট বিক্রয়: ৳ <span id="totalSales">0</span></p>
-  <p>মোট লাভ: ৳ <span id="totalProfit">0</span></p>
-  <p>মোট বিক্রিত পণ্য: <span id="totalQty">0</span> পিস</p>
-</section>
+    <!-- Products -->
+    <section id="products" style="display:none;">
+      <h2>পণ্য ব্যবস্থাপনা</h2>
 
- <section id="products" style="display:none;">
-  <h2>পণ্য ব্যবস্থাপনা</h2>
+      <h3>নতুন পণ্য যোগ করুন</h3>
+      <input type="text" id="productName" placeholder="পণ্যের নাম">
+      <input type="number" id="buyPrice" placeholder="ক্রয় মূল্য">
+      <input type="number" id="sellPrice" placeholder="বিক্রয় মূল্য">
+      <input type="number" id="stockQty" placeholder="স্টক পরিমাণ">
+      <button onclick="addProduct()">পণ্য যোগ করুন</button>
 
-  <h3>নতুন পণ্য যোগ করুন</h3>
-  <input type="text" id="productName" placeholder="পণ্যের নাম">
-  <input type="number" id="buyPrice" placeholder="ক্রয় মূল্য">
-  <input type="number" id="sellPrice" placeholder="বিক্রয় মূল্য">
-  <input type="number" id="stockQty" placeholder="স্টক পরিমাণ">
-  <button onclick="addProduct()">পণ্য যোগ করুন</button>
+      <h3>পণ্যের তালিকা</h3>
+      <table border="1" width="100%">
+        <thead>
+          <tr>
+            <th>নাম</th>
+            <th>ক্রয় মূল্য</th>
+            <th>বিক্রয় মূল্য</th>
+            <th>স্টক</th>
+            <th>অ্যাকশন</th>
+          </tr>
+        </thead>
+        <tbody id="productList"></tbody>
+      </table>
+    </section>
 
-  <h3>পণ্যের তালিকা</h3>
-  <table border="1" width="100%">
-    <thead>
-      <tr>
-        <th>নাম</th>
-        <th>ক্রয় মূল্য</th>
-        <th>বিক্রয় মূল্য</th>
-        <th>স্টক</th>
-        <th>অ্যাকশন</th>
-      </tr>
-    </thead>
-    <tbody id="productList"></tbody>
-  </table>
-</section>
-    <<section id="sales" style="display:none;">
-  <h2>বিক্রয় ব্যবস্থাপনা</h2>
+    <!-- Sales -->
+    <section id="sales" style="display:none;">
+      <h2>বিক্রয় ব্যবস্থাপনা</h2>
 
-  <select id="saleProduct"></select>
-  <input type="number" id="saleQty" placeholder="পরিমাণ">
-  <button onclick="makeSale()">বিক্রয় করুন</button>
+      <select id="saleProduct"></select>
+      <input type="number" id="saleQty" placeholder="পরিমাণ">
+      <button onclick="makeSale()">বিক্রয় করুন</button>
 
-  <h3>বিক্রয়ের হিস্টরি</h3>
-  <ul id="salesHistory"></ul>
-</section>
+      <h3>বিক্রয়ের হিস্টরি</h3>
+      <ul id="salesHistory"></ul>
+    </section>
 
+    <!-- Reports -->
     <section id="reports" style="display:none;">
       <h2>রিপোর্ট</h2>
       <p>এখানে রিপোর্ট দেখানো হবে</p>
@@ -70,6 +74,6 @@
 
   </main>
 
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
