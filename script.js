@@ -1,36 +1,26 @@
 function showSection(sectionId) {
   const sections = document.querySelectorAll("main section");
-  sections.forEach(section => {
-    section.style.display = "none";
-  });
-
+  sections.forEach(section => section.style.display = "none");
   document.getElementById(sectionId).style.display = "block";
-
-  if (sectionId === "sales") {
-    loadProductOptions();
-  }
-
-  if (sectionId === "dashboard") {
-    updateDashboard();
-  }
+  if (sectionId === "sales") loadProductOptions();
+  updateDashboard();
 }
 
 let products = JSON.parse(localStorage.getItem("products")) || [];
 let sales = JSON.parse(localStorage.getItem("sales")) || [];
+let dues = JSON.parse(localStorage.getItem("dues")) || [];
 
-function saveProducts() {
+function saveAll() {
   localStorage.setItem("products", JSON.stringify(products));
-}
-
-function saveSales() {
   localStorage.setItem("sales", JSON.stringify(sales));
+  localStorage.setItem("dues", JSON.stringify(dues));
 }
 
 function addProduct() {
-  const name = document.getElementById("productName").value;
-  const buy = parseFloat(document.getElementById("buyPrice").value);
-  const sell = parseFloat(document.getElementById("sellPrice").value);
-  const stock = parseInt(document.getElementById("stockQty").value);
+  const name = productName.value;
+  const buy = parseFloat(buyPrice.value);
+  const sell = parseFloat(sellPrice.value);
+  const stock = parseInt(stockQty.value);
 
   if (!name || !buy || !sell || !stock) {
     alert("সব তথ্য পূরণ করুন");
@@ -38,134 +28,113 @@ function addProduct() {
   }
 
   products.push({ name, buy, sell, stock });
-
-  saveProducts();
+  saveAll();
   displayProducts();
-  clearForm();
   loadProductOptions();
   updateDashboard();
+
+  productName.value = "";
+  buyPrice.value = "";
+  sellPrice.value = "";
+  stockQty.value = "";
 }
 
 function displayProducts() {
-  const list = document.getElementById("productList");
-  list.innerHTML = "";
-
-  products.forEach((product, index) => {
-    list.innerHTML += `
+  productList.innerHTML = "";
+  products.forEach((p, i) => {
+    productList.innerHTML += `
       <tr>
-        <td>${product.name}</td>
-        <td>${product.buy}</td>
-        <td>${product.sell}</td>
-        <td>${product.stock}</td>
-        <td><button onclick="deleteProduct(${index})">ডিলিট</button></td>
-      </tr>
-    `;
+        <td>${p.name}</td>
+        <td>${p.buy}</td>
+        <td>${p.sell}</td>
+        <td>${p.stock}</td>
+        <td><button onclick="deleteProduct(${i})">ডিলিট</button></td>
+      </tr>`;
   });
 }
 
-function deleteProduct(index) {
-  products.splice(index, 1);
-  saveProducts();
+function deleteProduct(i) {
+  products.splice(i, 1);
+  saveAll();
   displayProducts();
   loadProductOptions();
   updateDashboard();
 }
 
-function clearForm() {
-  document.getElementById("productName").value = "";
-  document.getElementById("buyPrice").value = "";
-  document.getElementById("sellPrice").value = "";
-  document.getElementById("stockQty").value = "";
-}
-
 function loadProductOptions() {
-  const select = document.getElementById("saleProduct");
-  if (!select) return;
-
-  select.innerHTML = "";
-
-  products.forEach((product, index) => {
-    select.innerHTML += `
-      <option value="${index}">
-        ${product.name} - (স্টক: ${product.stock})
-      </option>
-    `;
+  saleProduct.innerHTML = "";
+  products.forEach((p, i) => {
+    saleProduct.innerHTML += `<option value="${i}">
+      ${p.name} (স্টক: ${p.stock})
+    </option>`;
   });
-
-  if (products.length === 0) {
-    select.innerHTML = `<option value="">কোন পণ্য নেই</option>`;
-  }
 }
 
 function makeSale() {
-  const productIndex = document.getElementById("saleProduct").value;
-  const qty = parseInt(document.getElementById("saleQty").value);
-
-  if (!qty || qty <= 0) {
-    alert("সঠিক পরিমাণ দিন");
-    return;
-  }
-
-  if (products[productIndex].stock < qty) {
+  const i = saleProduct.value;
+  const qty = parseInt(saleQty.value);
+  if (!qty || products[i].stock < qty) {
     alert("স্টক পর্যাপ্ত নেই");
     return;
   }
 
-  products[productIndex].stock -= qty;
+  const amount = products[i].sell * qty;
+  const profit = (products[i].sell - products[i].buy) * qty;
 
-  const saleAmount = products[productIndex].sell * qty;
-  const profit =
-    (products[productIndex].sell - products[productIndex].buy) * qty;
+  products[i].stock -= qty;
+  sales.push({ name: products[i].name, qty, amount, profit });
 
-  sales.push({
-    name: products[productIndex].name,
-    qty,
-    profit,
-    amount: saleAmount
-  });
+  if (paymentType.value === "due") {
+    if (!customerName.value) {
+      alert("কাস্টমারের নাম দিন");
+      return;
+    }
+    dues.push({ name: customerName.value, amount });
+  }
 
-  saveProducts();
-  saveSales();
+  saveAll();
   displayProducts();
   displaySales();
   loadProductOptions();
   updateDashboard();
 
-  document.getElementById("saleQty").value = "";
+  saleQty.value = "";
+  customerName.value = "";
 }
 
 function displaySales() {
-  const list = document.getElementById("salesHistory");
-  if (!list) return;
-
-  list.innerHTML = "";
-
-  sales.forEach(sale => {
-    list.innerHTML += `
-      <li>${sale.name} - ${sale.qty} পিস | বিক্রয়: ৳ ${sale.amount} | লাভ: ৳ ${sale.profit}</li>
-    `;
+  salesHistory.innerHTML = "";
+  sales.forEach(s => {
+    salesHistory.innerHTML += `
+      <li>${s.name} - ${s.qty} পিস | বিক্রয়: ৳ ${s.amount} | লাভ: ৳ ${s.profit}</li>`;
   });
 }
 
 function updateDashboard() {
-  let totalSales = 0;
-  let totalProfit = 0;
-  let totalQty = 0;
+  let totalSales = 0, totalProfit = 0, totalQty = 0, totalDue = 0;
 
-  sales.forEach(sale => {
-    totalSales += sale.amount;
-    totalProfit += sale.profit;
-    totalQty += sale.qty;
+  sales.forEach(s => {
+    totalSales += s.amount;
+    totalProfit += s.profit;
+    totalQty += s.qty;
   });
 
-  const salesEl = document.getElementById("totalSales");
-  const profitEl = document.getElementById("totalProfit");
-  const qtyEl = document.getElementById("totalQty");
+  dues.forEach(d => totalDue += d.amount);
 
-  if (salesEl) salesEl.innerText = totalSales;
-  if (profitEl) profitEl.innerText = totalProfit;
-  if (qtyEl) qtyEl.innerText = totalQty;
+  totalSalesEl = document.getElementById("totalSales");
+  totalProfitEl = document.getElementById("totalProfit");
+  totalQtyEl = document.getElementById("totalQty");
+  totalDueEl = document.getElementById("totalDue");
+
+  if (totalSalesEl) totalSalesEl.innerText = totalSales;
+  if (totalProfitEl) totalProfitEl.innerText = totalProfit;
+  if (totalQtyEl) totalQtyEl.innerText = totalQty;
+  if (totalDueEl) totalDueEl.innerText = totalDue;
 }
+
+paymentType?.addEventListener("change", function () {
+  customerName.style.display = this.value === "due" ? "inline-block" : "none";
+});
 
 displayProducts();
 displaySales();
