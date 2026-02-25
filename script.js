@@ -9,6 +9,10 @@ function showSection(sectionId) {
   if (sectionId === "sales") {
     loadProductOptions();
   }
+
+  if (sectionId === "dashboard") {
+    updateDashboard();
+  }
 }
 
 let products = JSON.parse(localStorage.getItem("products")) || [];
@@ -33,17 +37,13 @@ function addProduct() {
     return;
   }
 
-  products.push({
-    name,
-    buy,
-    sell,
-    stock
-  });
+  products.push({ name, buy, sell, stock });
 
   saveProducts();
   displayProducts();
   clearForm();
-  loadProductOptions(); // 👈 এখানে অটো আপডেট হবে
+  loadProductOptions();
+  updateDashboard();
 }
 
 function displayProducts() {
@@ -68,6 +68,7 @@ function deleteProduct(index) {
   saveProducts();
   displayProducts();
   loadProductOptions();
+  updateDashboard();
 }
 
 function clearForm() {
@@ -112,13 +113,15 @@ function makeSale() {
 
   products[productIndex].stock -= qty;
 
+  const saleAmount = products[productIndex].sell * qty;
   const profit =
     (products[productIndex].sell - products[productIndex].buy) * qty;
 
   sales.push({
     name: products[productIndex].name,
     qty,
-    profit
+    profit,
+    amount: saleAmount
   });
 
   saveProducts();
@@ -126,6 +129,7 @@ function makeSale() {
   displayProducts();
   displaySales();
   loadProductOptions();
+  updateDashboard();
 
   document.getElementById("saleQty").value = "";
 }
@@ -138,11 +142,32 @@ function displaySales() {
 
   sales.forEach(sale => {
     list.innerHTML += `
-      <li>${sale.name} - ${sale.qty} পিস | লাভ: ৳ ${sale.profit}</li>
+      <li>${sale.name} - ${sale.qty} পিস | বিক্রয়: ৳ ${sale.amount} | লাভ: ৳ ${sale.profit}</li>
     `;
   });
+}
+
+function updateDashboard() {
+  let totalSales = 0;
+  let totalProfit = 0;
+  let totalQty = 0;
+
+  sales.forEach(sale => {
+    totalSales += sale.amount;
+    totalProfit += sale.profit;
+    totalQty += sale.qty;
+  });
+
+  const salesEl = document.getElementById("totalSales");
+  const profitEl = document.getElementById("totalProfit");
+  const qtyEl = document.getElementById("totalQty");
+
+  if (salesEl) salesEl.innerText = totalSales;
+  if (profitEl) profitEl.innerText = totalProfit;
+  if (qtyEl) qtyEl.innerText = totalQty;
 }
 
 displayProducts();
 displaySales();
 loadProductOptions();
+updateDashboard();
