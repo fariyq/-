@@ -27,11 +27,30 @@
       <p>মোট বাকি: ৳ 0</p>
     </section>
 
-    <section id="products" style="display:none;">
-      <h2>পণ্য ব্যবস্থাপনা</h2>
-      <p>এখানে পণ্য যোগ করা হবে</p>
-    </section>
+ <section id="products" style="display:none;">
+  <h2>পণ্য ব্যবস্থাপনা</h2>
 
+  <h3>নতুন পণ্য যোগ করুন</h3>
+  <input type="text" id="productName" placeholder="পণ্যের নাম">
+  <input type="number" id="buyPrice" placeholder="ক্রয় মূল্য">
+  <input type="number" id="sellPrice" placeholder="বিক্রয় মূল্য">
+  <input type="number" id="stockQty" placeholder="স্টক পরিমাণ">
+  <button onclick="addProduct()">পণ্য যোগ করুন</button>
+
+  <h3>পণ্যের তালিকা</h3>
+  <table border="1" width="100%">
+    <thead>
+      <tr>
+        <th>নাম</th>
+        <th>ক্রয় মূল্য</th>
+        <th>বিক্রয় মূল্য</th>
+        <th>স্টক</th>
+        <th>অ্যাকশন</th>
+      </tr>
+    </thead>
+    <tbody id="productList"></tbody>
+  </table>
+</section>
     <section id="sales" style="display:none;">
       <h2>বিক্রয় ব্যবস্থাপনা</h2>
       <p>এখানে বিক্রয় এন্ট্রি হবে</p>
