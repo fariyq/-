@@ -86,10 +86,14 @@ function loadProductOptions() {
   products.forEach((product, index) => {
     select.innerHTML += `
       <option value="${index}">
-        ${product.name} (স্টক: ${product.stock})
+        ${product.name} - (স্টক: ${product.stock})
       </option>
     `;
   });
+
+  if (products.length === 0) {
+    select.innerHTML = `<option value="">কোন পণ্য নেই</option>`;
+  }
 }
 
 function makeSale() {
