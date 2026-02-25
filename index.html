@@ -51,10 +51,16 @@
     <tbody id="productList"></tbody>
   </table>
 </section>
-    <section id="sales" style="display:none;">
-      <h2>বিক্রয় ব্যবস্থাপনা</h2>
-      <p>এখানে বিক্রয় এন্ট্রি হবে</p>
-    </section>
+    <<section id="sales" style="display:none;">
+  <h2>বিক্রয় ব্যবস্থাপনা</h2>
+
+  <select id="saleProduct"></select>
+  <input type="number" id="saleQty" placeholder="পরিমাণ">
+  <button onclick="makeSale()">বিক্রয় করুন</button>
+
+  <h3>বিক্রয়ের হিস্টরি</h3>
+  <ul id="salesHistory"></ul>
+</section>
 
     <section id="reports" style="display:none;">
       <h2>রিপোর্ট</h2>
