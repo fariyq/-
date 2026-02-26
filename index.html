@@ -15,12 +15,12 @@
   <button onclick="showSection('dashboard')">ড্যাশবোর্ড</button>
   <button onclick="showSection('products')">পণ্য</button>
   <button onclick="showSection('sales')">বিক্রয়</button>
-  <button onclick="showSection('duesSection')">বাকি তালিকা</button>
   <button onclick="showSection('reports')">রিপোর্ট</button>
 </nav>
 
 <main>
 
+<!-- Dashboard -->
 <section id="dashboard">
   <h2>ড্যাশবোর্ড</h2>
   <p>মোট বিক্রয়: ৳ <span id="totalSales">0</span></p>
@@ -29,6 +29,7 @@
   <p>মোট বাকি: ৳ <span id="totalDue">0</span></p>
 </section>
 
+<!-- Products -->
 <section id="products" style="display:none;">
   <h2>পণ্য ব্যবস্থাপনা</h2>
 
@@ -53,6 +54,7 @@
   </table>
 </section>
 
+<!-- Sales -->
 <section id="sales" style="display:none;">
   <h2>বিক্রয় ব্যবস্থাপনা</h2>
 
@@ -72,11 +74,7 @@
   <ul id="salesHistory"></ul>
 </section>
 
-<section id="duesSection" style="display:none;">
-  <h2>বাকি তালিকা</h2>
-  <ul id="dueList"></ul>
-</section>
-
+<!-- Reports -->
 <section id="reports" style="display:none;">
   <h2>রিপোর্ট</h2>
   <p>এখানে রিপোর্ট দেখানো হবে</p>
