@@ -148,8 +148,17 @@ alert("আগে বিক্রয় করুন");
 return;
 }
 
-let invoiceHTML = `
-<div style="padding:20px;font-family:Arial;">
+let invoiceWindow = window.open('', '', 'width=600,height=600');
+
+invoiceWindow.document.write(`
+<html>
+<head>
+<title>Invoice</title>
+<style>
+body{font-family:Arial;padding:20px;}
+</style>
+</head>
+<body>
 <h2>ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার</h2>
 <p>গদখালি বাজার বাস স্ট্যান্ড, ঝিকরগাছা, যশোর</p>
 <hr>
@@ -160,16 +169,18 @@ let invoiceHTML = `
 <h3>মোট: ৳ ${lastInvoice.total}</h3>
 <hr>
 <p>ধন্যবাদ আপনার ব্যবসার জন্য</p>
-</div>
-`;
+</body>
+</html>
+`);
 
-let originalContent=document.body.innerHTML;
-document.body.innerHTML=invoiceHTML;
-window.print();
-document.body.innerHTML=originalContent;
-location.reload();
+invoiceWindow.document.close();
+
+setTimeout(function(){
+invoiceWindow.print();
+invoiceWindow.close();
+}, 500);
+
 }
-
 document.getElementById("paymentType").addEventListener("change",function(){
 document.getElementById("customerName").style.display=
 this.value==="due"?"inline-block":"none";
