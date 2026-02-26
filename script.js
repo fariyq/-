@@ -101,7 +101,69 @@ function makeSale() {
   saleQty.value = "";
   customerName.value = "";
 }
+let lastInvoice = {};
 
+function makeSale() {
+  const i = saleProduct.value;
+  const qty = parseInt(saleQty.value);
+
+  if (!qty || products[i].stock < qty) {
+    alert("স্টক পর্যাপ্ত নেই");
+    return;
+  }
+
+  const amount = products[i].sell * qty;
+  const profit = (products[i].sell - products[i].buy) * qty;
+
+  products[i].stock -= qty;
+  sales.push({ name: products[i].name, qty, amount, profit });
+
+  lastInvoice = {
+    customer: customerName.value || "নগদ ক্রেতা",
+    product: products[i].name,
+    qty: qty,
+    price: products[i].sell,
+    total: amount
+  };
+
+  if (paymentType.value === "due") {
+    if (!customerName.value) {
+      alert("কাস্টমারের নাম দিন");
+      return;
+    }
+    dues.push({ name: customerName.value, amount });
+  }
+
+  saveAll();
+  displayProducts();
+  displaySales();
+  loadProductOptions();
+  updateDashboard();
+
+  saleQty.value = "";
+  customerName.value = "";
+}
+
+function printInvoice() {
+  if (!lastInvoice.product) {
+    alert("আগে একটি বিক্রয় করুন");
+    return;
+  }
+
+  invCustomer.innerText = lastInvoice.customer;
+  invProduct.innerText = lastInvoice.product;
+  invQty.innerText = lastInvoice.qty;
+  invPrice.innerText = lastInvoice.price;
+  invTotal.innerText = lastInvoice.total;
+
+  const printContent = invoiceArea.innerHTML;
+  const originalContent = document.body.innerHTML;
+
+  document.body.innerHTML = printContent;
+  window.print();
+  document.body.innerHTML = originalContent;
+  location.reload();
+}
 function displaySales() {
   salesHistory.innerHTML = "";
   sales.forEach(s => {
