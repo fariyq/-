@@ -5,10 +5,10 @@
 <title>ইমরান ইলেকট্রনিক্স POS</title>
 
 <style>
-body { font-family: Arial; margin:0; background:#f5f7fa;}
+body { font-family: Arial; margin:0; padding:0; background:#f5f7fa;}
 header { background:#0d6efd; color:white; padding:15px; text-align:center;}
 nav { background:#222; padding:10px; text-align:center;}
-nav button { margin:5px; padding:8px 15px; cursor:pointer; color:white; background:#198754; border:none;}
+nav button { margin:5px; padding:8px 15px; cursor:pointer; color:white; background:#198754;}
 section { padding:20px;}
 input, select { padding:7px; margin:5px;}
 button { padding:7px; margin:5px; cursor:pointer;}
@@ -51,13 +51,7 @@ th, td { padding:8px; text-align:center;}
 <h3>পণ্যের তালিকা</h3>
 <table>
 <thead>
-<tr>
-<th>নাম</th>
-<th>ক্রয়</th>
-<th>বিক্রয়</th>
-<th>স্টক</th>
-<th>ডিলিট</th>
-</tr>
+<tr><th>নাম</th><th>ক্রয়</th><th>বিক্রয়</th><th>স্টক</th><th>ডিলিট</th></tr>
 </thead>
 <tbody id="productList"></tbody>
 </table>
@@ -81,6 +75,7 @@ th, td { padding:8px; text-align:center;}
 
 <h3>বিক্রয়ের হিস্টরি</h3>
 <ul id="salesHistory"></ul>
+
 </section>
 
 <section id="dues" style="display:none;">
@@ -88,4 +83,8 @@ th, td { padding:8px; text-align:center;}
 <ul id="dueList"></ul>
 </section>
 
+<!-- CACHE FIX VERSION -->
 <script src="script.js?v=10"></script>
+
+</body>
+</html>
