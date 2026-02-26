@@ -1,180 +1,168 @@
+document.addEventListener("DOMContentLoaded", function(){
+
 let products = JSON.parse(localStorage.getItem("products")) || [];
 let sales = JSON.parse(localStorage.getItem("sales")) || [];
 let dues = JSON.parse(localStorage.getItem("dues")) || [];
 let lastInvoice = {};
 
 function saveData(){
-  localStorage.setItem("products", JSON.stringify(products));
-  localStorage.setItem("sales", JSON.stringify(sales));
-  localStorage.setItem("dues", JSON.stringify(dues));
+localStorage.setItem("products", JSON.stringify(products));
+localStorage.setItem("sales", JSON.stringify(sales));
+localStorage.setItem("dues", JSON.stringify(dues));
 }
 
-function showSection(id){
-  document.querySelectorAll("section").forEach(sec=>sec.style.display="none");
-  document.getElementById(id).style.display="block";
-
-  updateDashboard();
-  loadProductOptions();
-  displayDues();
+window.showSection = function(id){
+document.querySelectorAll("section").forEach(sec=>sec.style.display="none");
+document.getElementById(id).style.display="block";
+updateDashboard();
+displayDues();
 }
 
-function addProduct(){
-  let name = productName.value;
-  let buy = parseFloat(buyPrice.value);
-  let sell = parseFloat(sellPrice.value);
-  let stock = parseInt(stockQty.value);
+window.addProduct = function(){
+let name=document.getElementById("productName").value;
+let buy=parseFloat(document.getElementById("buyPrice").value);
+let sell=parseFloat(document.getElementById("sellPrice").value);
+let stock=parseInt(document.getElementById("stockQty").value);
 
-  if(!name || !buy || !sell || !stock){
-    alert("সব তথ্য পূরণ করুন");
-    return;
-  }
+if(!name||!buy||!sell||!stock){ alert("সব পূরণ করুন"); return;}
 
-  products.push({name, buy, sell, stock});
-  saveData();
-  displayProducts();
-  loadProductOptions();
+products.push({name,buy,sell,stock});
+saveData();
+displayProducts();
+loadProductOptions();
 
-  productName.value="";
-  buyPrice.value="";
-  sellPrice.value="";
-  stockQty.value="";
+document.getElementById("productName").value="";
+document.getElementById("buyPrice").value="";
+document.getElementById("sellPrice").value="";
+document.getElementById("stockQty").value="";
 }
 
 function displayProducts(){
-  productList.innerHTML="";
-  products.forEach((p, i)=>{
-    productList.innerHTML+=`
-      <tr>
-        <td>${p.name}</td>
-        <td>${p.buy}</td>
-        <td>${p.sell}</td>
-        <td>${p.stock}</td>
-        <td><button onclick="deleteProduct(${i})">X</button></td>
-      </tr>`;
-  });
+let list=document.getElementById("productList");
+list.innerHTML="";
+products.forEach((p,i)=>{
+list.innerHTML+=`
+<tr>
+<td>${p.name}</td>
+<td>${p.buy}</td>
+<td>${p.sell}</td>
+<td>${p.stock}</td>
+<td><button onclick="deleteProduct(${i})">X</button></td>
+</tr>`;
+});
 }
 
-function deleteProduct(i){
-  products.splice(i, 1);
-  saveData();
-  displayProducts();
-  loadProductOptions();
+window.deleteProduct=function(i){
+products.splice(i,1);
+saveData();
+displayProducts();
+loadProductOptions();
 }
 
 function loadProductOptions(){
-  saleProduct.innerHTML="";
-  products.forEach((p, i)=>{
-    saleProduct.innerHTML += `<option value="${i}">
-      ${p.name} (স্টক: ${p.stock})
-    </option>`;
-  });
+let select=document.getElementById("saleProduct");
+select.innerHTML="";
+products.forEach((p,i)=>{
+select.innerHTML+=`<option value="${i}">${p.name} (স্টক:${p.stock})</option>`;
+});
 }
 
-function makeSale(){
-  let i = saleProduct.value;
-  let qty = parseInt(saleQty.value);
-  if(!qty || products[i].stock < qty){ alert("স্টক পর্যাপ্ত নেই"); return;}
+window.makeSale=function(){
+let i=document.getElementById("saleProduct").value;
+let qty=parseInt(document.getElementById("saleQty").value);
 
-  let amount = products[i].sell * qty;
-  let profit = (products[i].sell - products[i].buy) * qty;
+if(!qty||products[i].stock<qty){ alert("স্টক নেই"); return;}
 
-  products[i].stock -= qty;
-  sales.push({name:products[i].name, qty, amount, profit});
+let amount=products[i].sell*qty;
+let profit=(products[i].sell-products[i].buy)*qty;
 
-  lastInvoice = {
-    customer: customerName.value || "নগদ ক্রেতা",
-    product: products[i].name,
-    qty,
-    price: products[i].sell,
-    total: amount
-  };
+products[i].stock-=qty;
+sales.push({name:products[i].name,qty,amount,profit});
 
-  document.addEventListener("DOMContentLoaded", function() {
+if(document.getElementById("paymentType").value==="due"){
+let cname=document.getElementById("customerName").value;
+if(!cname){ alert("নাম দিন"); return;}
+dues.push({name:cname,amount});
+}
 
-  const paymentTypeEl = document.getElementById("paymentType");
-  const customerNameEl = document.getElementById("customerName");
+lastInvoice={
+customer:document.getElementById("customerName").value||"নগদ ক্রেতা",
+product:products[i].name,
+qty,
+price:products[i].sell,
+total:amount
+};
 
-  if(paymentTypeEl){
-    paymentTypeEl.addEventListener("change", function(){
-      customerNameEl.style.display = 
-        this.value === "due" ? "inline-block" : "none";
-    });
-  }
+saveData();
+displayProducts();
+displaySales();
+updateDashboard();
+loadProductOptions();
 
-});
-
-  saveData();
-  displayProducts();
-  displaySales();
-  updateDashboard();
-  loadProductOptions();
-
-  saleQty.value="";
-  customerName.value="";
+document.getElementById("saleQty").value="";
+document.getElementById("customerName").value="";
 }
 
 function displaySales(){
-  salesHistory.innerHTML="";
-  sales.forEach(s=>{
-    salesHistory.innerHTML += `
-      <li>${s.name} - ${s.qty} পিস | বিক্রয়: ৳ ${s.amount}</li>
-    `;
-  });
+let ul=document.getElementById("salesHistory");
+ul.innerHTML="";
+sales.forEach(s=>{
+ul.innerHTML+=`<li>${s.name} - ${s.qty} পিস | ৳ ${s.amount}</li>`;
+});
 }
 
 function displayDues(){
-  dueList.innerHTML="";
-  dues.forEach((d,i)=>{
-    dueList.innerHTML += `
-      <li>${d.name} - ৳ ${d.amount}
-      <button onclick="payDue(${i})">টাকা নিলাম</button></li>
-    `;
-  });
+let ul=document.getElementById("dueList");
+ul.innerHTML="";
+dues.forEach((d,i)=>{
+ul.innerHTML+=`<li>${d.name} - ৳ ${d.amount}
+<button onclick="payDue(${i})">টাকা নিলাম</button></li>`;
+});
 }
 
-function payDue(i){
-  let paid = parseFloat(prompt("কত টাকা পরিশোধ করলো?"));
-  if(!paid) return;
-
-  if(paid >= dues[i].amount) dues.splice(i,1);
-  else dues[i].amount -= paid;
-
-  saveData();
-  displayDues();
-  updateDashboard();
+window.payDue=function(i){
+let paid=parseFloat(prompt("কত টাকা?"));
+if(!paid)return;
+if(paid>=dues[i].amount) dues.splice(i,1);
+else dues[i].amount-=paid;
+saveData();
+displayDues();
+updateDashboard();
 }
 
 function updateDashboard(){
-  let totalSales=0, totalProfit=0, totalQty=0, totalDue=0;
-  sales.forEach(s => { totalSales += s.amount; totalProfit += s.profit; totalQty += s.qty; });
-  dues.forEach(d => totalDue += d.amount);
+let totalSales=0,totalProfit=0,totalQty=0,totalDue=0;
+sales.forEach(s=>{totalSales+=s.amount; totalProfit+=s.profit; totalQty+=s.qty;});
+dues.forEach(d=>totalDue+=d.amount);
 
-  totalSalesEl.innerText = totalSales;
-  totalProfitEl.innerText = totalProfit;
-  totalQtyEl.innerText = totalQty;
-  totalDueEl.innerText = totalDue;
+document.getElementById("totalSalesEl").innerText=totalSales;
+document.getElementById("totalProfitEl").innerText=totalProfit;
+document.getElementById("totalQtyEl").innerText=totalQty;
+document.getElementById("totalDueEl").innerText=totalDue;
 }
 
-function printInvoice(){
-  if(!lastInvoice.product){ alert("আগে একটি বিক্রয় করুন"); return;}
+window.printInvoice=function(){
+if(!lastInvoice.product){ alert("আগে বিক্রয় করুন"); return;}
 
-  invCustomer.innerText = lastInvoice.customer;
-  invProduct.innerText = lastInvoice.product;
-  invQty.innerText = lastInvoice.qty;
-  invPrice.innerText = lastInvoice.price;
-  invTotal.innerText = lastInvoice.total;
-
-  let printContent = document.getElementById("invoiceArea").innerHTML;
-  let original = document.body.innerHTML;
-
-  document.body.innerHTML = printContent;
-  window.print();
-  document.body.innerHTML = original;
-  location.reload();
+let win=window.open("","Print");
+win.document.write(`
+<h2>ইমরান ইলেকট্রনিক্স</h2>
+<hr>
+<p>কাস্টমার: ${lastInvoice.customer}</p>
+<p>পণ্য: ${lastInvoice.product}</p>
+<p>পরিমাণ: ${lastInvoice.qty}</p>
+<p>একক মূল্য: ৳ ${lastInvoice.price}</p>
+<h3>মোট: ৳ ${lastInvoice.total}</h3>
+<hr>
+<p>ধন্যবাদ</p>
+`);
+win.print();
+win.close();
 }
 
-paymentType.addEventListener("change", function(){
-  customerName.style.display = this.value === "due" ? "inline-block" : "none";
+document.getElementById("paymentType").addEventListener("change",function(){
+document.getElementById("customerName").style.display=
+this.value==="due"?"inline-block":"none";
 });
 
 displayProducts();
@@ -182,3 +170,5 @@ displaySales();
 displayDues();
 updateDashboard();
 loadProductOptions();
+
+});
