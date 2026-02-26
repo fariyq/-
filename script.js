@@ -155,40 +155,114 @@ window.printInvoice=function(){
 if(!lastInvoice.product){ alert("আগে বিক্রয় করুন"); return;}
 
 let printWindow=window.open('','');
+
 printWindow.document.write(`
 <html>
 <head>
 <title>Invoice</title>
+
+<style>
+body{
+font-family: Arial;
+padding:40px;
+}
+.container{
+max-width:700px;
+margin:auto;
+border:1px solid #000;
+padding:20px;
+}
+.header{
+text-align:center;
+}
+.header h2{
+margin:0;
+}
+.info{
+margin-top:15px;
+}
+table{
+width:100%;
+border-collapse: collapse;
+margin-top:15px;
+}
+table, th, td{
+border:1px solid black;
+}
+th, td{
+padding:8px;
+text-align:center;
+}
+.total{
+text-align:right;
+font-size:18px;
+margin-top:15px;
+}
+.sign{
+margin-top:40px;
+display:flex;
+justify-content:space-between;
+}
+.footer{
+text-align:center;
+margin-top:30px;
+}
+</style>
+
 </head>
-<body style="font-family:Arial;padding:20px;">
+
+<body>
+
+<div class="container">
+
+<div class="header">
 <h2>ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার</h2>
 <p>গদখালি বাজার বাস স্ট্যান্ড, ঝিকরগাছা, যশোর</p>
+</div>
+
 <hr>
 
+<div class="info">
 <p><strong>ইনভয়েস নং:</strong> ${lastInvoice.invoiceNo}</p>
 <p><strong>তারিখ:</strong> ${lastInvoice.date}</p>
 <p><strong>সময়:</strong> ${lastInvoice.time}</p>
+<p><strong>কাস্টমার:</strong> ${lastInvoice.customer}</p>
+</div>
 
-<hr>
+<table>
+<tr>
+<th>পণ্য</th>
+<th>পরিমাণ</th>
+<th>একক মূল্য</th>
+<th>মোট</th>
+</tr>
+<tr>
+<td>${lastInvoice.product}</td>
+<td>${lastInvoice.qty}</td>
+<td>৳ ${lastInvoice.price}</td>
+<td>৳ ${lastInvoice.total}</td>
+</tr>
+</table>
 
-<p>কাস্টমার: ${lastInvoice.customer}</p>
-<p>পণ্য: ${lastInvoice.product}</p>
-<p>পরিমাণ: ${lastInvoice.qty}</p>
-<p>একক মূল্য: ৳ ${lastInvoice.price}</p>
+<div class="total">
+<strong>সর্বমোট: ৳ ${lastInvoice.total}</strong>
+</div>
 
-<h3>মোট: ৳ ${lastInvoice.total}</h3>
+<div class="sign">
+<div>বিক্রেতার স্বাক্ষর<br>__________________</div>
+<div>ক্রেতার স্বাক্ষর<br>__________________</div>
+</div>
 
-<hr>
-
-<p>বিক্রেতার স্বাক্ষর: _____________________</p>
-<p>ক্রেতার স্বাক্ষর: _____________________</p>
-
-<br><br>
+<div class="footer">
 <p>ধন্যবাদ আপনার ব্যবসার জন্য</p>
+</div>
+
+</div>
 
 </body>
 </html>
 `);
+
 printWindow.document.close();
 setTimeout(()=>{printWindow.print();},500);
 }
