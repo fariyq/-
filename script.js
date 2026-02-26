@@ -89,10 +89,19 @@ function makeSale(){
     total: amount
   };
 
-  if(paymentType.value === "due"){
-    if(!customerName.value){ alert("কাস্টমারের নাম দিন"); return;}
-    dues.push({name:customerName.value, amount});
+  document.addEventListener("DOMContentLoaded", function() {
+
+  const paymentTypeEl = document.getElementById("paymentType");
+  const customerNameEl = document.getElementById("customerName");
+
+  if(paymentTypeEl){
+    paymentTypeEl.addEventListener("change", function(){
+      customerNameEl.style.display = 
+        this.value === "due" ? "inline-block" : "none";
+    });
   }
+
+});
 
   saveData();
   displayProducts();
