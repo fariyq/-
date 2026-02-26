@@ -4,99 +4,92 @@
 <meta charset="UTF-8">
 <title>ইমরান ইলেকট্রনিক্স POS</title>
 <style>
-body { font-family: Arial; margin:0; padding:0; background:#f4f4f4;}
+body { font-family: Arial; margin:0; padding:0; background:#f5f7fa;}
 header { background:#0d6efd; color:white; padding:15px; text-align:center;}
 nav { background:#222; padding:10px; text-align:center;}
-nav button { margin:5px; padding:8px 15px; cursor:pointer;}
-section { padding:20px; }
+nav button { margin:5px; padding:8px 15px; cursor:pointer; color:white; background:#198754;}
+section { padding:20px;}
+input, select { padding:7px; margin:5px;}
+button { padding:7px; margin:5px; cursor:pointer;}
 table { width:100%; border-collapse: collapse;}
 table, th, td { border:1px solid #ccc;}
 th, td { padding:8px; text-align:center;}
-input, select { padding:6px; margin:5px;}
-button { cursor:pointer; }
 </style>
 </head>
 <body>
 
 <header>
-<h2>ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার</h2>
-<p>গদখালি বাজার বাস স্ট্যান্ড, ঝিকরগাছা, যশোর</p>
+  <h2>ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার</h2>
+  <p>গদখালি বাজার বাস স্ট্যান্ড, ঝিকরগাছা, যশোর</p>
 </header>
 
 <nav>
-<button onclick="showSection('dashboard')">ড্যাশবোর্ড</button>
-<button onclick="showSection('products')">পণ্য</button>
-<button onclick="showSection('sales')">বিক্রয়</button>
-<button onclick="showSection('dues')">বাকি</button>
+  <button onclick="showSection('dashboard')">ড্যাশবোর্ড</button>
+  <button onclick="showSection('products')">পণ্য</button>
+  <button onclick="showSection('sales')">বিক্রয়</button>
+  <button onclick="showSection('dues')">বাকি</button>
 </nav>
 
 <section id="dashboard">
-<h3>ড্যাশবোর্ড</h3>
-<p>মোট বিক্রয়: ৳ <span id="totalSalesEl">0</span></p>
-<p>মোট লাভ: ৳ <span id="totalProfitEl">0</span></p>
-<p>মোট বিক্রিত পণ্য: <span id="totalQtyEl">0</span></p>
-<p>মোট বাকি: ৳ <span id="totalDueEl">0</span></p>
+  <h3>ড্যাশবোর্ড</h3>
+  <p>মোট বিক্রয়: ৳ <span id="totalSalesEl">0</span></p>
+  <p>মোট লাভ: ৳ <span id="totalProfitEl">0</span></p>
+  <p>মোট বিক্রিত পণ্য: <span id="totalQtyEl">0</span></p>
+  <p>মোট বাকি: ৳ <span id="totalDueEl">0</span></p>
 </section>
 
 <section id="products" style="display:none;">
-<h3>পণ্য যোগ করুন</h3>
-<input type="text" id="productName" placeholder="নাম">
-<input type="number" id="buyPrice" placeholder="ক্রয় মূল্য">
-<input type="number" id="sellPrice" placeholder="বিক্রয় মূল্য">
-<input type="number" id="stockQty" placeholder="স্টক">
-<button onclick="addProduct()">যোগ করুন</button>
+  <h3>পণ্য যোগ করুন</h3>
+  <input type="text" id="productName" placeholder="নাম">
+  <input type="number" id="buyPrice" placeholder="ক্রয় মূল্য">
+  <input type="number" id="sellPrice" placeholder="বিক্রয় মূল্য">
+  <input type="number" id="stockQty" placeholder="স্টক">
+  <button onclick="addProduct()">যোগ করুন</button>
 
-<h3>পণ্যের তালিকা</h3>
-<table>
-<thead>
-<tr>
-<th>নাম</th>
-<th>ক্রয়</th>
-<th>বিক্রয়</th>
-<th>স্টক</th>
-<th>ডিলিট</th>
-</tr>
-</thead>
-<tbody id="productList"></tbody>
-</table>
+  <h3>পণ্যের তালিকা</h3>
+  <table>
+    <thead>
+      <tr><th>নাম</th><th>ক্রয়</th><th>বিক্রয়</th><th>স্টক</th><th>ডিলিট</th></tr>
+    </thead>
+    <tbody id="productList"></tbody>
+  </table>
 </section>
 
 <section id="sales" style="display:none;">
-<h3>বিক্রয়</h3>
+  <h3>বিক্রয়</h3>
+  <select id="saleProduct"></select>
+  <input type="number" id="saleQty" placeholder="পরিমাণ">
 
-<select id="saleProduct"></select>
-<input type="number" id="saleQty" placeholder="পরিমাণ">
+  <select id="paymentType">
+    <option value="cash">নগদ</option>
+    <option value="due">বাকি</option>
+  </select>
+  <input type="text" id="customerName" placeholder="কাস্টমারের নাম" style="display:none;">
 
-<select id="paymentType">
-<option value="cash">নগদ</option>
-<option value="due">বাকি</option>
-</select>
+  <button onclick="makeSale()">বিক্রয় করুন</button>
+  <button onclick="printInvoice()">ইনভয়েস প্রিন্ট</button>
 
-<input type="text" id="customerName" placeholder="কাস্টমারের নাম" style="display:none;">
+  <h3>বিক্রয়ের হিস্টরি</h3>
+  <ul id="salesHistory"></ul>
 
-<button onclick="makeSale()">বিক্রয় করুন</button>
-<button onclick="printInvoice()">ইনভয়েস প্রিন্ট</button>
-
-<h3>বিক্রয়ের হিস্টরি</h3>
-<ul id="salesHistory"></ul>
-
-<div id="invoiceArea" style="display:none;">
-<h2>ইমরান ইলেকট্রনিক্স</h2>
-<hr>
-<p>কাস্টমার: <span id="invCustomer"></span></p>
-<p>পণ্য: <span id="invProduct"></span></p>
-<p>পরিমাণ: <span id="invQty"></span></p>
-<p>একক মূল্য: ৳ <span id="invPrice"></span></p>
-<h3>মোট: ৳ <span id="invTotal"></span></h3>
-<hr>
-<p>ধন্যবাদ</p>
-</div>
-
+  <!-- Invoice Template -->
+  <div id="invoiceArea" style="display:none; padding:20px; background:white;">
+    <h2>ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার</h2>
+    <p>গদখালি বাজার বাস স্ট্যান্ড, ঝিকরগাছা, যশোর</p>
+    <hr>
+    <p>কাস্টমার: <span id="invCustomer"></span></p>
+    <p>পণ্য: <span id="invProduct"></span></p>
+    <p>পরিমাণ: <span id="invQty"></span></p>
+    <p>একক মূল্য: ৳ <span id="invPrice"></span></p>
+    <h3>মোট: ৳ <span id="invTotal"></span></h3>
+    <hr>
+    <p>ধন্যবাদ আপনার ব্যবসার জন্য!</p>
+  </div>
 </section>
 
 <section id="dues" style="display:none;">
-<h3>বাকি তালিকা</h3>
-<ul id="dueList"></ul>
+  <h3>বাকি তালিকা</h3>
+  <ul id="dueList"></ul>
 </section>
 
 <script src="script.js"></script>
