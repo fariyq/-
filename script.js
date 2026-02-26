@@ -141,7 +141,7 @@ th, td{padding:8px;text-align:center;}
 </div>
 
 <div class="footer">
-<p>ধন্যবাদ আপনার ব্যবসার জন্য</p>
+<p>ধন্যবাদ আবার আসবেন</p>
 </div>
 </div>
 </body>
