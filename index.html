@@ -67,7 +67,20 @@
   </select>
 
   <input type="text" id="customerName" placeholder="কাস্টমারের নাম" style="display:none;">
+<button onclick="printInvoice()">ইনভয়েস প্রিন্ট করুন</button>
 
+<div id="invoiceArea" style="display:none;">
+  <h2>ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার</h2>
+  <p>গদখালি বাজার বাস স্ট্যান্ড, ঝিকরগাছা, যশোর</p>
+  <hr>
+  <p>কাস্টমার: <span id="invCustomer"></span></p>
+  <p>পণ্য: <span id="invProduct"></span></p>
+  <p>পরিমাণ: <span id="invQty"></span></p>
+  <p>একক মূল্য: ৳ <span id="invPrice"></span></p>
+  <h3>মোট: ৳ <span id="invTotal"></span></h3>
+  <hr>
+  <p>ধন্যবাদ</p>
+</div>
   <button onclick="makeSale()">বিক্রয় করুন</button>
 
   <h3>বিক্রয়ের হিস্টরি</h3>
