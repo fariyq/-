@@ -141,24 +141,14 @@ document.getElementById("totalQtyEl").innerText=totalQty;
 document.getElementById("totalDueEl").innerText=totalDue;
 }
 
-window.printInvoice = function(){
+window.printInvoice=function(){
+if(!lastInvoice.product){ alert("আগে বিক্রয় করুন"); return;}
 
-if(!lastInvoice.product){
-alert("আগে বিক্রয় করুন");
-return;
-}
-
-let invoiceWindow = window.open('', '', 'width=600,height=600');
-
-invoiceWindow.document.write(`
+let printWindow=window.open('','');
+printWindow.document.write(`
 <html>
-<head>
-<title>Invoice</title>
-<style>
-body{font-family:Arial;padding:20px;}
-</style>
-</head>
-<body>
+<head><title>Invoice</title></head>
+<body style="font-family:Arial;padding:20px;">
 <h2>ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার</h2>
 <p>গদখালি বাজার বাস স্ট্যান্ড, ঝিকরগাছা, যশোর</p>
 <hr>
@@ -172,15 +162,10 @@ body{font-family:Arial;padding:20px;}
 </body>
 </html>
 `);
-
-invoiceWindow.document.close();
-
-setTimeout(function(){
-invoiceWindow.print();
-invoiceWindow.close();
-}, 500);
-
+printWindow.document.close();
+setTimeout(()=>{printWindow.print();},500);
 }
+
 document.getElementById("paymentType").addEventListener("change",function(){
 document.getElementById("customerName").style.display=
 this.value==="due"?"inline-block":"none";
