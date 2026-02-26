@@ -30,6 +30,7 @@ th, td { padding:8px; text-align:center;}
 <button onclick="showSection('products')">পণ্য</button>
 <button onclick="showSection('sales')">বিক্রয়</button>
 <button onclick="showSection('dues')">বাকি</button>
+<button onclick="showSection('invoiceSection')">ইনভয়েস হিস্টোরি</button>
 </nav>
 
 <section id="dashboard">
@@ -83,8 +84,25 @@ th, td { padding:8px; text-align:center;}
 <ul id="dueList"></ul>
 </section>
 
+<!-- 🔥 নতুন ইনভয়েস হিস্টোরি সেকশন -->
+<section id="invoiceSection" style="display:none;">
+<h3>ইনভয়েস হিস্টোরি</h3>
+<table>
+<thead>
+<tr>
+<th>নং</th>
+<th>তারিখ</th>
+<th>কাস্টমার</th>
+<th>মোট</th>
+<th>অ্যাকশন</th>
+</tr>
+</thead>
+<tbody id="invoiceHistory"></tbody>
+</table>
+</section>
+
 <!-- CACHE FIX VERSION -->
-<script src="script.js?v=10"></script>
+<script src="script.js?v=11"></script>
 
 </body>
 </html>
