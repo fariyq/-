@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function(){
 let products = JSON.parse(localStorage.getItem("products")) || [];
 let sales = JSON.parse(localStorage.getItem("sales")) || [];
 let dues = JSON.parse(localStorage.getItem("dues")) || [];
+let invoiceCounter = localStorage.getItem("invoiceCounter") || 1;
 let lastInvoice = {};
 
 function saveData(){
@@ -85,13 +86,21 @@ if(!cname){ alert("নাম দিন"); return;}
 dues.push({name:cname,amount});
 }
 
+let now = new Date();
+
 lastInvoice={
-customer:document.getElementById("customerName").value||"নগদ ক্রেতা",
-product:products[i].name,
+invoiceNo: invoiceCounter,
+date: now.toLocaleDateString(),
+time: now.toLocaleTimeString(),
+customer: document.getElementById("customerName").value || "নগদ ক্রেতা",
+product: products[i].name,
 qty,
-price:products[i].sell,
-total:amount
+price: products[i].sell,
+total: amount
 };
+
+invoiceCounter++;
+localStorage.setItem("invoiceCounter", invoiceCounter);
 
 saveData();
 displayProducts();
@@ -142,23 +151,41 @@ document.getElementById("totalDueEl").innerText=totalDue;
 }
 
 window.printInvoice=function(){
+
 if(!lastInvoice.product){ alert("আগে বিক্রয় করুন"); return;}
 
 let printWindow=window.open('','');
 printWindow.document.write(`
 <html>
-<head><title>Invoice</title></head>
+<head>
+<title>Invoice</title>
+</head>
 <body style="font-family:Arial;padding:20px;">
 <h2>ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার</h2>
 <p>গদখালি বাজার বাস স্ট্যান্ড, ঝিকরগাছা, যশোর</p>
 <hr>
+
+<p><strong>ইনভয়েস নং:</strong> ${lastInvoice.invoiceNo}</p>
+<p><strong>তারিখ:</strong> ${lastInvoice.date}</p>
+<p><strong>সময়:</strong> ${lastInvoice.time}</p>
+
+<hr>
+
 <p>কাস্টমার: ${lastInvoice.customer}</p>
 <p>পণ্য: ${lastInvoice.product}</p>
 <p>পরিমাণ: ${lastInvoice.qty}</p>
 <p>একক মূল্য: ৳ ${lastInvoice.price}</p>
+
 <h3>মোট: ৳ ${lastInvoice.total}</h3>
+
 <hr>
+
+<p>বিক্রেতার স্বাক্ষর: _____________________</p>
+<p>ক্রেতার স্বাক্ষর: _____________________</p>
+
+<br><br>
 <p>ধন্যবাদ আপনার ব্যবসার জন্য</p>
+
 </body>
 </html>
 `);
