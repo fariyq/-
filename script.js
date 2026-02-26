@@ -2,7 +2,10 @@ function showSection(sectionId) {
   const sections = document.querySelectorAll("main section");
   sections.forEach(section => section.style.display = "none");
   document.getElementById(sectionId).style.display = "block";
+
   if (sectionId === "sales") loadProductOptions();
+  if (sectionId === "duesSection") displayDues();
+
   updateDashboard();
 }
 
@@ -73,6 +76,7 @@ function loadProductOptions() {
 function makeSale() {
   const i = saleProduct.value;
   const qty = parseInt(saleQty.value);
+
   if (!qty || products[i].stock < qty) {
     alert("স্টক পর্যাপ্ত নেই");
     return;
@@ -110,6 +114,32 @@ function displaySales() {
   });
 }
 
+function displayDues() {
+  dueList.innerHTML = "";
+  dues.forEach((d, i) => {
+    dueList.innerHTML += `
+      <li>
+        ${d.name} - ৳ ${d.amount}
+        <button onclick="payDue(${i})">টাকা নিলাম</button>
+      </li>`;
+  });
+}
+
+function payDue(i) {
+  const paid = parseFloat(prompt("কত টাকা পরিশোধ করলো?"));
+  if (!paid) return;
+
+  if (paid >= dues[i].amount) {
+    dues.splice(i, 1);
+  } else {
+    dues[i].amount -= paid;
+  }
+
+  saveAll();
+  displayDues();
+  updateDashboard();
+}
+
 function updateDashboard() {
   let totalSales = 0, totalProfit = 0, totalQty = 0, totalDue = 0;
 
@@ -121,15 +151,10 @@ function updateDashboard() {
 
   dues.forEach(d => totalDue += d.amount);
 
-  totalSalesEl = document.getElementById("totalSales");
-  totalProfitEl = document.getElementById("totalProfit");
-  totalQtyEl = document.getElementById("totalQty");
-  totalDueEl = document.getElementById("totalDue");
-
-  if (totalSalesEl) totalSalesEl.innerText = totalSales;
-  if (totalProfitEl) totalProfitEl.innerText = totalProfit;
-  if (totalQtyEl) totalQtyEl.innerText = totalQty;
-  if (totalDueEl) totalDueEl.innerText = totalDue;
+  totalSalesEl.innerText = totalSales;
+  totalProfitEl.innerText = totalProfit;
+  totalQtyEl.innerText = totalQty;
+  totalDueEl.innerText = totalDue;
 }
 
 paymentType?.addEventListener("change", function () {
@@ -138,5 +163,6 @@ paymentType?.addEventListener("change", function () {
 
 displayProducts();
 displaySales();
+displayDues();
 loadProductOptions();
 updateDashboard();
