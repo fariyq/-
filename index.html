@@ -64,10 +64,10 @@ th, td { padding:8px; text-align:center;}
 <select id="saleProduct"></select>
 <input type="number" id="saleQty" placeholder="পরিমাণ">
 
-<select id="paymentType">
-  <option value="cash">নগদ</option>
-  <option value="due">বাকি</option>
-</select>
+document.getElementById("paymentType").addEventListener("change", function(){
+  document.getElementById("customerName").style.display =
+    this.value === "due" ? "block" : "none";
+});
 
 <input type="text" id="customerName" placeholder="কাস্টমারের নাম" style="display:none;">
 
