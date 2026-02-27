@@ -1,115 +1,75 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ইমরান ইলেকট্রনিক্স POS</title>
-
-<style>
-body {font-family: Arial; margin:0; background:#f2f4f8;}
-header {background:#0d6efd; color:white; padding:15px; text-align:center;}
-nav {background:#222; text-align:center; padding:10px;}
-nav button {margin:5px; padding:8px 15px; background:#198754; color:white; border:none;}
-section {padding:20px; display:none;}
-input, select {padding:7px; margin:5px;}
-button {cursor:pointer;}
-table {width:100%; border-collapse:collapse; margin-top:10px;}
-th, td {border:1px solid #ccc; padding:8px; text-align:center;}
-.print-area {display:none;}
-@media print {
-  body * {visibility:hidden;}
-  .print-area, .print-area * {visibility:visible;}
-  .print-area {position:absolute; left:0; top:0; width:100%;}
-}
-.invoice-box {
-  border:2px solid #000;
-  padding:20px;
-}
-.invoice-header {
-  text-align:center;
-  border-bottom:2px solid #000;
-  margin-bottom:15px;
-  padding-bottom:10px;
-}
-.signature {
-  margin-top:40px;
-  display:flex;
-  justify-content:space-between;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ইনভয়েস সিস্টেম</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+<body onload="updateDateTime(); generateInvoiceNumber();">
+    <div class="header">
+        <h2>ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার</h2>
+        <p>📍 গদখালি বাজার বাস স্ট্যান্ড, রহিম সরদার মার্কেট, ঝিকরগাছা, যশোর।</p>
+        <p>📧 mdemranst0@gmail.com | 📞 01952325903</p>
+        <p>📅 <span id="currentDate"></span> | ⏰ <span id="currentTime"></span></p>
+    </div>
 
-<body>
+    <div class="container">
+        <h2>ইনভয়েস তৈরি করুন</h2>
 
-<header>
-<h2>ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার</h2>
-<p>গদখালি বাজার বাস স্ট্যান্ড, ঝিকরগাছা, যশোর</p>
-<p>মোবাইল: ০১৯৫২৩২৫৯০৩</p>
-</header>
+        <label for="invoiceNumber">ইনভয়েস নাম্বার:</label>
+        <input type="text" id="invoiceNumber" readonly><br><br>
 
-<nav>
-<button onclick="showSection('dashboard')">ড্যাশবোর্ড</button>
-<button onclick="showSection('products')">পণ্য</button>
-<button onclick="showSection('sales')">বিক্রয়</button>
-<button onclick="showSection('dues')">বাকি</button>
-<button onclick="showSection('invoiceHistorySection')">ইনভয়েস হিস্টোরি</button>
-</nav>
+        <label for="customerName">কাস্টমারের নাম:</label>
+        <input type="text" id="customerName" placeholder="কাস্টমারের নাম লিখুন"><br><br>
 
-<section id="dashboard" style="display:block;">
-<h3>ড্যাশবোর্ড</h3>
-<p>মোট বিক্রয়: ৳ <span id="totalSales">0</span></p>
-<p>মোট লাভ: ৳ <span id="totalProfit">0</span></p>
-<p>মোট বিক্রিত পণ্য: <span id="totalQty">0</span></p>
-<p>মোট বাকি: ৳ <span id="totalDue">0</span></p>
-</section>
+        <table>
+            <thead>
+                <tr>
+                    <th>ক্রমিক</th> 
+                    <th>পণ্য নাম</th>
+                    <th>পরিমাণ</th>
+                    <th>একক মূল্য</th>
+                    <th>মোট</th>
+                    <th class="no-print">অপশন</th>
+                </tr>
+            </thead>
+            <tbody id="invoiceBody"></tbody>
+        </table>
 
-<section id="products">
-<h3>পণ্য যোগ</h3>
-<input type="text" id="pName" placeholder="নাম">
-<input type="number" id="pBuy" placeholder="ক্রয় মূল্য">
-<input type="number" id="pSell" placeholder="বিক্রয় মূল্য">
-<input type="number" id="pStock" placeholder="স্টক">
-<button onclick="addProduct()">যোগ করুন</button>
+        <button class="no-print" onclick="addItem()">+ আইটেম যোগ করুন</button>
 
-<table>
-<thead>
-<tr><th>নাম</th><th>ক্রয়</th><th>বিক্রয়</th><th>স্টক</th><th>ডিলিট</th></tr>
-</thead>
-<tbody id="productTable"></tbody>
-</table>
-</section>
+        <div class="total-section">
+            <div class="total-info">
+                <p><strong>মোট মূল্য:</strong> <span id="grandTotal">0 টাকা</span></p>
+                <p><strong>জমা টাকা:</strong> <input type="number" id="paidAmount" oninput="calculateDue()" placeholder="জমা টাকা লিখুন"></p>
+                <p><strong>বাকি টাকা:</strong> <span id="dueAmount">0 টাকা</span></p>
+                <p><strong>ফেরত টাকা:</strong> <span id="returnAmount">0 টাকা</span></p>
+                
+                <!-- বাকি টাকা দেওয়ার তারিখ অপশন -->
+                <div id="dueDateContainer" style="display: none; margin-top: 10px;">
+                    <label for="dueDate"><strong>বাকি টাকা দেওয়ার তারিখ:</strong></label>
+                    <input type="date" id="dueDate">
+                </div>
+            </div>
+        </div>
 
-<section id="sales">
-<h3>বিক্রয়</h3>
-<select id="saleProduct"></select>
-<input type="number" id="saleQty" placeholder="পরিমাণ">
+        <h3 id="paymentStatus" style="color: green; display: none;">✅ পরিশোধিত</h3>
 
-<select id="paymentType">
-<option value="cash">Cash</option>
-<option value="due">Due</option>
-</select>
+        <div class="signature-section">
+            <div class="signature-box">
+                <p>কাস্টমারের স্বাক্ষর:</p>
+                <div class="signature-line"></div>
+            </div>
+            <div class="signature-box">
+                <p>বিক্রেতার স্বাক্ষর:</p>
+                <div class="signature-line"></div>
+            </div>
+        </div>
 
-<input type="text" id="customerName" placeholder="কাস্টমারের নাম" style="display:none;">
-<button onclick="makeSale()">বিক্রয় করুন</button>
-</section>
+        <button class="no-print" onclick="printInvoice()">🖨️ প্রিন্ট করুন</button>
+    </div>
 
-<section id="dues">
-<h3>বাকি তালিকা</h3>
-<ul id="dueList"></ul>
-</section>
-
-<section id="invoiceHistorySection">
-<h3>ইনভয়েস হিস্টোরি</h3>
-<table>
-<thead>
-<tr><th>নং</th><th>তারিখ</th><th>কাস্টমার</th><th>মোট</th><th>পেমেন্ট</th></tr>
-</thead>
-<tbody id="invoiceHistory"></tbody>
-</table>
-</section>
-
-<div class="print-area" id="printArea"></div>
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
