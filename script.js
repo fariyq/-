@@ -13,7 +13,10 @@ localStorage.setItem("sales", JSON.stringify(sales));
 localStorage.setItem("dues", JSON.stringify(dues));
 localStorage.setItem("invoices", JSON.stringify(invoices));
 }
-
+document.getElementById("paymentType").addEventListener("change", function(){
+document.getElementById("customerName").style.display =
+this.value === "due" ? "inline-block" : "none";
+});
 window.showSection=function(id){
 document.querySelectorAll("section").forEach(sec=>sec.style.display="none");
 document.getElementById(id).style.display="block";
