@@ -8,16 +8,16 @@
 body { font-family: Arial; margin:0; padding:0; background:#f5f7fa;}
 header { background:#0d6efd; color:white; padding:15px; text-align:center;}
 nav { background:#222; padding:10px; text-align:center;}
-nav button { margin:5px; padding:8px 15px; cursor:pointer; color:white; background:#198754;}
-section { padding:20px;}
+nav button { margin:5px; padding:8px 15px; cursor:pointer; color:white; background:#198754; border:none;}
+section { padding:20px; display:none;}
 input, select { padding:7px; margin:5px;}
 button { padding:7px; margin:5px; cursor:pointer;}
 table { width:100%; border-collapse: collapse;}
 table, th, td { border:1px solid #ccc;}
 th, td { padding:8px; text-align:center;}
 </style>
-
 </head>
+
 <body>
 
 <header>
@@ -33,7 +33,7 @@ th, td { padding:8px; text-align:center;}
 <button onclick="showSection('invoiceSection')">ইনভয়েস হিস্টোরি</button>
 </nav>
 
-<section id="dashboard">
+<section id="dashboard" style="display:block;">
 <h3>ড্যাশবোর্ড</h3>
 <p>মোট বিক্রয়: ৳ <span id="totalSalesEl">0</span></p>
 <p>মোট লাভ: ৳ <span id="totalProfitEl">0</span></p>
@@ -41,7 +41,7 @@ th, td { padding:8px; text-align:center;}
 <p>মোট বাকি: ৳ <span id="totalDueEl">0</span></p>
 </section>
 
-<section id="products" style="display:none;">
+<section id="products">
 <h3>পণ্য যোগ করুন</h3>
 <input type="text" id="productName" placeholder="নাম">
 <input type="number" id="buyPrice" placeholder="ক্রয় মূল্য">
@@ -58,18 +58,16 @@ th, td { padding:8px; text-align:center;}
 </table>
 </section>
 
-<section id="sales" style="display:none;">
+<section id="sales">
 <h3>বিক্রয়</h3>
 
 <select id="saleProduct"></select>
 <input type="number" id="saleQty" placeholder="পরিমাণ">
 
-document.getElementById("paymentType").addEventListener("change", function(){
-  document.getElementById("customerName").style.display =
-    this.value === "due" ? "block" : "none";
-});
-
-<input type="text" id="customerName" placeholder="কাস্টমারের নাম" style="display:none;">
+<select id="paymentType">
+<option value="cash">নগদ</option>
+<option value="due">বাকি</option>
+</select>
 
 <input type="text" id="customerName" placeholder="কাস্টমারের নাম" style="display:none;">
 
@@ -78,16 +76,14 @@ document.getElementById("paymentType").addEventListener("change", function(){
 
 <h3>বিক্রয়ের হিস্টরি</h3>
 <ul id="salesHistory"></ul>
-
 </section>
 
-<section id="dues" style="display:none;">
+<section id="dues">
 <h3>বাকি তালিকা</h3>
 <ul id="dueList"></ul>
 </section>
 
-<!-- 🔥 নতুন ইনভয়েস হিস্টোরি সেকশন -->
-<section id="invoiceSection" style="display:none;">
+<section id="invoiceSection">
 <h3>ইনভয়েস হিস্টোরি</h3>
 <table>
 <thead>
@@ -96,6 +92,7 @@ document.getElementById("paymentType").addEventListener("change", function(){
 <th>তারিখ</th>
 <th>কাস্টমার</th>
 <th>মোট</th>
+<th>পেমেন্ট</th>
 <th>অ্যাকশন</th>
 </tr>
 </thead>
@@ -103,8 +100,7 @@ document.getElementById("paymentType").addEventListener("change", function(){
 </table>
 </section>
 
-<!-- CACHE FIX VERSION -->
-<script src="script.js?v=11"></script>
+<script src="script.js?v=22"></script>
 
 </body>
 </html>
