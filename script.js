@@ -1,113 +1,100 @@
-let products = JSON.parse(localStorage.getItem("products")) || [];
-let invoices = JSON.parse(localStorage.getItem("invoices")) || [];
-let dues = JSON.parse(localStorage.getItem("dues")) || [];
-let invoiceNo = parseInt(localStorage.getItem("invoiceNo")) || 1001;
+document.addEventListener("DOMContentLoaded", function () { 
+    let invoiceBody = document.getElementById("invoiceBody");
+    let grandTotalElement = document.getElementById("grandTotal");
+    let paidAmountElement = document.getElementById("paidAmount");
+    let dueAmountElement = document.getElementById("dueAmount");
+    let returnAmountElement = document.getElementById("returnAmount");
+    let paymentStatusElement = document.getElementById("paymentStatus");
+    let invoiceNumberElement = document.getElementById("invoiceNumber");
+    let dueDateContainer = document.getElementById("dueDateContainer");
 
-function saveData(){
-  localStorage.setItem("products", JSON.stringify(products));
-  localStorage.setItem("invoices", JSON.stringify(invoices));
-  localStorage.setItem("dues", JSON.stringify(dues));
-  localStorage.setItem("invoiceNo", invoiceNo);
-}
+    function updateDateTime() {
+        const now = new Date();
+        const date = now.toLocaleDateString('bn-BD');
+        const time = now.toLocaleTimeString('bn-BD');
+        document.getElementById("currentDate").innerText = date;
+        document.getElementById("currentTime").innerText = time;
 
-function showSection(id){
-  document.querySelectorAll("section").forEach(s=>s.style.display="none");
-  document.getElementById(id).style.display="block";
-}
+        setTimeout(updateDateTime, 1000);
+    }
 
-document.getElementById("paymentType").addEventListener("change",function(){
-  document.getElementById("customerName").style.display =
-  this.value==="due"?"inline-block":"none";
+    window.updateDateTime = updateDateTime;
+
+    function generateInvoiceNumber() {
+        let randomNumber = Math.floor(100000 + Math.random() * 900000);
+        invoiceNumberElement.value = "INV-" + randomNumber;
+    }
+
+    window.generateInvoiceNumber = generateInvoiceNumber;
+
+    function calculateTotal() {
+        let rows = document.querySelectorAll("#invoiceBody tr");
+        let grandTotal = 0;
+
+        rows.forEach((row, index) => {
+            let quantityInput = row.querySelector(".quantity");
+            let unitPriceInput = row.querySelector(".unitPrice");
+            let totalPriceElement = row.querySelector(".totalPrice");
+
+            let quantity = parseFloat(quantityInput.value) || 0;
+            let unitPrice = parseFloat(unitPriceInput.value) || 0;
+            let totalPrice = quantity * unitPrice;
+
+            totalPriceElement.innerText = totalPrice.toFixed(2) + " টাকা";
+            grandTotal += totalPrice;
+
+            row.querySelector(".serialNumber").innerText = index + 1;
+        });
+
+        grandTotalElement.innerText = grandTotal.toFixed(2) + " টাকা";
+        calculateDue();
+    }
+
+    window.calculateTotal = calculateTotal;
+
+    window.calculateDue = function () {
+        let grandTotal = parseFloat(grandTotalElement.innerText.replace(" টাকা", "")) || 0;
+        let paidAmount = parseFloat(paidAmountElement.value) || 0;
+        let dueAmount = grandTotal - paidAmount;
+        let returnAmount = dueAmount < 0 ? Math.abs(dueAmount) : 0;
+        dueAmount = dueAmount > 0 ? dueAmount : 0;
+
+        dueAmountElement.innerText = dueAmount.toFixed(2) + " টাকা";
+        returnAmountElement.innerText = returnAmount.toFixed(2) + " টাকা";
+        paymentStatusElement.style.display = (dueAmount === 0 && paidAmount > 0) ? "block" : "none";
+
+        // বাকি টাকা থাকলে বাকি টাকা দেওয়ার তারিখের অপশন দেখানো হবে, না থাকলে লুকানো হবে
+        if (dueAmount > 0) {
+            dueDateContainer.style.display = "block";
+        } else {
+            dueDateContainer.style.display = "none";  // সম্পূর্ণ টাকা পরিশোধিত হলে সম্পূর্ণভাবে লুকিয়ে যাবে
+            document.getElementById("dueDate").value = ""; // তারিখের ইনপুট ফাঁকা হয়ে যাবে
+        }
+    };
+
+    window.addItem = function () {
+        let row = document.createElement("tr");
+        row.innerHTML = `<td class="serialNumber"></td>
+                         <td><input type="text" class="productName"></td>
+                         <td><input type="number" class="quantity" oninput="calculateTotal()"></td>
+                         <td><input type="number" class="unitPrice" oninput="calculateTotal()"></td>
+                         <td class="totalPrice">0.00 টাকা</td>
+                         <td class="no-print"><button class="removeBtn">❌</button></td>`;
+
+        row.querySelector(".removeBtn").addEventListener("click", function () {
+            row.remove();
+            calculateTotal();
+        });
+
+        invoiceBody.appendChild(row);
+        calculateTotal();
+    };
+
+    window.printInvoice = function () {
+        alert("প্রিন্ট করা হচ্ছে...");
+        window.print();
+    };
+
+    updateDateTime();
+    generateInvoiceNumber();
 });
-
-function addProduct(){
-  let name=pName.value;
-  let buy=+pBuy.value;
-  let sell=+pSell.value;
-  let stock=+pStock.value;
-  if(!name) return alert("নাম দিন");
-  products.push({name,buy,sell,stock});
-  saveData();
-  location.reload();
-}
-
-function makeSale(){
-  let index=saleProduct.selectedIndex;
-  let qty=+saleQty.value;
-  let payment=paymentType.value;
-  let customer=customerName.value||"";
-  if(products[index].stock<qty) return alert("স্টক কম");
-  let total=products[index].sell*qty;
-  products[index].stock-=qty;
-  invoices.push({
-    no:invoiceNo++,
-    date:new Date().toLocaleString(),
-    customer,
-    total,
-    payment
-  });
-  if(payment==="due"){
-    dues.push({customer,total});
-  }
-  saveData();
-  generateInvoice(products[index].name,qty,total,payment,customer);
-  location.reload();
-}
-
-function generateInvoice(name,qty,total,payment,customer){
-  let html=`
-  <div class="invoice-box">
-  <div class="invoice-header">
-  <h2>ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার</h2>
-  <p>গদখালি বাজার বাস স্ট্যান্ড, ঝিকরগাছা, যশোর</p>
-  <p>মোবাইল: ০১৯৫২৩২৫৯০৩</p>
-  </div>
-  <p>Invoice No: ${invoiceNo-1}</p>
-  <p>Date: ${new Date().toLocaleString()}</p>
-  <p>Customer: ${customer||"N/A"}</p>
-  <table>
-  <tr><th>পণ্য</th><th>পরিমাণ</th><th>মোট</th></tr>
-  <tr><td>${name}</td><td>${qty}</td><td>৳ ${total}</td></tr>
-  </table>
-  <h3>মোট: ৳ ${total}</h3>
-  <p>Payment: ${payment}</p>
-  <div class="signature">
-  <div>Customer Signature</div>
-  <div>Seller: MD Emran</div>
-  </div>
-  </div>`;
-  printArea.innerHTML=html;
-  window.print();
-}
-
-window.onload=function(){
-  products.forEach((p,i)=>{
-    productTable.innerHTML+=`
-    <tr>
-    <td>${p.name}</td>
-    <td>${p.buy}</td>
-    <td>${p.sell}</td>
-    <td>${p.stock}</td>
-    <td><button onclick="deleteProduct(${i})">X</button></td>
-    </tr>`;
-    saleProduct.innerHTML+=`<option>${p.name}</option>`;
-  });
-  invoices.forEach((inv,i)=>{
-    invoiceHistory.innerHTML+=`
-    <tr>
-    <td>${inv.no}</td>
-    <td>${inv.date}</td>
-    <td>${inv.customer}</td>
-    <td>${inv.total}</td>
-    <td>${inv.payment}</td>
-    </tr>`;
-  });
-  dues.forEach((d,i)=>{
-    dueList.innerHTML+=`<li>${d.customer} - ৳ ${d.total}</li>`;
-  });
-}
-function deleteProduct(i){
-  products.splice(i,1);
-  saveData();
-  location.reload();
-}
