@@ -8,16 +8,16 @@
 body { font-family: Arial; margin:0; padding:0; background:#f5f7fa;}
 header { background:#0d6efd; color:white; padding:15px; text-align:center;}
 nav { background:#222; padding:10px; text-align:center;}
-nav button { margin:5px; padding:8px 15px; cursor:pointer; color:white; background:#198754; border:none;}
-section { padding:20px; display:none;}
+nav button { margin:5px; padding:8px 15px; cursor:pointer; color:white; background:#198754;}
+section { padding:20px;}
 input, select { padding:7px; margin:5px;}
 button { padding:7px; margin:5px; cursor:pointer;}
 table { width:100%; border-collapse: collapse;}
 table, th, td { border:1px solid #ccc;}
 th, td { padding:8px; text-align:center;}
 </style>
-</head>
 
+</head>
 <body>
 
 <header>
@@ -33,7 +33,7 @@ th, td { padding:8px; text-align:center;}
 <button onclick="showSection('invoiceSection')">ইনভয়েস হিস্টোরি</button>
 </nav>
 
-<section id="dashboard" style="display:block;">
+<section id="dashboard">
 <h3>ড্যাশবোর্ড</h3>
 <p>মোট বিক্রয়: ৳ <span id="totalSalesEl">0</span></p>
 <p>মোট লাভ: ৳ <span id="totalProfitEl">0</span></p>
@@ -41,7 +41,7 @@ th, td { padding:8px; text-align:center;}
 <p>মোট বাকি: ৳ <span id="totalDueEl">0</span></p>
 </section>
 
-<section id="products">
+<section id="products" style="display:none;">
 <h3>পণ্য যোগ করুন</h3>
 <input type="text" id="productName" placeholder="নাম">
 <input type="number" id="buyPrice" placeholder="ক্রয় মূল্য">
@@ -58,7 +58,7 @@ th, td { padding:8px; text-align:center;}
 </table>
 </section>
 
-<section id="sales">
+<section id="sales" style="display:none;">
 <h3>বিক্রয়</h3>
 
 <select id="saleProduct"></select>
@@ -76,14 +76,16 @@ th, td { padding:8px; text-align:center;}
 
 <h3>বিক্রয়ের হিস্টরি</h3>
 <ul id="salesHistory"></ul>
+
 </section>
 
-<section id="dues">
+<section id="dues" style="display:none;">
 <h3>বাকি তালিকা</h3>
 <ul id="dueList"></ul>
 </section>
 
-<section id="invoiceSection">
+<!-- 🔥 নতুন ইনভয়েস হিস্টোরি সেকশন -->
+<section id="invoiceSection" style="display:none;">
 <h3>ইনভয়েস হিস্টোরি</h3>
 <table>
 <thead>
@@ -92,7 +94,6 @@ th, td { padding:8px; text-align:center;}
 <th>তারিখ</th>
 <th>কাস্টমার</th>
 <th>মোট</th>
-<th>পেমেন্ট</th>
 <th>অ্যাকশন</th>
 </tr>
 </thead>
@@ -100,7 +101,8 @@ th, td { padding:8px; text-align:center;}
 </table>
 </section>
 
-<script src="script.js?v=22"></script>
+<!-- CACHE FIX VERSION -->
+<script src="script.js?v=11"></script>
 
 </body>
 </html>
