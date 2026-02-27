@@ -3,73 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ইনভয়েস সিস্টেম</title>
-    <link rel="stylesheet" href="style.css">
+    <title>ইমরান ইলেকট্রনিক্স POS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body onload="updateDateTime(); generateInvoiceNumber();">
-    <div class="header">
-        <h2>ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার</h2>
-        <p>📍 গদখালি বাজার বাস স্ট্যান্ড, রহিম সরদার মার্কেট, ঝিকরগাছা, যশোর।</p>
-        <p>📧 mdemranst0@gmail.com | 📞 01952325903</p>
-        <p>📅 <span id="currentDate"></span> | ⏰ <span id="currentTime"></span></p>
+
+<body class="bg-light">
+
+<div class="container py-3">
+
+    <!-- Header -->
+    <div class="text-center mb-4">
+        <h4 class="fw-bold">ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার</h4>
+        <small>গদখালি বাজার, ঝিকরগাছা, যশোর</small>
     </div>
 
-    <div class="container">
-        <h2>ইনভয়েস তৈরি করুন</h2>
+    <!-- Dashboard Cards -->
+    <div class="row g-3 mb-4">
 
-        <label for="invoiceNumber">ইনভয়েস নাম্বার:</label>
-        <input type="text" id="invoiceNumber" readonly><br><br>
-
-        <label for="customerName">কাস্টমারের নাম:</label>
-        <input type="text" id="customerName" placeholder="কাস্টমারের নাম লিখুন"><br><br>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>ক্রমিক</th> 
-                    <th>পণ্য নাম</th>
-                    <th>পরিমাণ</th>
-                    <th>একক মূল্য</th>
-                    <th>মোট</th>
-                    <th class="no-print">অপশন</th>
-                </tr>
-            </thead>
-            <tbody id="invoiceBody"></tbody>
-        </table>
-
-        <button class="no-print" onclick="addItem()">+ আইটেম যোগ করুন</button>
-
-        <div class="total-section">
-            <div class="total-info">
-                <p><strong>মোট মূল্য:</strong> <span id="grandTotal">0 টাকা</span></p>
-                <p><strong>জমা টাকা:</strong> <input type="number" id="paidAmount" oninput="calculateDue()" placeholder="জমা টাকা লিখুন"></p>
-                <p><strong>বাকি টাকা:</strong> <span id="dueAmount">0 টাকা</span></p>
-                <p><strong>ফেরত টাকা:</strong> <span id="returnAmount">0 টাকা</span></p>
-                
-                <!-- বাকি টাকা দেওয়ার তারিখ অপশন -->
-                <div id="dueDateContainer" style="display: none; margin-top: 10px;">
-                    <label for="dueDate"><strong>বাকি টাকা দেওয়ার তারিখ:</strong></label>
-                    <input type="date" id="dueDate">
+        <div class="col-6">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h6>আজকের বিক্রয়</h6>
+                    <h5 class="text-success">৳ 12,500</h5>
                 </div>
             </div>
         </div>
 
-        <h3 id="paymentStatus" style="color: green; display: none;">✅ পরিশোধিত</h3>
-
-        <div class="signature-section">
-            <div class="signature-box">
-                <p>কাস্টমারের স্বাক্ষর:</p>
-                <div class="signature-line"></div>
-            </div>
-            <div class="signature-box">
-                <p>বিক্রেতার স্বাক্ষর:</p>
-                <div class="signature-line"></div>
+        <div class="col-6">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h6>আজকের লাভ</h6>
+                    <h5 class="text-primary">৳ 3,200</h5>
+                </div>
             </div>
         </div>
 
-        <button class="no-print" onclick="printInvoice()">🖨️ প্রিন্ট করুন</button>
+        <div class="col-6">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h6>মোট বাকি</h6>
+                    <h5 class="text-danger">৳ 8,450</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h6>স্টক আইটেম</h6>
+                    <h5>124 টি</h5>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <script src="script.js"></script>
+    <!-- POS Section -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="mb-3">নতুন বিক্রয়</h5>
+
+            <div class="mb-3">
+                <label class="form-label">পণ্যের নাম</label>
+                <input type="text" class="form-control" placeholder="পণ্যের নাম লিখুন">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">পরিমাণ</label>
+                <input type="number" class="form-control" placeholder="পরিমাণ">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">দাম</label>
+                <input type="number" class="form-control" placeholder="দাম">
+            </div>
+
+            <button class="btn btn-success w-100">বিক্রয় সম্পন্ন করুন</button>
+        </div>
+    </div>
+
+</div>
+
 </body>
 </html>
