@@ -219,46 +219,97 @@ window.printInvoice();
 
 /* ================= PRINT ================= */
 
-window.printInvoice=function(){
+window.printInvoice = function(){
 
-if(!lastInvoice.product){ alert("আগে বিক্রয় করুন"); return;}
+  if(!lastInvoice.product){ 
+    alert("আগে বিক্রয় করুন"); 
+    return;
+  }
 
-let printWindow=window.open('','');
+  let printWindow = window.open('','PRINT');
 
-printWindow.document.write(`
+  printWindow.document.write(`
+<!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <title>Invoice</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; }
+  .invoice-container {
+    max-width: 800px;
+    margin: auto;
+    border: 2px solid #000;
+    padding: 15px;
+  }
+  .header { text-align: center; }
+  .header h2 { margin:0; font-size: 22px; }
+  .header p { margin:0; font-size: 14px; }
+
+  .info, .totals { margin-top:15px; }
+
+  table { width:100%; border-collapse: collapse; margin-top: 15px; }
+  table, th, td {
+    border: 1px solid #000;
+  }
+  th, td {
+    padding:8px;
+    text-align:center;
+    font-size: 14px;
+  }
+
+  .footer { text-align:center; margin-top:30px; font-size:14px; }
+</style>
 </head>
-<body style="font-family:Arial;padding:40px;">
-<h2 style="text-align:center;">ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার</h2>
-<hr>
-<p>ইনভয়েস নং: ${lastInvoice.invoiceNo}</p>
-<p>তারিখ: ${lastInvoice.date}</p>
-<p>সময়: ${lastInvoice.time}</p>
-<p>কাস্টমার: ${lastInvoice.customer}</p>
-<p>পেমেন্ট: ${lastInvoice.payment}</p>
-<hr>
-<p>পণ্য: ${lastInvoice.product}</p>
-<p>পরিমাণ: ${lastInvoice.qty}</p>
-<p>একক মূল্য: ৳ ${lastInvoice.price}</p>
-<h3>মোট: ৳ ${lastInvoice.total}</h3>
-<br><br>
-<p>বিক্রেতার স্বাক্ষর: ____________</p>
-<p>ক্রেতার স্বাক্ষর: ____________</p>
+<body>
+
+<div class="invoice-container">
+
+  <div class="header">
+    <h2>ইমরান ইলেকট্রনিক্স অ্যান্ড মোবাইল সার্ভিসিং সেন্টার</h2>
+    <p>গদখালি বাজার বাস স্ট্যান্ড, ঝিকরগাছা, যশোর</p>
+  </div>
+
+  <div class="info">
+    <p><strong>ইনভয়েস নং:</strong> ${lastInvoice.invoiceNo}</p>
+    <p><strong>তারিখ:</strong> ${lastInvoice.date}</p>
+    <p><strong>সময়:</strong> ${lastInvoice.time}</p>
+    <p><strong>Customer:</strong> ${lastInvoice.customer}</p>
+    <p><strong>Payment:</strong> ${lastInvoice.payment}</p>
+  </div>
+
+  <table>
+    <tr>
+      <th>পণ্য</th>
+      <th>পরিমাণ</th>
+      <th>একক মূল্য</th>
+      <th>মোট</th>
+    </tr>
+    <tr>
+      <td>${lastInvoice.product}</td>
+      <td>${lastInvoice.qty}</td>
+      <td>৳ ${lastInvoice.price}</td>
+      <td>৳ ${lastInvoice.total}</td>
+    </tr>
+  </table>
+
+  <div class="totals">
+    <p><strong>সর্বমোট: ৳ ${lastInvoice.total}</strong></p>
+  </div>
+
+  <div class="footer">
+    <p>বিক্রেতার স্বাক্ষর: ____________________</p>
+    <p>ক্রেতার স্বাক্ষর: ____________________</p>
+    <p>ধন্যবাদ আবার আসবেন প্রিয়</p>
+  </div>
+
+</div>
+
 </body>
 </html>
 `);
 
-printWindow.document.close();
-setTimeout(()=>{printWindow.print();},500);
-}
-
-/* INIT */
-displayProducts();
-displayDues();
-displayInvoices();
-updateDashboard();
-loadProductOptions();
-
-});
+  printWindow.document.close();
+  printWindow.focus();
+  printWindow.print();
+};
